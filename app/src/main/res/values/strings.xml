@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">Temi Attend</string>
+
+    <string name="label_welcome_title">Welcome!</string>
+    <string name="label_welcome_subtitle">Check in as</string>
+
+    <string name="label_scan_instruction">Please scan your staff pass</string>
+    <string name="label_manual_instruction">Please enter your Schaeffler ID</string>
+
+    <string name="label_temperature_instruction">Recording your temperature</string>
+
+    <string name="label_normal_end_title">Thank You!</string>
+    <string name="label_normal_end_subtitle">Please also check in through the SafeEntry</string>
+
+    <string name="label_end_title">Sorry!</string>
+    <string name="label_end_subtitle">You are not allowed to enter the office</string>
+    <string name="label_bad_end_instruction">Kindly wait for a few minutes to cool down and try again</string>
+    <string name="label_bad_end_chance">Remaining Chance: %d</string>
+    <string name="label_strict_end_instruction">
+        Unfortunately, your temperature remains high. For safety purpose, kindly leave the office now.
+    </string>
+
+    <string name="label_mask_title">Mask Not Detected!</string>
+    <string name="label_mask_subtitle">Please wear a mask at all times!</string>
+    <string name="label_mask_instruction">This panel will disappear once mask has been detected</string>
+    <string name="label_mask_hint">Don\'t have one? Please take one from the counter</string>
+
+    <string name="hint_manual_employee">Schaeffler ID</string>
+
+    <string name="button_employee">Employee</string>
+    <string name="button_guest">Guest</string>
+    <string name="button_face_recognize">Recognize me</string>
+    <string name="button_manual">Manual entry</string>
+    <string name="button_confirm">Confirm</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+</resources>
