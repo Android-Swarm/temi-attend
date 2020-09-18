@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'androidx.navigation.safeargs'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion 30
@@ -23,6 +25,24 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+    }
+
+    aaptOptions {
+        noCompress "tflite"
+    }
+
+    testOptions.unitTests {
+        includeAndroidResources=true
+    }
 }
 
 dependencies {
@@ -32,7 +52,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    testImplementation 'junit:junit:4.12'
+
+    testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
@@ -42,5 +63,63 @@ dependencies {
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
+
+    // Camera
+    api 'com.otaliastudios:cameraview:2.6.4'
+
+    // Temi SDK
+    releaseImplementation 'com.robotemi:sdk:0.10.70'
+
+    // Face detection and mask recognition
+    implementation 'com.google.mlkit:face-detection:16.0.2'
+    implementation 'com.google.mlkit:image-labeling-custom:16.2.1'
+
+    // Task to coroutine API
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
+
+    // Azure face SDK
+    implementation 'com.microsoft.azure.cognitiveservices:azure-cognitiveservices-faceapi:1.0.0-beta'
+
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_android_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_android_version"
+
+    // Room database
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version" // Coroutine support
+    kapt "androidx.room:room-compiler:$room_version" // Annotation processor
+
+    // LiveData<T>
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+
+    // TensorFlow Lite
+    implementation('org.tensorflow:tensorflow-lite:2.3.0') { changing = true }
+    implementation('org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly') { changing = true }
+    implementation('org.tensorflow:tensorflow-lite-support:0.0.0-nightly') { changing = true }
+
+    // Dependency Injection
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+    // Barcode generator
+    implementation 'com.google.zxing:core:3.4.0'
+    implementation 'com.journeyapps:zxing-android-embedded:3.4.0@aar'
+
+    // Espresso
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test:rules:1.3.0'
+
+    // Testing
+    testImplementation "org.robolectric:robolectric:4.4"
+    testImplementation "androidx.core:core-ktx:1.3.1"
+    testImplementation 'androidx.test.ext:junit:1.1.2'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9'
+//    androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9'
+    testImplementation "org.hamcrest:hamcrest-all:1.3"
+
+    // Fragment Scenario
+    debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
 
 }
