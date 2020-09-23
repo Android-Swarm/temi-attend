@@ -4,8 +4,7 @@
     <string name="label_welcome_title">Welcome!</string>
     <string name="label_welcome_subtitle">Check in as</string>
 
-    <string name="label_scan_instruction">Please scan your staff pass</string>
-    <string name="label_manual_instruction">Please enter your Schaeffler ID</string>
+    <string name="label_login_instruction">Scan your staff pass or enter your Schaeffler ID</string>
 
     <string name="label_temperature_instruction">Recording your temperature</string>
 
@@ -35,6 +34,22 @@
 
     <string name="content_desc_mask">This icon shows because you are not wearing a mask! Please
     wear your mask properly</string>
+    <string name="content_desc_setting">Settings icon. Click to access settings.</string>
 
+    <string name="snack_bar_error">Encountered error: %s</string>
+    <string name="snack_bar_new_face">New face detected! Your face will be saved once you confirmed your id.</string>
+    <string name="snack_bar_no_face">No face detected, unable to recognize!</string>
 
+    <!-- Camera related strings -->
+    <string name="camera_overlay_text">Tap the screen when your face is visible</string>
+    <string name="camera_overlay_button">Close Camera</string>
+
+    <!-- Preferences -->
+    <string name="settings_location">Office Location</string>
+    <string name="summary_location">Which office the attendance is taken</string>
+    <string-array name="locations">
+        <item>18 Tai Seng</item>
+        <item>Aerospace</item>
+        <item>SHARE@NTU</item>
+    </string-array>
 </resources>

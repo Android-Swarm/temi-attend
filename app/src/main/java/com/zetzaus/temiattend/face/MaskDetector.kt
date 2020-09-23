@@ -1,4 +1,4 @@
-package com.zetzaus.temiattend
+package com.zetzaus.temiattend.face
 
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.label.ImageLabeling

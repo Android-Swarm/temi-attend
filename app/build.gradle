@@ -41,7 +41,7 @@ android {
     }
 
     testOptions.unitTests {
-        includeAndroidResources=true
+        includeAndroidResources = true
     }
 }
 
@@ -52,6 +52,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation files('libs/temi-ir-sdk_v1.0.23.jar')
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
@@ -78,8 +79,11 @@ dependencies {
     // Task to coroutine API
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
 
-    // Azure face SDK
-    implementation 'com.microsoft.azure.cognitiveservices:azure-cognitiveservices-faceapi:1.0.0-beta'
+    // Azure face dependencies
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation 'com.squareup.retrofit2:converter-scalars:2.8.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_android_version"
@@ -92,11 +96,8 @@ dependencies {
 
     // LiveData<T>
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-
-    // TensorFlow Lite
-    implementation('org.tensorflow:tensorflow-lite:2.3.0') { changing = true }
-    implementation('org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly') { changing = true }
-    implementation('org.tensorflow:tensorflow-lite-support:0.0.0-nightly') { changing = true }
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
 
     // Dependency Injection
     implementation "com.google.dagger:hilt-android:$hilt_version"
@@ -105,6 +106,9 @@ dependencies {
     // Barcode generator
     implementation 'com.google.zxing:core:3.4.0'
     implementation 'com.journeyapps:zxing-android-embedded:3.4.0@aar'
+
+    // Settings
+    implementation "androidx.preference:preference:1.1.1"
 
     // Espresso
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

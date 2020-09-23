@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
+    tools:context=".ui.MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/NavHostFragment"
@@ -27,18 +26,34 @@
         app:cameraAudio="off"
         app:cameraEngine="camera2"
         app:cameraExperimental="true"
-        app:cameraFacing="front" />
+        app:cameraFacing="front"
+        app:cameraHdr="on"
+        app:cameraPlaySounds="false"
+        app:cameraPreviewFrameRate="60" />
 
     <ImageView
         android:id="@+id/imageMask"
         android:layout_width="75dp"
         android:layout_height="75dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/content_desc_mask"
         android:src="@drawable/ic_mask"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/error_dark_theme"
+        tools:visibility="visible" />
+
+    <include
+        android:id="@+id/cameraOverlay"
+        layout="@layout/camera_overlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:tint="@color/error_dark_theme" />
-
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

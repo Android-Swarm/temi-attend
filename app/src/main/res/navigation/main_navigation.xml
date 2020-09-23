@@ -7,7 +7,23 @@
 
     <fragment
         android:id="@+id/welcomeFragment"
-        android:name="com.zetzaus.temiattend.WelcomeFragment"
+        android:name="com.zetzaus.temiattend.ui.WelcomeFragment"
         android:label="fragment_welcome"
-        tools:layout="@layout/fragment_welcome" />
+        tools:layout="@layout/fragment_welcome" >
+        <action
+            android:id="@+id/action_welcomeFragment_to_employeeLoginFragment"
+            app:destination="@id/employeeLoginFragment" />
+        <action
+            android:id="@+id/action_welcomeFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/employeeLoginFragment"
+        android:name="com.zetzaus.temiattend.ui.EmployeeLoginFragment"
+        android:label="fragment_employee_login"
+        tools:layout="@layout/fragment_employee_login" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.zetzaus.temiattend.ui.SettingsFragment"
+        android:label="SettingsFragment" />
 </navigation>

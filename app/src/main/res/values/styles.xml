@@ -1,11 +1,27 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-<!--        <item name="android:windowAnimationStyle">@style/WindowAnimationStyle</item>-->
+        <!--        <item name="android:windowAnimationStyle">@style/WindowAnimationStyle</item>-->
 
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_height">100dp</item>
+        <item name="android:layout_width">200dp</item>
+
+        <item name="android:textSize">20sp</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
+    <style name="OutlinedAppButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:layout_height">100dp</item>
+        <item name="android:layout_width">200dp</item>
+
+        <item name="android:textSize">20sp</item>
+        <item name="android:padding">16dp</item>
     </style>
 
 </resources>
