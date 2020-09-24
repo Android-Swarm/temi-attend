@@ -9,7 +9,7 @@
         android:id="@+id/welcomeFragment"
         android:name="com.zetzaus.temiattend.ui.WelcomeFragment"
         android:label="fragment_welcome"
-        tools:layout="@layout/fragment_welcome" >
+        tools:layout="@layout/fragment_welcome">
         <action
             android:id="@+id/action_welcomeFragment_to_employeeLoginFragment"
             app:destination="@id/employeeLoginFragment" />
@@ -21,9 +21,41 @@
         android:id="@+id/employeeLoginFragment"
         android:name="com.zetzaus.temiattend.ui.EmployeeLoginFragment"
         android:label="fragment_employee_login"
-        tools:layout="@layout/fragment_employee_login" />
+        tools:layout="@layout/fragment_employee_login">
+        <action
+            android:id="@+id/action_employeeLoginFragment_to_temperatureFragment"
+            app:destination="@id/temperatureFragment"
+            app:popUpTo="@id/employeeLoginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.zetzaus.temiattend.ui.SettingsFragment"
         android:label="SettingsFragment" />
+    <fragment
+        android:id="@+id/temperatureFragment"
+        android:name="com.zetzaus.temiattend.ui.TemperatureFragment"
+        android:label="fragment_temperature"
+        tools:layout="@layout/fragment_temperature">
+        <argument
+            android:name="user"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_temperatureFragment_to_normalTempFragment"
+            app:destination="@id/normalTempFragment"
+            app:popUpTo="@id/welcomeFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/normalTempFragment"
+        android:name="com.zetzaus.temiattend.ui.NormalTempFragment"
+        android:label="fragment_normal_temp"
+        tools:layout="@layout/fragment_normal_temp">
+        <argument
+            android:name="user"
+            app:argType="string" />
+        <argument
+            android:name="temperature"
+            app:argType="float" />
+    </fragment>
 </navigation>

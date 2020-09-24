@@ -5,6 +5,9 @@ import android.animation.AnimatorListenerAdapter
 import android.view.View
 import android.view.ViewAnimationUtils
 import androidx.core.view.isVisible
+import androidx.navigation.NavDirections
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigator
 
 /**
  * Animates the [View] with the circular reveal animation.
@@ -29,3 +32,10 @@ fun View.circularHideOrReveal(hide: Boolean, hiddenVisibility: Int = View.GONE) 
 
         isVisible = true
     }.start()
+
+fun View?.navigate(resId: Int) = this?.findNavController()?.navigate(resId)
+
+fun View?.navigate(dir: NavDirections) = this?.findNavController()?.navigate(dir)
+
+fun View?.navigateWithExtras(dir: NavDirections, extra: FragmentNavigator.Extras) =
+    this?.findNavController()?.navigate(dir, extra)

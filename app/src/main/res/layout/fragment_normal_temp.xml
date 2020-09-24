@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="username"
+            type="String" />
+
+        <variable
+            name="temperature"
+            type="float" />
+
+        <variable
+            name="fragment"
+            type="com.zetzaus.temiattend.ui.NormalTempFragment" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        tools:context=".ui.NormalTempFragment">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/titleText"
+            style="@style/TitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_normal_end_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleText">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animatedThermometer"
+                android:layout_width="125dp"
+                android:layout_height="125dp"
+                android:scaleType="centerCrop"
+                android:transitionName="thermometer"
+                app:lottie_autoPlay="false"
+                app:lottie_progress="0.427"
+                app:lottie_rawRes="@raw/thermometer" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/temperatureText"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text='@{String.format(@string/label_temperature, temperature)}'
+                android:textSize="36sp"
+                android:transitionName="temperature"
+                tools:text="36.5℃" />
+        </LinearLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/subtitleText"
+            style="@style/TitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/label_normal_end_subtitle"
+            android:textSize="36sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout" />
+
+        <ImageView
+            android:id="@+id/safeEntryQrCode"
+            android:layout_width="175dp"
+            android:layout_height="175dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/content_desc_qr_code"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/subtitleText" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/confirmButton"
+            style="@style/AppButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:onClick="@{() -> fragment.onConfirmButtonPressed()}"
+            android:text="@string/button_confirm"
+            app:layout_constraintBottom_toTopOf="@id/footer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <include
+            android:id="@+id/footer"
+            layout="@layout/user_footer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:user="@{username}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

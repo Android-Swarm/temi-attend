@@ -33,7 +33,6 @@ import kotlinx.android.synthetic.main.camera_overlay.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 
-
 class MainActivity : AppCompatActivity() {
     /** The activity's `ViewModel`. */
     private val mainViewModel by viewModels<MainActivityViewModel> {

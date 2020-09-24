@@ -7,6 +7,8 @@
     <string name="label_login_instruction">Scan your staff pass or enter your Schaeffler ID</string>
 
     <string name="label_temperature_instruction">Recording your temperature</string>
+    <string name="label_temperature">%.2f℃</string>
+    <string name="label_user">Hello, </string>
 
     <string name="label_normal_end_title">Thank You!</string>
     <string name="label_normal_end_subtitle">Please also check in through the SafeEntry</string>
@@ -35,6 +37,7 @@
     <string name="content_desc_mask">This icon shows because you are not wearing a mask! Please
     wear your mask properly</string>
     <string name="content_desc_setting">Settings icon. Click to access settings.</string>
+    <string name="content_desc_qr_code">SafeEntry QR code. Please scan this with your phone before entering office.</string>
 
     <string name="snack_bar_error">Encountered error: %s</string>
     <string name="snack_bar_new_face">New face detected! Your face will be saved once you confirmed your id.</string>
@@ -52,4 +55,6 @@
         <item>Aerospace</item>
         <item>SHARE@NTU</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

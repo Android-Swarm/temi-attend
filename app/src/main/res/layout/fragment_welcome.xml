@@ -14,8 +14,7 @@
         android:layout_marginTop="16dp"
         android:letterSpacing="0.2"
         android:text="@string/label_welcome_title"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        android:textSize="48sp"
+        android:textAppearance="@style/TitleText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

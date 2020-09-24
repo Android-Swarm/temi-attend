@@ -12,8 +12,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import com.zetzaus.temiattend.R
 import com.zetzaus.temiattend.ext.LOG_TAG
+import com.zetzaus.temiattend.ext.navigateWithExtras
 import com.zetzaus.temiattend.face.NewPersonPayload
 import kotlinx.android.synthetic.main.fragment_employee_login.*
 
@@ -44,7 +46,7 @@ class EmployeeLoginFragment : Fragment() {
         )
 
         viewModel.recognizedUser.observe(viewLifecycleOwner) { recognizedUserId ->
-            schaefflerIdTextInput.editText?.setText(recognizedUserId)
+            schaefflerIdTextLayout.editText?.setText(recognizedUserId)
         }
 
         buttonFaceRecognition.setOnClickListener {
@@ -61,7 +63,7 @@ class EmployeeLoginFragment : Fragment() {
                     )
 
                     val payloadCopy = NewPersonPayload(
-                        user = schaefflerIdTextInput.editText?.text.toString(),
+                        user = schaefflerIdEditText.text.toString(),
                         photoData = it.photoData,
                         rect = it.rect
                     )
@@ -72,6 +74,17 @@ class EmployeeLoginFragment : Fragment() {
                 }
             } finally {
                 activityViewModel.newPersonToRegister = null
+            }
+
+            if (schaefflerIdEditText.text.isNullOrBlank()) {
+                schaefflerIdTextLayout.error = "Please input your Schaeffler ID!"
+            } else {
+                val dir = EmployeeLoginFragmentDirections
+                    .actionEmployeeLoginFragmentToTemperatureFragment(schaefflerIdEditText.text.toString())
+
+                val extras = FragmentNavigatorExtras(schaefflerIdEditText to "username")
+
+                it.navigateWithExtras(dir, extras)
             }
         }
     }

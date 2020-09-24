@@ -24,4 +24,14 @@
         <item name="android:padding">16dp</item>
     </style>
 
+    <style name="TitleText" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textSize">48sp</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="UserCaption" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
 </resources>
