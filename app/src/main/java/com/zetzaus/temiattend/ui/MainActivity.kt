@@ -2,7 +2,7 @@ package com.zetzaus.temiattend.ui
 
 import android.Manifest
 import android.animation.ObjectAnimator
-import android.media.Image
+import android.graphics.*
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -13,11 +13,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
-import com.google.mlkit.common.model.LocalModel
 import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.face.FaceDetection
-import com.google.mlkit.vision.face.FaceDetectorOptions
-import com.google.mlkit.vision.label.custom.CustomImageLabelerOptions
+import com.google.mlkit.vision.face.FaceDetector
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.PictureResult
 import com.otaliastudios.cameraview.gesture.Gesture
@@ -32,31 +29,22 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.camera_overlay.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
+import java.io.ByteArrayOutputStream
+import javax.inject.Inject
+import kotlin.math.abs
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     /** The activity's `ViewModel`. */
     private val mainViewModel by viewModels<MainActivityViewModel>()
 
-    /** Configurations for face detection. */
-    private val faceDetectorOptions = FaceDetectorOptions.Builder()
-        .build()
-
     /** Face detector that takes an image as input. */
-    private val faceDetector = FaceDetection.getClient(faceDetectorOptions)
-
-    /** Custom TensorFlow Lite model to be used in image classification. */
-    private val localModel = LocalModel.Builder()
-        .setAssetFilePath(MODEL_FILENAME)
-        .build()
-
-    /** Configuration for image classifications. */
-    private val customLabelerOptions = CustomImageLabelerOptions.Builder(localModel)
-        .setConfidenceThreshold(0.8f)
-        .build()
+    @Inject
+    lateinit var faceDetector: FaceDetector
 
     /** Image labeler. */
-    private val maskDetector = MaskDetector(customLabelerOptions)
+    @Inject
+    lateinit var maskDetector: MaskDetector
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -134,16 +122,51 @@ class MainActivity : AppCompatActivity() {
 
         maskCameraView.addFrameProcessor {
             runBlocking {
-                if (it.dataClass == Image::class.java) {
-                    val originalImage = it.getData<Image>()
-                    val inputImage = InputImage.fromMediaImage(
-                        originalImage,
-                        it.rotationToView
+                if (it.dataClass == ByteArray::class.java) {
+                    val inputImage = InputImage.fromByteArray(
+                        it.getData(),
+                        it.size.width,
+                        it.size.height,
+                        it.rotationToView,
+                        InputImage.IMAGE_FORMAT_NV21
                     )
+
                     val faces = faceDetector.process(inputImage).await()
 
-                    faces.firstOrNull()?.let { _ ->
-                        maskDetector.detectMask(inputImage).run {
+                    faces.firstOrNull()?.let { face ->
+                        // Crop image only the face part
+                        val yuvImage =
+                            YuvImage(
+                                it.getData(),
+                                ImageFormat.NV21,
+                                it.size.width,
+                                it.size.height,
+                                null
+                            )
+                        val bytesOut = ByteArrayOutputStream()
+                        yuvImage.compressToJpeg(
+                            Rect(0, 0, it.size.width, it.size.height),
+                            90,
+                            bytesOut
+                        )
+                        val bytesFrame = bytesOut.toByteArray()
+
+                        val originalImage =
+                            BitmapFactory.decodeByteArray(bytesFrame, 0, bytesFrame.size)
+
+                        val boundingBox = face.boundingBox
+                        val faceImage = Bitmap.createBitmap(
+                            originalImage,
+                            boundingBox.centerX() - abs(boundingBox.width() / 1.25).toInt(),
+                            boundingBox.centerY() - abs(boundingBox.height() / 1.25).toInt(),
+                            (boundingBox.width() * 1.5).toInt(),
+                            (boundingBox.height() * 1.5).toInt()
+                        )
+
+                        // Detect mask
+                        val faceInputImage = InputImage.fromBitmap(faceImage, it.rotationToView)
+
+                        maskDetector.detectMask(faceInputImage).run {
                             mainViewModel.updateMaskDetection(isWearingMask)
                         }
 

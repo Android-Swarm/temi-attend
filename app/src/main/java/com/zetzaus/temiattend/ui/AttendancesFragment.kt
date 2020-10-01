@@ -42,14 +42,14 @@ class AttendancesFragment : BindingFragment<FragmentAttendancesBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        
+        viewModel.attendances.observe(viewLifecycleOwner) {
+            attendanceAdapter.submitList(it)
+        }
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = attendanceAdapter
-        }
-
-        viewModel.attendances.observe(viewLifecycleOwner) {
-            attendanceAdapter.submitList(it)
         }
     }
 

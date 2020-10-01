@@ -32,7 +32,7 @@ class MainActivityViewModel @ViewModelInject constructor(
     private val maskDetectionChannel = BroadcastChannel<Boolean>(60)
     val maskDetected = maskDetectionChannel.asFlow()
         .distinctUntilChanged() // From rapid frames, emit only if the incoming value is different than the last emitted value
-        .debounce(1000) // Emit if the value doesn't change for 1s
+        .debounce(2000) // Emit if the value doesn't change for 1s
         .asLiveData()
 
     private val _startFaceRecognition = MutableLiveData<Boolean>()
