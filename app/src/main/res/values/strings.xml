@@ -4,7 +4,7 @@
     <string name="label_welcome_title">Welcome!</string>
     <string name="label_welcome_subtitle">Check in as</string>
 
-    <string name="label_login_instruction">Scan your staff pass or enter your Schaeffler ID</string>
+    <string name="label_login_instruction">Enter your Schaeffler ID</string>
 
     <string name="label_temperature_instruction">Recording your temperature</string>
     <string name="label_temperature">%.2f℃</string>
@@ -21,10 +21,7 @@
         Unfortunately, your temperature remains high. For safety purpose, kindly leave the office now.
     </string>
 
-    <string name="label_mask_title">Mask Not Detected!</string>
-    <string name="label_mask_subtitle">Please wear a mask at all times!</string>
-    <string name="label_mask_instruction">This panel will disappear once mask has been detected</string>
-    <string name="label_mask_hint">Don\'t have one? Please take one from the counter</string>
+    <string name="label_attendances_title">%s\'s Attendances</string>
 
     <string name="hint_manual_employee">Schaeffler ID</string>
 
@@ -39,6 +36,8 @@
     wear your mask properly</string>
     <string name="content_desc_setting">Settings icon. Click to access settings.</string>
     <string name="content_desc_qr_code">SafeEntry QR code. Please scan this with your phone before entering office.</string>
+    <string name="content_desc_ic_calendar">Calendar icon.</string>
+    <string name="content_desc_ic_thermometer">Thermometer icon.</string>
 
     <string name="snack_bar_error">Encountered error: %s</string>
     <string name="snack_bar_new_face">New face detected! Your face will be saved once you confirmed your id.</string>

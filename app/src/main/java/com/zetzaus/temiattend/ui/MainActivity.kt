@@ -188,6 +188,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Click handlers for calling the back button.
+     *
+     * @param v The [View] that is clicked.
+     */
+    fun onClickShouldGoBack(v: View) = onBackPressed()
+
     companion object {
         const val PERMISSION_CODE = 1111
         const val MODEL_FILENAME = "model.tflite"

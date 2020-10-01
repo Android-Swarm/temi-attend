@@ -6,6 +6,7 @@ import android.view.ViewTreeObserver
 import androidx.navigation.fragment.navArgs
 import com.zetzaus.temiattend.R
 import com.zetzaus.temiattend.databinding.FragmentNormalTempBinding
+import com.zetzaus.temiattend.ext.navigate
 import com.zetzaus.temiattend.ext.toQrCode
 import kotlinx.android.synthetic.main.fragment_normal_temp.*
 
@@ -41,6 +42,13 @@ class NormalTempFragment : BindingFragment<FragmentNormalTempBinding>() {
     }
 
     fun onConfirmButtonPressed() = requireActivity().onBackPressed()
+
+    fun onMyAttendancePressed(v: View) {
+        val directions =
+            NormalTempFragmentDirections.actionNormalTempFragmentToAttendancesFragment(args.user)
+
+        v.navigate(directions)
+    }
 
     companion object {
         const val SCHAEFFLER_SAFE_ENTRY_URL =

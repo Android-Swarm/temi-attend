@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="attendance"
+            type="com.zetzaus.temiattend.database.Attendance" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/iconCalendar"
+            android:layout_width="50dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/content_desc_ic_calendar"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_calendar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@android:color/white" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:textSize="24sp"
+            app:dateText="@{attendance.dateTime}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iconCalendar"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Mar 26, 2020 10:30:20" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/iconThermometer"
+            app:layout_constraintTop_toTopOf="parent"
+            app:temperatureText="@{attendance.temperature}"
+            tools:text="36.5℃" />
+
+        <ImageView
+            android:id="@+id/iconThermometer"
+            android:layout_width="50dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/content_desc_ic_thermometer"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_thermometer"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@android:color/white" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -4,11 +4,16 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.view.View
 import android.view.ViewAnimationUtils
+import android.widget.TextView
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.isVisible
+import androidx.databinding.BindingAdapter
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigator
+import com.zetzaus.temiattend.R
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Animates the [View] with the circular reveal animation.
@@ -84,3 +89,17 @@ fun MotionLayout.addTransitionCompleteListener(listener: (MotionLayout?, Int) ->
             p3: Float
         ) = Unit
     })
+
+@BindingAdapter("dateText")
+fun TextView.dateText(date: Date) {
+    text = SimpleDateFormat.getDateTimeInstance().format(date)
+}
+
+@BindingAdapter("temperatureText")
+fun TextView.temperatureText(temperature: Float?) {
+    text = if (temperature != null) {
+        String.format(context.getString(R.string.label_temperature, temperature))
+    } else {
+        ""
+    }
+}

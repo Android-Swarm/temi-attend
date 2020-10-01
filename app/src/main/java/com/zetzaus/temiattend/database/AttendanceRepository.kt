@@ -12,9 +12,9 @@ class AttendanceRepository @Inject constructor(private val dao: AttendanceDao) {
 
     suspend fun saveAttendance(attendance: Attendance) = dao.saveAttendance(attendance)
 
-    suspend fun getUserAttendances(user: String) = dao.getByUser(user)
+    fun getUserAttendances(user: String) = dao.getByUser(user)
 
-    suspend fun getUserAttendancesToday(user: String): Flow<List<Attendance>> {
+    fun getUserAttendancesToday(user: String): Flow<List<Attendance>> {
         val start = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, 0)
             set(Calendar.MINUTE, 0)

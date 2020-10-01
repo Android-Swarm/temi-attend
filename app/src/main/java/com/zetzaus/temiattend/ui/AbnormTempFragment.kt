@@ -1,10 +1,10 @@
 package com.zetzaus.temiattend.ui
 
-import android.os.Bundle
 import android.view.View
 import androidx.navigation.fragment.navArgs
 import com.zetzaus.temiattend.R
 import com.zetzaus.temiattend.databinding.FragmentAbnormTempBinding
+import com.zetzaus.temiattend.ext.navigate
 
 class AbnormTempFragment : BindingFragment<FragmentAbnormTempBinding>() {
 
@@ -20,8 +20,10 @@ class AbnormTempFragment : BindingFragment<FragmentAbnormTempBinding>() {
 
     fun onConfirm() = requireActivity().onBackPressed()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
+    fun onMyAttendanceClicked(v: View) {
+        val directions =
+            AbnormTempFragmentDirections.actionAbnormTempFragmentToAttendancesFragment(args.user)
 
+        v.navigate(directions)
+    }
 }

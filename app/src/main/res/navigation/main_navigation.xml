@@ -61,6 +61,9 @@
         <argument
             android:name="temperature"
             app:argType="float" />
+        <action
+            android:id="@+id/action_normalTempFragment_to_attendancesFragment"
+            app:destination="@id/attendancesFragment" />
     </fragment>
     <fragment
         android:id="@+id/abnormTempFragment"
@@ -73,5 +76,16 @@
         <argument
             android:name="temperature"
             app:argType="float" />
+        <action
+            android:id="@+id/action_abnormTempFragment_to_attendancesFragment"
+            app:destination="@id/attendancesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/attendancesFragment"
+        android:name="com.zetzaus.temiattend.ui.AttendancesFragment"
+        android:label="AttendancesFragment" >
+        <argument
+            android:name="user"
+            app:argType="string" />
     </fragment>
 </navigation>

@@ -55,13 +55,13 @@
             style="@style/TextAppearance.AppCompat.Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text='@{String.format(@string/label_temperature, temperature)}'
             android:textSize="36sp"
             android:transitionName="temperature"
             app:layout_constraintBottom_toBottomOf="@id/thermometer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/thermometer"
             app:layout_constraintTop_toTopOf="@id/thermometer"
+            app:temperatureText="@{temperature}"
             tools:text="36.5℃" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -97,6 +97,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/attendancesButton"
             style="@style/OutlinedAppButton"
+            android:onClick="@{(v) -> fragment.onMyAttendancePressed(v)}"
             android:text="@string/button_my_attendance" />
 
         <include
