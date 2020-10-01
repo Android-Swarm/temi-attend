@@ -1,37 +1,23 @@
 package com.zetzaus.temiattend.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import androidx.transition.TransitionInflater
 import com.zetzaus.temiattend.R
 import com.zetzaus.temiattend.databinding.FragmentNormalTempBinding
 import com.zetzaus.temiattend.ext.toQrCode
 import kotlinx.android.synthetic.main.fragment_normal_temp.*
 
-class NormalTempFragment : TransitionalFragment() {
+class NormalTempFragment : BindingFragment<FragmentNormalTempBinding>() {
     private val args by navArgs<NormalTempFragmentArgs>()
 
-    private lateinit var binding: FragmentNormalTempBinding
+    override fun layoutId(): Int = R.layout.fragment_normal_temp
 
-    override fun transitionId(): Int = android.R.transition.move
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_normal_temp, container, false)
-
+    override fun onBinding() {
         binding.temperature = args.temperature
         binding.username = args.user
         binding.fragment = this
-
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

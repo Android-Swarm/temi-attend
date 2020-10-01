@@ -26,24 +26,17 @@ import com.zetzaus.temiattend.R
 import com.zetzaus.temiattend.ext.LOG_TAG
 import com.zetzaus.temiattend.ext.allAndroidPermissionsGranted
 import com.zetzaus.temiattend.ext.circularHideOrReveal
-import com.zetzaus.temiattend.face.AzureFaceManager
 import com.zetzaus.temiattend.face.MaskDetector
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.camera_overlay.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     /** The activity's `ViewModel`. */
-    private val mainViewModel by viewModels<MainActivityViewModel> {
-        MainActivityViewModel.Factory(
-            faceManager = AzureFaceManager(
-                getString(R.string.azure_endpoint),
-                getString(R.string.azure_key)
-            ),
-            context = this
-        )
-    }
+    private val mainViewModel by viewModels<MainActivityViewModel>()
 
     /** Configurations for face detection. */
     private val faceDetectorOptions = FaceDetectorOptions.Builder()
@@ -71,6 +64,7 @@ class MainActivity : AppCompatActivity() {
 
         // Set to night mode
         if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES) {
+            Log.d(LOG_TAG, "Changing to night mode, recreating activity")
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             recreate()
         }
@@ -168,6 +162,21 @@ class MainActivity : AppCompatActivity() {
                 mainViewModel.detect(result.data)
             }
         })
+
+
+        // Temp SDK
+//        IrManager.initIr(
+//            application,
+//            """MIIBVAIBADANBgkqhkiG9w0BAQEFAASCAT4wggE6AgEAAkEAmx5NrqWXCEkX39U2CHiYzb90PauqEfmjV+UtgDqaqhl1KsNYCNQSWNsERqtMhHFBW6Nnftb7o8BDMigD52QYpwIDAQABAkBDJzdSKHXeLGadjFw8BpmAWSYlnK+f4IcKgjjUjopuoLG1Bi1LAr/NoYZIFZvf1t8TLyR9TPPMHf/pvPghvkZBAiEA19yRvRZyn2ccxqGSHAwTgEeauxgp1J3BXVOYlE8mFVkCIQC39j0iPqR7fqJOcwD41ub8SVuUXB/g9Zf/5N5Q5F/d/wIhAJaoprtPqI6i3A2yhRS4RQAaed8tXTy9IlFt4CdbGpx5AiAnLsyQqbURFMTvXrF7TxK988YM0J59pPHuMEpmAm6k8wIgXXguCfTq9XigD25u/A6tmkV3G3eOgqzgqba8ShUBYVU=""",
+//            """sdk_zetzaus_temiattend""",
+//        )
+//
+//        if (IrManager.getCheckSuccess()) {
+//            Log.d(LOG_TAG, "Temi-IR SDK initialization success!")
+//
+//        } else {
+//            Log.d(this@MainActivity.LOG_TAG, "Temi-IR SDK initialization failed!")
+//        }
     }
 
     override fun onBackPressed() {
@@ -182,6 +191,10 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val PERMISSION_CODE = 1111
         const val MODEL_FILENAME = "model.tflite"
-        val ANDROID_PERMISSIONS = listOf(Manifest.permission.CAMERA)
+        val ANDROID_PERMISSIONS = listOf(
+            Manifest.permission.CAMERA,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
     }
 }

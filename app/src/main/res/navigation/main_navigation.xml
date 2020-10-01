@@ -44,6 +44,10 @@
             android:id="@+id/action_temperatureFragment_to_normalTempFragment"
             app:destination="@id/normalTempFragment"
             app:popUpTo="@id/welcomeFragment" />
+        <action
+            android:id="@+id/action_temperatureFragment_to_abnormTempFragment"
+            app:destination="@id/abnormTempFragment"
+            app:popUpTo="@id/welcomeFragment" />
     </fragment>
 
     <fragment
@@ -51,6 +55,18 @@
         android:name="com.zetzaus.temiattend.ui.NormalTempFragment"
         android:label="fragment_normal_temp"
         tools:layout="@layout/fragment_normal_temp">
+        <argument
+            android:name="user"
+            app:argType="string" />
+        <argument
+            android:name="temperature"
+            app:argType="float" />
+    </fragment>
+    <fragment
+        android:id="@+id/abnormTempFragment"
+        android:name="com.zetzaus.temiattend.ui.AbnormTempFragment"
+        android:label="AbnormTempFragment"
+        tools:layout="@layout/fragment_abnorm_temp">
         <argument
             android:name="user"
             app:argType="string" />

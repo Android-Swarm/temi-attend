@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="username"
+            name="user"
             type="String" />
 
         <variable
@@ -14,24 +14,28 @@
             type="float" />
 
         <variable
+            name="chance"
+            type="int" />
+
+        <variable
             name="fragment"
-            type="com.zetzaus.temiattend.ui.NormalTempFragment" />
+            type="com.zetzaus.temiattend.ui.AbnormTempFragment" />
     </data>
 
     <androidx.constraintlayout.motion.widget.MotionLayout
-        android:id="@+id/constraintLayout"
+        android:id="@+id/motionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp"
-        app:layoutDescription="@xml/fragment_normal_temp_xml_constraintlayout_scene"
-        tools:context=".ui.NormalTempFragment">
+        app:layoutDescription="@xml/fragment_abnorm_temp_xml_constraintlayout_scene"
+        tools:context=".ui.AbnormTempFragment">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/titleText"
             style="@style/TitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/label_normal_end_title"
+            android:text="@string/label_end_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -41,13 +45,13 @@
             android:layout_width="125dp"
             android:layout_height="125dp"
             android:scaleType="centerCrop"
-            android:transitionName="thermometer"
+            app:layout_constraintBottom_toTopOf="@+id/subtitleText"
             app:layout_constraintEnd_toStartOf="@id/temperatureText"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/titleText"
+            app:layout_constraintTop_toBottomOf="@+id/titleText"
             app:lottie_autoPlay="false"
-            app:lottie_progress="0.427"
+            app:lottie_progress="0.88"
             app:lottie_rawRes="@raw/thermometer" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -57,11 +61,10 @@
             android:layout_height="wrap_content"
             android:text='@{String.format(@string/label_temperature, temperature)}'
             android:textSize="36sp"
-            android:transitionName="temperature"
-            app:layout_constraintBottom_toBottomOf="@id/thermometer"
+            app:layout_constraintBottom_toTopOf="@+id/subtitleText"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/thermometer"
-            app:layout_constraintTop_toTopOf="@id/thermometer"
+            app:layout_constraintStart_toEndOf="@+id/thermometer"
+            app:layout_constraintTop_toBottomOf="@+id/titleText"
             tools:text="36.5℃" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -69,46 +72,48 @@
             style="@style/TitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/label_normal_end_subtitle"
+            android:text="@string/label_bad_end_instruction"
             android:textSize="36sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/thermometer" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/safeEntryQrCode"
-            android:layout_width="175dp"
-            android:layout_height="175dp"
-            android:layout_marginTop="16dp"
-            android:contentDescription="@string/content_desc_qr_code"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/chanceText"
+            style="@style/UserCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{String.format(@string/label_bad_end_chance, chance)}'
+            app:layout_constraintBottom_toTopOf="@id/footer"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/subtitleText" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/confirmButton"
             style="@style/AppButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> fragment.onConfirmButtonPressed()}"
-            android:text="@string/button_confirm" />
+            android:layout_marginTop="16dp"
+            android:onClick="@{() -> fragment.onConfirm()}"
+            android:text="@string/button_confirm"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/subtitleText" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/attendancesButton"
             style="@style/OutlinedAppButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/button_my_attendance" />
 
         <include
             android:id="@+id/footer"
             layout="@layout/user_footer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:user="@{username}" />
+            app:user="@{user}"
+            tools:layout_editor_absoluteX="394dp"
+            tools:layout_editor_absoluteY="541dp" />
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

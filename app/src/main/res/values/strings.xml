@@ -14,8 +14,8 @@
     <string name="label_normal_end_subtitle">Please also check in through the SafeEntry</string>
 
     <string name="label_end_title">Sorry!</string>
-    <string name="label_end_subtitle">You are not allowed to enter the office</string>
-    <string name="label_bad_end_instruction">Kindly wait for a few minutes to cool down and try again</string>
+    <string name="label_bad_end_instruction">You are not allowed to enter the office.\n
+        Kindly wait for a few minutes to cool down and try again</string>
     <string name="label_bad_end_chance">Remaining Chance: %d</string>
     <string name="label_strict_end_instruction">
         Unfortunately, your temperature remains high. For safety purpose, kindly leave the office now.
@@ -33,6 +33,7 @@
     <string name="button_face_recognize">Recognize me</string>
     <string name="button_manual">Manual entry</string>
     <string name="button_confirm">Confirm</string>
+    <string name="button_my_attendance">My Attendance</string>
 
     <string name="content_desc_mask">This icon shows because you are not wearing a mask! Please
     wear your mask properly</string>

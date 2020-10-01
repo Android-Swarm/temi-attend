@@ -74,7 +74,7 @@ dependencies {
     api 'com.otaliastudios:cameraview:2.6.4'
 
     // Temi SDK
-    releaseImplementation 'com.robotemi:sdk:0.10.70'
+    implementation 'com.robotemi:sdk:0.10.53'
 
     // Face detection and mask recognition
     implementation 'com.google.mlkit:face-detection:16.0.2'
@@ -106,6 +106,8 @@ dependencies {
     // Dependency Injection
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02'
+    kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha02'
 
     // Barcode generator
     implementation 'com.google.zxing:core:3.4.0'

@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.view.View
 import android.view.ViewAnimationUtils
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.isVisible
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
@@ -33,9 +34,53 @@ fun View.circularHideOrReveal(hide: Boolean, hiddenVisibility: Int = View.GONE) 
         isVisible = true
     }.start()
 
+/**
+ * Navigates to another destination.
+ *
+ * @param resId The destination id.
+ */
 fun View?.navigate(resId: Int) = this?.findNavController()?.navigate(resId)
 
+/**
+ * Navigates to another destination.
+ *
+ * @param dir The destination direction.
+ */
 fun View?.navigate(dir: NavDirections) = this?.findNavController()?.navigate(dir)
 
+/**
+ * Navigates to another destination.
+ *
+ * @param dir The destination direction.
+ * @param extra Any navigation extras.
+ */
 fun View?.navigateWithExtras(dir: NavDirections, extra: FragmentNavigator.Extras) =
     this?.findNavController()?.navigate(dir, extra)
+
+/**
+ * Adds only a listener that listens to a transition complete event.
+ *
+ * @param listener The lambda called when the transition has completed.
+ */
+fun MotionLayout.addTransitionCompleteListener(listener: (MotionLayout?, Int) -> Unit) =
+    addTransitionListener(object : MotionLayout.TransitionListener {
+        override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) = Unit
+
+        override fun onTransitionChange(
+            p0: MotionLayout?,
+            p1: Int,
+            p2: Int,
+            p3: Float
+        ) = Unit
+
+        override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
+            listener(p0, p1)
+        }
+
+        override fun onTransitionTrigger(
+            p0: MotionLayout?,
+            p1: Int,
+            p2: Boolean,
+            p3: Float
+        ) = Unit
+    })

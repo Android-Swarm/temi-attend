@@ -1,10 +1,10 @@
 package com.zetzaus.temiattend.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import androidx.databinding.ViewDataBinding
 import androidx.transition.TransitionInflater
 
-abstract class TransitionalFragment : Fragment() {
+abstract class TransitionalFragment<T : ViewDataBinding> : BindingFragment<T>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

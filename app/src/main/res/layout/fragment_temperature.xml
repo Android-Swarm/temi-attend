@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -9,12 +11,12 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/motionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp"
+        app:layoutDescription="@xml/fragment_temperature_xml_constraintlayout_scene"
         tools:context=".ui.TemperatureFragment">
 
         <com.google.android.material.textview.MaterialTextView
@@ -49,6 +51,7 @@
             style="@style/TextAppearance.AppCompat.Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text='@{viewModel.temperatureLiveData != null ? String.format(@string/label_temperature, viewModel.temperatureLiveData) : ""}'
             android:textSize="36sp"
             android:transitionName="temperature"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -56,10 +59,10 @@
             app:layout_constraintHorizontal_bias="0.55"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:textAppear='@{viewModel.temperatureLiveData != null ? String.format(@string/label_temperature, viewModel.temperatureLiveData) : ""}'
             tools:text="36.5℃" />
 
         <include
+            android:id="@+id/include"
             layout="@layout/user_footer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -68,5 +71,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:user="@{viewModel.userLiveData}" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>
