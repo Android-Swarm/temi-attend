@@ -2,6 +2,8 @@ package com.zetzaus.temiattend.ext
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
+import android.util.Log
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.widget.TextView
@@ -17,27 +19,36 @@ import java.util.*
 
 /**
  * Animates the [View] with the circular reveal animation.
+ * Make sure to set the attribute `android:visibility` to set the starting visibility.
  *
  * @param hide `true` for circular hide, `false` for circular reveal.
  * @param hiddenVisibility Determines the Visibility after circular hide. Defaults to [View.GONE].
  */
-fun View.circularHideOrReveal(hide: Boolean, hiddenVisibility: Int = View.GONE) =
-    ViewAnimationUtils.createCircularReveal(
-        this,
-        width / 2,
-        height / 2,
-        if (hide) width.toFloat() else 0f,
-        if (hide) 0f else width.toFloat()
-    ).apply {
-        addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
-                super.onAnimationEnd(animation)
-                this@circularHideOrReveal.visibility = if (hide) hiddenVisibility else View.VISIBLE
-            }
-        })
+@BindingAdapter(value = ["circularHide", "circularHiddenVisibility"], requireAll = false)
+fun View.circularHideOrReveal(hide: Boolean, hiddenVisibility: Int = View.GONE) {
+    if (isAttachedToWindow) {
+        Log.d(LOG_TAG, "View is attached, launching animation for hidden $hide")
+        ViewAnimationUtils.createCircularReveal(
+            this,
+            width / 2,
+            height / 2,
+            if (hide) width.toFloat() else 0f,
+            if (hide) 0f else width.toFloat()
+        ).apply {
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    super.onAnimationEnd(animation)
+                    this@circularHideOrReveal.visibility =
+                        if (hide) hiddenVisibility else View.VISIBLE
 
-        isVisible = true
-    }.start()
+                    Log.d(LOG_TAG, "View is now ${if (hide) "invisible" else "visible"}")
+                }
+            })
+
+            isVisible = true
+        }.start()
+    }
+}
 
 /**
  * Navigates to another destination.
@@ -89,6 +100,15 @@ fun MotionLayout.addTransitionCompleteListener(listener: (MotionLayout?, Int) ->
             p3: Float
         ) = Unit
     })
+
+@BindingAdapter("blinkDuration")
+fun View.blink(repeatDuration: Long) {
+    ObjectAnimator.ofFloat(this, "alpha", 0f, 1f).apply {
+        duration = repeatDuration
+        repeatCount = ObjectAnimator.INFINITE
+        repeatMode = ObjectAnimator.REVERSE
+    }.start()
+}
 
 @BindingAdapter("dateText")
 fun TextView.dateText(date: Date) {

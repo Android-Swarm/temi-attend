@@ -1,59 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.MainActivity">
+<layout>
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/NavHostFragment"
-        android:background="@android:color/background_dark"
-        android:name="androidx.navigation.fragment.NavHostFragment"
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.zetzaus.temiattend.ui.MainActivityViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/main_navigation" />
+        tools:context=".ui.MainActivity">
 
-    <com.otaliastudios.cameraview.CameraView
-        android:id="@+id/maskCameraView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible"
-        app:cameraAudio="off"
-        app:cameraEngine="camera1"
-        app:cameraFacing="front"
-        app:cameraHdr="on"
-        app:cameraPlaySounds="false"
-        app:cameraPreviewFrameRate="60" />
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/NavHostFragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/background_dark"
+            app:defaultNavHost="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navGraph="@navigation/main_navigation" />
 
-    <ImageView
-        android:id="@+id/imageMask"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:contentDescription="@string/content_desc_mask"
-        android:src="@drawable/ic_mask"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@color/error_dark_theme"
-        tools:visibility="visible" />
+        <com.otaliastudios.cameraview.CameraView
+            android:id="@+id/maskCameraView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            app:cameraAudio="off"
+            app:cameraEngine="camera1"
+            app:cameraFacing="front"
+            app:cameraHdr="on"
+            app:cameraPlaySounds="false"
+            app:cameraPreviewFrameRate="60"
+            app:circularHiddenVisibility="@{View.INVISIBLE}"
+            app:circularHide="@{!viewModel.startFaceRecognition}" />
 
-    <include
-        android:id="@+id/cameraOverlay"
-        layout="@layout/camera_overlay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/imageMask"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="@string/content_desc_mask"
+            android:src="@drawable/ic_mask"
+            android:visibility="@{viewModel.maskDetected ? View.GONE : View.VISIBLE}"
+            app:blinkDuration="@{1500}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/error_dark_theme" />
+
+        <include
+            android:id="@+id/cameraOverlay"
+            layout="@layout/camera_overlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:viewModel="@{viewModel}"
+            tools:visibility="visible" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

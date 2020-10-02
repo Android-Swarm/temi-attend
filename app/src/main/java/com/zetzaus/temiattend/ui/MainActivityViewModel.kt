@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
-import java.net.Socket
 
 @OptIn(
     kotlinx.coroutines.ExperimentalCoroutinesApi::class,
@@ -29,18 +28,30 @@ class MainActivityViewModel @ViewModelInject constructor(
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
+    /** Channel to update when mask become (not) detected. */
     private val maskDetectionChannel = BroadcastChannel<Boolean>(60)
+
+    /** Observed to update the mask icon's visibility.*/
     val maskDetected = maskDetectionChannel.asFlow()
         .distinctUntilChanged() // From rapid frames, emit only if the incoming value is different than the last emitted value
-        .debounce(2000) // Emit if the value doesn't change for 1s
+        .debounce(2000) // Emit if the value doesn't change for 2s
         .asLiveData()
 
-    private val _startFaceRecognition = MutableLiveData<Boolean>()
-    val startFaceRecognition: LiveData<Boolean> = _startFaceRecognition // Start camera
+    /** Used to update if face recognition should be started. */
+    private val _startFaceRecognition = MutableLiveData(false)
 
+    /** Observed to update the visibility of the camera for face recognition.*/
+    val startFaceRecognition: LiveData<Boolean> = _startFaceRecognition
+
+    /** Used to send messages to be displayed in the snack bar.*/
     private val _snackBarMessage = MutableLiveData<String>()
-    val snackBarMessage: LiveData<String> = _snackBarMessage // Display SnackBar with message
 
+    /** Observed to send messages to the user by snack bar.*/
+    val snackBarMessage: LiveData<String> = _snackBarMessage
+
+    /** This will not be null when a new face is recognized. Used by the [EmployeeLoginFragment] to
+     * register a new person to the Azure cloud.
+     */
     var newPersonToRegister: NewPersonPayload? = null
 
 //    init {
@@ -136,17 +147,17 @@ class MainActivityViewModel @ViewModelInject constructor(
 //
 //        }
 //    }
-
-    private fun retrySocket5001(retry: Int = 6): Socket = try {
-        Socket("192.168.43.45", 5001)
-    } catch (e: Exception) {
-        if (retry > 0) {
-            Log.d("Socket", "Socket connect failed, retries left $retry")
-            retrySocket5001(retry - 1)
-        } else {
-            throw e
-        }
-    }
+//
+//    private fun retrySocket5001(retry: Int = 6): Socket = try {
+//        Socket("192.168.43.45", 5001)
+//    } catch (e: Exception) {
+//        if (retry > 0) {
+//            Log.d("Socket", "Socket connect failed, retries left $retry")
+//            retrySocket5001(retry - 1)
+//        } else {
+//            throw e
+//        }
+//    }
 
     suspend fun updateMaskDetection(isWearingMask: Boolean) =
         maskDetectionChannel.send(isWearingMask)
@@ -240,20 +251,6 @@ class MainActivityViewModel @ViewModelInject constructor(
             .run {
                 context.sendBroadcast(this, PRIVATE_BROADCAST_PERMISSION)
             }
-
-
-//    class Factory(private val faceManager: AzureFaceManager, private val context: Context) :
-//        ViewModelProvider.NewInstanceFactory() {
-//
-//        @Suppress("UNCHECKED_CAST")
-//        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-//            if (modelClass.isAssignableFrom(MainActivityViewModel::class.java)) {
-//                return MainActivityViewModel(faceManager, context) as T
-//            }
-//
-//            return super.create(modelClass)
-//        }
-//    }
 
     companion object {
         const val PRIVATE_BROADCAST_PERMISSION = "com.zetzaus.temiattend.PRIVATE_BROADCAST"

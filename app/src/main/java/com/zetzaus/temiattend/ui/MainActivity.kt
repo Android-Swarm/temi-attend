@@ -1,7 +1,6 @@
 package com.zetzaus.temiattend.ui
 
 import android.Manifest
-import android.animation.ObjectAnimator
 import android.graphics.*
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.google.mlkit.vision.common.InputImage
@@ -20,13 +20,12 @@ import com.otaliastudios.cameraview.PictureResult
 import com.otaliastudios.cameraview.gesture.Gesture
 import com.otaliastudios.cameraview.gesture.GestureAction
 import com.zetzaus.temiattend.R
+import com.zetzaus.temiattend.databinding.ActivityMainBinding
 import com.zetzaus.temiattend.ext.LOG_TAG
 import com.zetzaus.temiattend.ext.allAndroidPermissionsGranted
-import com.zetzaus.temiattend.ext.circularHideOrReveal
 import com.zetzaus.temiattend.face.MaskDetector
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.camera_overlay.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import java.io.ByteArrayOutputStream
@@ -46,9 +45,16 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var maskDetector: MaskDetector
 
+    /** Main Activity's binding.*/
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        // Setup data binding
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.viewModel = mainViewModel
+        binding.lifecycleOwner = this
 
         // Set to night mode
         if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES) {
@@ -57,6 +63,7 @@ class MainActivity : AppCompatActivity() {
             recreate()
         }
 
+        // Start mask detection if permitted before
         if (allAndroidPermissionsGranted(ANDROID_PERMISSIONS)) {
             startMaskDetection()
         } else {
@@ -67,40 +74,10 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        // Animate mask not detected icon
-        ObjectAnimator.ofInt(imageMask, "imageAlpha", 0, 255).apply {
-            duration = 2000
-            repeatCount = ObjectAnimator.INFINITE
-            repeatMode = ObjectAnimator.REVERSE
-        }.start()
-
-        mainViewModel.maskDetected.observe(this) { wearingMask ->
-            imageMask.isVisible = !wearingMask
-            Log.d(LOG_TAG, if (wearingMask) "Wearing mask or no person" else "No mask")
-        }
-
-        mainViewModel.startFaceRecognition.observe(this) { shouldStartFaceRecognition ->
-            shouldShowCamera(shouldStartFaceRecognition)
-        }
-
-        closeCameraButton.setOnClickListener {
-            shouldShowCamera(false)
-        }
-
         mainViewModel.snackBarMessage.observe(this) {
             Snackbar.make(findViewById(android.R.id.content), it, Snackbar.LENGTH_INDEFINITE)
                 .setAction(android.R.string.ok) {}
                 .show()
-        }
-    }
-
-    private fun shouldShowCamera(show: Boolean) {
-        if (show) {
-            maskCameraView.circularHideOrReveal(false)
-            cameraOverlay.circularHideOrReveal(false)
-        } else {
-            maskCameraView.circularHideOrReveal(true, View.INVISIBLE)
-            cameraOverlay.circularHideOrReveal(true)
         }
     }
 
@@ -180,7 +157,7 @@ class MainActivity : AppCompatActivity() {
                 super.onPictureTaken(result)
 
                 Log.d(this@MainActivity.LOG_TAG, "Picture taken! Size: ${result.data.size}")
-                shouldShowCamera(false)
+                mainViewModel.updateFaceRecognitionState(false)
 
                 mainViewModel.detect(result.data)
             }
@@ -205,7 +182,7 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         // If camera is visible, hide the camera
         if (maskCameraView.isVisible) {
-            shouldShowCamera(false)
+            mainViewModel.updateFaceRecognitionState(false)
         } else {
             super.onBackPressed()
         }
