@@ -14,8 +14,8 @@
             type="float" />
 
         <variable
-            name="chance"
-            type="int" />
+            name="viewModel"
+            type="com.zetzaus.temiattend.ui.AbnormTempViewModel" />
 
         <variable
             name="fragment"
@@ -72,19 +72,20 @@
             style="@style/TitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/label_bad_end_instruction"
+            android:text="@{viewModel.remainingChance == 0 ? @string/label_strict_end_instruction : @string/label_bad_end_instruction}"
             android:textSize="36sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/label_bad_end_instruction"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/chanceText"
             style="@style/UserCaption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text='@{String.format(@string/label_bad_end_chance, chance)}'
+            android:text='@{String.format(@string/label_bad_end_chance, viewModel.remainingChance)}'
             app:layout_constraintBottom_toTopOf="@id/footer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -112,9 +113,12 @@
         <include
             android:id="@+id/footer"
             layout="@layout/user_footer"
-            app:user="@{user}"
-            tools:layout_editor_absoluteX="394dp"
-            tools:layout_editor_absoluteY="541dp" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:user="@{user}" />
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

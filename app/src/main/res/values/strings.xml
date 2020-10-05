@@ -14,11 +14,14 @@
     <string name="label_normal_end_subtitle">Please also check in through the SafeEntry</string>
 
     <string name="label_end_title">Sorry!</string>
-    <string name="label_bad_end_instruction">You are not allowed to enter the office.\n
-        Kindly wait for a few minutes to cool down and try again</string>
+    <string name="label_bad_end_instruction">
+        You are not allowed to enter the office.\n
+        Kindly wait for a few minutes to cool down and try again
+    </string>
     <string name="label_bad_end_chance">Remaining Chance: %d</string>
     <string name="label_strict_end_instruction">
-        Unfortunately, your temperature remains high. For safety purpose, kindly leave the office now.
+        Unfortunately, your temperature remains high.\n
+        For safety purpose, kindly leave the office now.
     </string>
 
     <string name="label_attendances_title">%s\'s Attendances</string>
@@ -46,6 +49,10 @@
     <!-- Camera related strings -->
     <string name="camera_overlay_text">Tap the screen when your face is visible</string>
     <string name="camera_overlay_button">Close Camera</string>
+
+    <!-- Schaeffler ID error -->
+    <string name="error_blank">Please input your Schaeffler ID!</string>
+    <string name="error_non_alphabet">Schaeffler ID cannot contain numbers or special characters!</string>
 
     <!-- Preferences -->
     <string name="settings_location">Office Location</string>

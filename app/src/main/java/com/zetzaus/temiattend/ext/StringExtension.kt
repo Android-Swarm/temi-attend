@@ -4,7 +4,16 @@ import android.graphics.Bitmap
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.journeyapps.barcodescanner.BarcodeEncoder
+import java.util.*
 
+/**
+ * Converts the [String] content into a QR code [Bitmap].
+ *
+ * @param width The width of the [Bitmap].
+ * @param height The height of the [Bitmap].
+ *
+ * @return The QR code image.
+ */
 fun String.toQrCode(width: Int, height: Int): Bitmap =
     MultiFormatWriter().encode(
         this,
@@ -14,3 +23,15 @@ fun String.toQrCode(width: Int, height: Int): Bitmap =
     ).run {
         BarcodeEncoder().createBitmap(this)
     }
+
+/**
+ * Returns `true` if the string contains only letters.
+ *
+ */
+fun String.isAlphabetical() = all(Char::isLetter)
+
+/**
+ * Trim leading and trailing spaces and convert all letters to upper case.
+ *
+ */
+fun String.upperCaseAndTrim() = toUpperCase(Locale.ROOT).trim()

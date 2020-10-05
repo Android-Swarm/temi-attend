@@ -1,64 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context=".ui.EmployeeLoginFragment">
+<layout>
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/titleTextView"
-        style="@style/TitleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/label_login_instruction"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/schaefflerIdTextLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/hint_manual_employee"
-        app:errorEnabled="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleTextView"
-        app:layout_constraintVertical_bias="0.25">
+        <variable
+            name="fragment"
+            type="com.zetzaus.temiattend.ui.EmployeeLoginFragment" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/schaefflerIdEditText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="textCapCharacters"
-            android:textSize="24sp"
-            android:transitionName="username"
-            tools:text="CONFIRMIDEXIST" />
-    </com.google.android.material.textfield.TextInputLayout>
+        <variable
+            name="viewModel"
+            type="com.zetzaus.temiattend.ui.EmployeeLoginViewModel" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonConfirmId"
-        style="@style/AppButton"
-        android:layout_marginTop="64dp"
-        android:text="@string/button_confirm"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.33"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/schaefflerIdTextLayout" />
+        <variable
+            name="mainViewModel"
+            type="com.zetzaus.temiattend.ui.MainActivityViewModel" />
+    </data>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonFaceRecognition"
-        style="@style/OutlinedAppButton"
-        android:layout_marginTop="64dp"
-        android:text="@string/button_face_recognize"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.66"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/schaefflerIdTextLayout" />
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        tools:context=".ui.EmployeeLoginFragment">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/titleTextView"
+            style="@style/TitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/label_login_instruction"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/schaefflerIdTextLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_manual_employee"
+            app:errorEnabled="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleTextView"
+            app:layout_constraintVertical_bias="0.25"
+            app:textError="@{viewModel.errorInput}">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/schaefflerIdEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textCapCharacters"
+                android:text="@{viewModel.recognizedUser}"
+                android:textSize="24sp"
+                android:transitionName="username"
+                tools:text="CONFIRMIDEXIST" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonConfirmId"
+            style="@style/AppButton"
+            android:layout_marginTop="64dp"
+            android:onClick="@{() -> fragment.onConfirmButtonClicked()}"
+            android:text="@string/button_confirm"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.33"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/schaefflerIdTextLayout" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonFaceRecognition"
+            style="@style/OutlinedAppButton"
+            android:layout_marginTop="64dp"
+            android:onClick="@{() -> mainViewModel.updateFaceRecognitionState(true)}"
+            android:text="@string/button_face_recognize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.66"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/schaefflerIdTextLayout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

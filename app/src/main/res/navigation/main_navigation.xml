@@ -27,6 +27,10 @@
             app:destination="@id/temperatureFragment"
             app:popUpTo="@id/employeeLoginFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_employeeLoginFragment_to_abnormTempFragment"
+            app:destination="@id/abnormTempFragment"
+            app:popUpTo="@id/welcomeFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -63,7 +67,8 @@
             app:argType="float" />
         <action
             android:id="@+id/action_normalTempFragment_to_attendancesFragment"
-            app:destination="@id/attendancesFragment" />
+            app:destination="@id/attendancesFragment"
+            app:popUpTo="@id/welcomeFragment" />
     </fragment>
     <fragment
         android:id="@+id/abnormTempFragment"
@@ -78,7 +83,8 @@
             app:argType="float" />
         <action
             android:id="@+id/action_abnormTempFragment_to_attendancesFragment"
-            app:destination="@id/attendancesFragment" />
+            app:destination="@id/attendancesFragment"
+            app:popUpTo="@id/welcomeFragment" />
     </fragment>
     <fragment
         android:id="@+id/attendancesFragment"

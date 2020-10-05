@@ -7,7 +7,16 @@
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@id/start"
         motion:duration="1000">
-        <KeyFrameSet></KeyFrameSet>
+        <KeyFrameSet>
+            <KeyAttribute
+                android:alpha="0.0"
+                motion:framePosition="90"
+                motion:motionTarget="@id/confirmButton" />
+            <KeyAttribute
+                android:alpha="0.0"
+                motion:framePosition="90"
+                motion:motionTarget="@id/attendancesButton" />
+        </KeyFrameSet>
     </Transition>
 
     <ConstraintSet android:id="@+id/start">

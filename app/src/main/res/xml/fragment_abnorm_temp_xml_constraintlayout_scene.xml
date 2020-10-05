@@ -19,6 +19,15 @@
                 android:scaleY="1.5"
                 motion:framePosition="85"
                 motion:motionTarget="@id/chanceText" />
+
+            <KeyAttribute
+                android:alpha="0.0"
+                motion:framePosition="90"
+                motion:motionTarget="@id/confirmButton" />
+            <KeyAttribute
+                android:alpha="0.0"
+                motion:framePosition="90"
+                motion:motionTarget="@id/attendancesButton" />
         </KeyFrameSet>
     </Transition>
 

@@ -6,14 +6,17 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.zetzaus.temiattend.R
 import com.zetzaus.temiattend.databinding.FragmentTemperatureBinding
 import com.zetzaus.temiattend.ext.LOG_TAG
 import com.zetzaus.temiattend.ext.addTransitionCompleteListener
+import com.zetzaus.temiattend.ext.isNormalTemperature
 import com.zetzaus.temiattend.ext.navigate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_temperature.*
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 @AndroidEntryPoint
@@ -31,7 +34,7 @@ class TemperatureFragment : TransitionalFragment<FragmentTemperatureBinding>() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        viewModel.updateUser(args.user)
+        viewModel.submitUser(args.user)
 
         // TODO: Change with real temperature
         Handler(Looper.getMainLooper())
@@ -45,28 +48,32 @@ class TemperatureFragment : TransitionalFragment<FragmentTemperatureBinding>() {
                 // Save attendance to local database
                 viewModel.recordAttendance(args.user, temp)
 
-                val normalTemp = temp < 37.3f
+                val normalTemp = temp.isNormalTemperature()
                 cancelAnimation()
 
                 progress = if (normalTemp) 0.427f else 0.88f
 
                 motionLayout.addTransitionCompleteListener { _, _ ->
+                    Log.d(
+                        this@TemperatureFragment.LOG_TAG,
+                        "Temperature recorded, navigating..."
+                    )
 
-                    Log.d(this@TemperatureFragment.LOG_TAG, "Temperature recorded, navigating...")
+                    lifecycleScope.launch {
+                        val dir = if (normalTemp) {
+                            TemperatureFragmentDirections.actionTemperatureFragmentToNormalTempFragment(
+                                args.user,
+                                viewModel.temperatureLiveData.value!!
+                            )
+                        } else {
+                            TemperatureFragmentDirections.actionTemperatureFragmentToAbnormTempFragment(
+                                args.user,
+                                viewModel.temperatureLiveData.value!!
+                            )
+                        }
 
-                    val dir = if (normalTemp) {
-                        TemperatureFragmentDirections.actionTemperatureFragmentToNormalTempFragment(
-                            args.user,
-                            viewModel.temperatureLiveData.value!!
-                        )
-                    } else {
-                        TemperatureFragmentDirections.actionTemperatureFragmentToAbnormTempFragment(
-                            args.user,
-                            viewModel.temperatureLiveData.value!!
-                        )
+                        animatedThermometer.navigate(dir)
                     }
-
-                    animatedThermometer.navigate(dir)
                 }
 
                 motionLayout.transitionToEnd()

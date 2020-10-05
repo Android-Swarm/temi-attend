@@ -1,12 +1,17 @@
 package com.zetzaus.temiattend.ui
 
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.zetzaus.temiattend.R
 import com.zetzaus.temiattend.databinding.FragmentAbnormTempBinding
 import com.zetzaus.temiattend.ext.navigate
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AbnormTempFragment : BindingFragment<FragmentAbnormTempBinding>() {
+
+    private val viewModel by viewModels<AbnormTempViewModel>()
 
     private val args by navArgs<AbnormTempFragmentArgs>()
 
@@ -14,7 +19,8 @@ class AbnormTempFragment : BindingFragment<FragmentAbnormTempBinding>() {
 
     override fun onBinding() {
         binding.temperature = args.temperature
-        binding.user = args.user
+        binding.user = args.user.also { viewModel.submitUser(it) }
+        binding.viewModel = viewModel
         binding.fragment = this
     }
 

@@ -13,6 +13,7 @@ import androidx.databinding.BindingAdapter
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigator
+import com.google.android.material.textfield.TextInputLayout
 import com.zetzaus.temiattend.R
 import java.text.SimpleDateFormat
 import java.util.*
@@ -122,4 +123,11 @@ fun TextView.temperatureText(temperature: Float?) {
     } else {
         ""
     }
+}
+
+@BindingAdapter("textError")
+fun TextInputLayout.textError(error: String?) {
+    error?.let {
+        setError(it)
+    } ?: setError(null)
 }

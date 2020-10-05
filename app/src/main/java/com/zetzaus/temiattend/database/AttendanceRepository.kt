@@ -1,6 +1,10 @@
 package com.zetzaus.temiattend.database
 
+import android.util.Log
+import com.zetzaus.temiattend.ext.LOG_TAG
+import com.zetzaus.temiattend.ext.isNormalTemperature
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,7 +18,11 @@ class AttendanceRepository @Inject constructor(private val dao: AttendanceDao) {
 
     fun getUserAttendances(user: String) = dao.getByUser(user)
 
-    fun getUserAttendancesToday(user: String): Flow<List<Attendance>> {
+    fun getAbnormalAttendancesToday(user: String) = getUserAttendancesToday(user)
+        .map { it.filter { attendance -> !attendance.temperature.isNormalTemperature() } }
+        .also { Log.d(LOG_TAG, "Filtered") }
+
+    private fun getUserAttendancesToday(user: String): Flow<List<Attendance>> {
         val start = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, 0)
             set(Calendar.MINUTE, 0)
@@ -28,6 +36,8 @@ class AttendanceRepository @Inject constructor(private val dao: AttendanceDao) {
             set(Calendar.SECOND, 59)
             set(Calendar.MILLISECOND, 999)
         }.time
+
+        Log.d(LOG_TAG, "Getting user attendances from $start to $end")
 
         return dao.getByUserBetween(user, start, end)
     }
