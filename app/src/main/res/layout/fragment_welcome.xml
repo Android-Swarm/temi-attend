@@ -8,19 +8,18 @@
     tools:context=".ui.WelcomeFragment">
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/textView"
+        android:id="@+id/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:letterSpacing="0.2"
+        android:layout_marginBottom="8dp"
         android:text="@string/label_welcome_title"
         android:textAppearance="@style/TitleText"
+        app:layout_constraintBottom_toTopOf="@id/checkInAsText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/materialTextView"
+        android:id="@+id/checkInAsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/label_welcome_subtitle"
@@ -34,23 +33,20 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonEmployee"
         style="@style/AppButton"
+        android:layout_marginTop="32dp"
         android:text="@string/button_employee"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintEnd_toStartOf="@id/buttonGuest"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.75" />
+        app:layout_constraintTop_toBottomOf="@id/checkInAsText" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonGuest"
         style="@style/AppButton"
+        android:layout_marginTop="32dp"
         android:text="@string/button_guest"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.75"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.75" />
+        app:layout_constraintStart_toEndOf="@id/buttonEmployee"
+        app:layout_constraintTop_toBottomOf="@id/checkInAsText" />
 
     <ImageView
         android:id="@+id/imageSettings"

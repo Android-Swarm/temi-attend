@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Temi Attend</string>
 
-    <string name="label_welcome_title">Welcome!</string>
+    <string name="label_welcome_title">Welcome to Schaeffler!</string>
     <string name="label_welcome_subtitle">Check in as</string>
 
     <string name="label_login_instruction">Enter your Schaeffler ID</string>

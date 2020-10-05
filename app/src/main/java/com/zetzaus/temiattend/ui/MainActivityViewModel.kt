@@ -43,6 +43,9 @@ class MainActivityViewModel @ViewModelInject constructor(
     /** Observed to update the visibility of the camera for face recognition.*/
     val startFaceRecognition: LiveData<Boolean> = _startFaceRecognition
 
+    private val _isRecognizing = MutableLiveData(false)
+    val isRecognizing: LiveData<Boolean> = _isRecognizing
+
     /** Used to send messages to be displayed in the snack bar.*/
     private val _snackBarMessage = MutableLiveData<String>()
 
@@ -166,8 +169,11 @@ class MainActivityViewModel @ViewModelInject constructor(
         _startFaceRecognition.value = state
     }
 
-    fun detect(photoData: ByteArray) =
+    fun detectAndRecognize(photoData: ByteArray) =
         viewModelScope.launch {
+            // Update state to recognizing
+            _isRecognizing.value = true
+
             val requestBody = photoData.toRequestBody(AzureFaceManager.PHOTO_PAYLOAD_TYPE)
 
             val detectedFace = faceManager.detectFaces(requestBody).also {
@@ -206,6 +212,8 @@ class MainActivityViewModel @ViewModelInject constructor(
 
                     Log.e(this@MainActivityViewModel.LOG_TAG, "$code : $message", e)
                 }
+            } finally {
+                _isRecognizing.value = false
             }
         }
 

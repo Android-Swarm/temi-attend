@@ -159,7 +159,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d(this@MainActivity.LOG_TAG, "Picture taken! Size: ${result.data.size}")
                 mainViewModel.updateFaceRecognitionState(false)
 
-                mainViewModel.detect(result.data)
+                mainViewModel.detectAndRecognize(result.data)
             }
         })
 
