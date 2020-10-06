@@ -31,10 +31,11 @@
             style="@style/TitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="@string/label_normal_end_title"
+            app:layout_constraintBottom_toTopOf="@id/thermometer"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/thermometer"
@@ -42,10 +43,6 @@
             android:layout_height="125dp"
             android:scaleType="centerCrop"
             android:transitionName="thermometer"
-            app:layout_constraintEnd_toStartOf="@id/temperatureText"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/titleText"
             app:lottie_autoPlay="false"
             app:lottie_progress="0.427"
             app:lottie_rawRes="@raw/thermometer" />

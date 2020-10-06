@@ -4,7 +4,6 @@ import android.Manifest
 import android.graphics.*
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -15,10 +14,13 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.FaceDetector
+import com.ogawa.temiirsdk.IrManager
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.PictureResult
 import com.otaliastudios.cameraview.gesture.Gesture
 import com.otaliastudios.cameraview.gesture.GestureAction
+import com.robotemi.sdk.Robot
+import com.robotemi.sdk.TtsRequest
 import com.zetzaus.temiattend.R
 import com.zetzaus.temiattend.databinding.ActivityMainBinding
 import com.zetzaus.temiattend.ext.LOG_TAG
@@ -79,6 +81,15 @@ class MainActivity : AppCompatActivity() {
                 .setAction(android.R.string.ok) {}
                 .show()
         }
+
+        mainViewModel.maskDetected.observe(this) { wearing ->
+            if (!wearing) {
+                Robot.getInstance()
+                    .speak(TtsRequest.create(getString(R.string.tts_mask_not_detected), true))
+            }
+        }
+
+        prepareTemperatureMeasurement()
     }
 
     override fun onRequestPermissionsResult(
@@ -162,21 +173,22 @@ class MainActivity : AppCompatActivity() {
                 mainViewModel.detectAndRecognize(result.data)
             }
         })
+    }
 
-
+    private fun prepareTemperatureMeasurement() {
         // Temp SDK
-//        IrManager.initIr(
-//            application,
-//            """MIIBVAIBADANBgkqhkiG9w0BAQEFAASCAT4wggE6AgEAAkEAmx5NrqWXCEkX39U2CHiYzb90PauqEfmjV+UtgDqaqhl1KsNYCNQSWNsERqtMhHFBW6Nnftb7o8BDMigD52QYpwIDAQABAkBDJzdSKHXeLGadjFw8BpmAWSYlnK+f4IcKgjjUjopuoLG1Bi1LAr/NoYZIFZvf1t8TLyR9TPPMHf/pvPghvkZBAiEA19yRvRZyn2ccxqGSHAwTgEeauxgp1J3BXVOYlE8mFVkCIQC39j0iPqR7fqJOcwD41ub8SVuUXB/g9Zf/5N5Q5F/d/wIhAJaoprtPqI6i3A2yhRS4RQAaed8tXTy9IlFt4CdbGpx5AiAnLsyQqbURFMTvXrF7TxK988YM0J59pPHuMEpmAm6k8wIgXXguCfTq9XigD25u/A6tmkV3G3eOgqzgqba8ShUBYVU=""",
-//            """sdk_zetzaus_temiattend""",
-//        )
-//
-//        if (IrManager.getCheckSuccess()) {
-//            Log.d(LOG_TAG, "Temi-IR SDK initialization success!")
-//
-//        } else {
-//            Log.d(this@MainActivity.LOG_TAG, "Temi-IR SDK initialization failed!")
-//        }
+        IrManager.initIr(
+            application,
+            getString(R.string.temi_ir_key),
+            getString(R.string.temi_ir_app_id),
+        )
+
+        if (IrManager.getCheckSuccess()) {
+            Log.d(LOG_TAG, "Temi-IR SDK initialization success! Starting temperature measurement")
+            mainViewModel.startTemperatureTaking()
+        } else {
+            Log.d(this@MainActivity.LOG_TAG, "Temi-IR SDK initialization failed!")
+        }
     }
 
     override fun onBackPressed() {
@@ -187,13 +199,6 @@ class MainActivity : AppCompatActivity() {
             super.onBackPressed()
         }
     }
-
-    /**
-     * Click handlers for calling the back button.
-     *
-     * @param v The [View] that is clicked.
-     */
-    fun onClickShouldGoBack(v: View) = onBackPressed()
 
     companion object {
         const val PERMISSION_CODE = 1111

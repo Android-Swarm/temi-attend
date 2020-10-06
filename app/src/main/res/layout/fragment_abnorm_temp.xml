@@ -35,17 +35,17 @@
             style="@style/TitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:text="@string/label_end_title"
+            app:layout_constraintBottom_toTopOf="@id/thermometer"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/thermometer"
             android:layout_width="125dp"
             android:layout_height="125dp"
             android:scaleType="centerCrop"
-            app:layout_constraintBottom_toTopOf="@+id/subtitleText"
             app:layout_constraintEnd_toStartOf="@id/temperatureText"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,10 +60,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="36sp"
-            app:layout_constraintBottom_toTopOf="@+id/subtitleText"
+            app:layout_constraintBottom_toBottomOf="@+id/thermometer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/thermometer"
-            app:layout_constraintTop_toBottomOf="@+id/titleText"
+            app:layout_constraintTop_toTopOf="@+id/thermometer"
             app:temperatureText="@{temperature}"
             tools:text="36.5℃" />
 
@@ -78,7 +78,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/label_bad_end_instruction"/>
+            tools:text="@string/label_bad_end_instruction" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/chanceText"

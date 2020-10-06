@@ -31,15 +31,6 @@
             motion:layout_constraintTop_toTopOf="parent" />
 
         <Constraint
-            android:id="@id/temperatureText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintEnd_toEndOf="parent"
-            motion:layout_constraintStart_toEndOf="@id/thermometer"
-            motion:layout_constraintTop_toTopOf="parent" />
-
-        <Constraint
             android:id="@id/safeEntryQrCode"
             android:layout_width="175dp"
             android:layout_height="175dp"
@@ -87,19 +78,10 @@
             android:layout_width="125dp"
             android:layout_height="125dp"
             android:layout_marginTop="16dp"
+            motion:layout_constraintBottom_toTopOf="@+id/subtitleText"
             motion:layout_constraintEnd_toStartOf="@id/temperatureText"
             motion:layout_constraintHorizontal_chainStyle="packed"
-            motion:layout_constraintStart_toStartOf="parent"
-            motion:layout_constraintTop_toBottomOf="@+id/titleText" />
-
-        <Constraint
-            android:id="@id/temperatureText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            motion:layout_constraintBottom_toBottomOf="@id/thermometer"
-            motion:layout_constraintEnd_toEndOf="parent"
-            motion:layout_constraintStart_toEndOf="@id/thermometer"
-            motion:layout_constraintTop_toTopOf="@id/thermometer" />
+            motion:layout_constraintStart_toStartOf="parent" />
 
         <Constraint
             android:id="@id/safeEntryQrCode"

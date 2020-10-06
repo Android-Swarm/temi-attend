@@ -42,7 +42,13 @@ class AttendancesFragment : BindingFragment<FragmentAttendancesBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
+        /* There is a bug in Hilt when using temi causing the app to crash, hence the click
+           listener is not bound. */
+        confirmButton.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
+
         viewModel.attendances.observe(viewLifecycleOwner) {
             attendanceAdapter.submitList(it)
         }
