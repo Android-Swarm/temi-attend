@@ -1,6 +1,8 @@
 package com.zetzaus.temiattend.di
 
 import android.content.Context
+import android.net.wifi.WifiManager
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import com.google.mlkit.common.model.LocalModel
 import com.google.mlkit.vision.face.FaceDetection
@@ -74,4 +76,9 @@ class MainActivityModules {
 
         return MaskDetector(customLabelerOptions)
     }
+
+    @Provides
+    fun provideWifiManager(@ApplicationContext context: Context): WifiManager =
+        ContextCompat.getSystemService(context, WifiManager::class.java)!!
+
 }
