@@ -1,7 +1,7 @@
 package com.zetzaus.temiattend.ui
 
 import android.Manifest
-import android.graphics.*
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
@@ -19,23 +19,20 @@ import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.PictureResult
 import com.otaliastudios.cameraview.gesture.Gesture
 import com.otaliastudios.cameraview.gesture.GestureAction
-import com.robotemi.sdk.Robot
-import com.robotemi.sdk.TtsRequest
+import com.robotemi.sdk.listeners.OnUserInteractionChangedListener
 import com.zetzaus.temiattend.R
 import com.zetzaus.temiattend.databinding.ActivityMainBinding
-import com.zetzaus.temiattend.ext.LOG_TAG
-import com.zetzaus.temiattend.ext.allAndroidPermissionsGranted
+import com.zetzaus.temiattend.ext.*
 import com.zetzaus.temiattend.face.MaskDetector
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
-import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 import kotlin.math.abs
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnUserInteractionChangedListener {
     /** The activity's `ViewModel`. */
     private val mainViewModel by viewModels<MainActivityViewModel>()
 
@@ -53,14 +50,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        robot.addOnUserInteractionChangedListener(this)
+
         // Setup data binding
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.viewModel = mainViewModel
         binding.lifecycleOwner = this
 
         // Set to night mode
-        if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES) {
+        if (!isNightMode) {
             Log.d(LOG_TAG, "Changing to night mode, recreating activity")
+
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             recreate()
         }
@@ -84,12 +84,19 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.maskDetected.observe(this) { wearing ->
             if (!wearing) {
-                Robot.getInstance()
-                    .speak(TtsRequest.create(getString(R.string.tts_mask_not_detected), true))
+                mainViewModel.requestTemiSpeak(getString(R.string.tts_mask_not_detected), true)
             }
         }
 
+        mainViewModel.temiTts.observe(this) { request -> robot.speak(request) }
+
         prepareTemperatureMeasurement()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        robot.removeOnUserInteractionChangedListener(this)
     }
 
     override fun onRequestPermissionsResult(
@@ -108,57 +115,44 @@ class MainActivity : AppCompatActivity() {
 
         maskCameraView.mapGesture(Gesture.TAP, GestureAction.TAKE_PICTURE)
 
-        maskCameraView.addFrameProcessor {
+        maskCameraView.addFrameProcessor { frame ->
             runBlocking {
-                if (it.dataClass == ByteArray::class.java) {
+                if (frame.dataClass == ByteArray::class.java) {
                     val inputImage = InputImage.fromByteArray(
-                        it.getData(),
-                        it.size.width,
-                        it.size.height,
-                        it.rotationToView,
+                        frame.getData(),
+                        frame.size.width,
+                        frame.size.height,
+                        frame.rotationToView,
                         InputImage.IMAGE_FORMAT_NV21
                     )
 
                     val faces = faceDetector.process(inputImage).await()
 
-                    faces.firstOrNull()?.let { face ->
-                        // Crop image only the face part
-                        val yuvImage =
-                            YuvImage(
-                                it.getData(),
-                                ImageFormat.NV21,
-                                it.size.width,
-                                it.size.height,
-                                null
+                    faces.filter { it.hasAllLandmarks() }
+                        .firstOrNull { it.headEulerAngleX in -30.0f..30f && it.headEulerAngleY in -30.0f..30f }
+                        ?.let { face ->
+                            // Convert frame to bitmap
+                            val originalImage = frame.toBitmap()
+
+                            // Crop image only the face part
+                            val boundingBox = face.boundingBox
+                            val faceImage = Bitmap.createBitmap(
+                                originalImage,
+                                boundingBox.centerX() - abs(boundingBox.width() / 1.25).toInt(),
+                                boundingBox.centerY() - abs(boundingBox.height() / 1.25).toInt(),
+                                (boundingBox.width() * 1.5).toInt(),
+                                (boundingBox.height() * 1.5).toInt()
                             )
-                        val bytesOut = ByteArrayOutputStream()
-                        yuvImage.compressToJpeg(
-                            Rect(0, 0, it.size.width, it.size.height),
-                            90,
-                            bytesOut
-                        )
-                        val bytesFrame = bytesOut.toByteArray()
 
-                        val originalImage =
-                            BitmapFactory.decodeByteArray(bytesFrame, 0, bytesFrame.size)
+                            // Detect mask
+                            val faceInputImage =
+                                InputImage.fromBitmap(faceImage, frame.rotationToView)
 
-                        val boundingBox = face.boundingBox
-                        val faceImage = Bitmap.createBitmap(
-                            originalImage,
-                            boundingBox.centerX() - abs(boundingBox.width() / 1.25).toInt(),
-                            boundingBox.centerY() - abs(boundingBox.height() / 1.25).toInt(),
-                            (boundingBox.width() * 1.5).toInt(),
-                            (boundingBox.height() * 1.5).toInt()
-                        )
+                            maskDetector.detectMask(faceInputImage).run {
+                                mainViewModel.updateMaskDetection(isWearingMask)
+                            }
 
-                        // Detect mask
-                        val faceInputImage = InputImage.fromBitmap(faceImage, it.rotationToView)
-
-                        maskDetector.detectMask(faceInputImage).run {
-                            mainViewModel.updateMaskDetection(isWearingMask)
-                        }
-
-                    } ?: mainViewModel.updateMaskDetection(true)
+                        } ?: mainViewModel.updateMaskDetection(true)
                 }
             }
         }
@@ -197,6 +191,15 @@ class MainActivity : AppCompatActivity() {
             mainViewModel.updateFaceRecognitionState(false)
         } else {
             super.onBackPressed()
+        }
+    }
+
+
+    override fun onUserInteraction(interacting: Boolean) {
+        Log.d(LOG_TAG, "Change of user interaction! User is interacting: $interacting")
+
+        if (interacting && currentDestinationId == R.id.welcomeFragment) {
+            mainViewModel.requestTemiSpeak(getString(R.string.label_welcome_title), false)
         }
     }
 

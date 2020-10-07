@@ -54,9 +54,11 @@ class FragmentModules {
 class MainActivityModules {
 
     @Provides
-    fun provideFaceDetector() = FaceDetectorOptions.Builder().build().run {
-        FaceDetection.getClient(this)
-    }
+    fun provideFaceDetector() = FaceDetectorOptions.Builder()
+        .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
+        .build().run {
+            FaceDetection.getClient(this)
+        }
 
     @Provides
     fun provideMaskDetector(): MaskDetector {

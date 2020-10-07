@@ -7,6 +7,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.ogawa.temiirsdk.IrDataUtil
 import com.ogawa.temiirsdk.IrSensorUtil
+import com.robotemi.sdk.TtsRequest
 import com.zetzaus.temiattend.BuildConfig
 import com.zetzaus.temiattend.R
 import com.zetzaus.temiattend.ext.LOG_TAG
@@ -52,6 +53,9 @@ class MainActivityViewModel @ViewModelInject constructor(
 
     private val _isRecognizing = MutableLiveData(false)
     val isRecognizing: LiveData<Boolean> = _isRecognizing
+
+    private val _temiTts = MutableLiveData<TtsRequest>()
+    val temiTts: LiveData<TtsRequest> = _temiTts
 
     /** Used to send messages to be displayed in the snack bar.*/
     private val _snackBarMessage = MutableLiveData<String>()
@@ -201,8 +205,8 @@ class MainActivityViewModel @ViewModelInject constructor(
         // FRM 1
         var frmOneRaw: TmIrResponse.FRM
         var frmOneData: IntArray?
-        var frmOneNo: Int = -1
-        var frmOneDistance: Int = 0
+        var frmOneNo = -1
+        var frmOneDistance: Int
 
         do {
             Log.d(this@MainActivityViewModel.LOG_TAG, "Attempting to fetch first FRM")
@@ -222,8 +226,8 @@ class MainActivityViewModel @ViewModelInject constructor(
         // FRM 2
         var frmTwoRaw: TmIrResponse.FRM
         var frmTwoData: IntArray?
-        var frmTwoNo: Int = -1
-        var frmTwoDistance: Int = 0
+        var frmTwoNo = -1
+        var frmTwoDistance: Int
 
         do {
             Log.d(this@MainActivityViewModel.LOG_TAG, "Attempting to fetch second FRM")
@@ -253,12 +257,13 @@ class MainActivityViewModel @ViewModelInject constructor(
         Log.d(LOG_TAG, "Measured temperature: $temperature")
     }
 
+    fun requestTemiSpeak(text: String, appear: Boolean = true) =
+        _temiTts.postValue(TtsRequest.create(text, appear))
+
     fun updateMaskDetection(isWearingMask: Boolean) =
         viewModelScope.launch { maskDetectionChannel.send(isWearingMask) }
 
-    fun updateFaceRecognitionState(state: Boolean) {
-        _startFaceRecognition.value = state
-    }
+    fun updateFaceRecognitionState(state: Boolean) = _startFaceRecognition.postValue(state)
 
     fun detectAndRecognize(photoData: ByteArray) =
         viewModelScope.launch {
