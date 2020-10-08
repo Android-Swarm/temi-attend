@@ -74,6 +74,10 @@ fun View?.navigate(dir: NavDirections) = this?.findNavController()?.navigate(dir
 fun View?.navigateWithExtras(dir: NavDirections, extra: FragmentNavigator.Extras) =
     this?.findNavController()?.navigate(dir, extra)
 
+@BindingAdapter("onClickNavigate")
+fun View?.navigateOnClick(resId: Int) =
+    this?.setOnClickListener { findNavController().navigate(resId) }
+
 /**
  * Adds only a listener that listens to a transition complete event.
  *
@@ -102,26 +106,26 @@ fun MotionLayout.addTransitionCompleteListener(listener: (MotionLayout?, Int) ->
         ) = Unit
     })
 
-@BindingAdapter("blinkDuration")
-fun View.blink(repeatDuration: Long) {
-    ObjectAnimator.ofFloat(this, "alpha", 0f, 1f).apply {
-        duration = repeatDuration
-        repeatCount = ObjectAnimator.INFINITE
-        repeatMode = ObjectAnimator.REVERSE
-    }.start()
-}
+@BindingAdapter(value = ["blinkDuration", "blinkEnabled"], requireAll = false)
+fun View.blink(repeatDuration: Long?, enabled: Boolean?) {
+    if (enabled != false) {
+        tag ?: let {
+            Log.d(LOG_TAG, "Enabled blink animation")
 
-@BindingAdapter("dateText")
-fun TextView.dateText(date: Date) {
-    text = SimpleDateFormat.getDateTimeInstance().format(date)
-}
-
-@BindingAdapter("temperatureText")
-fun TextView.temperatureText(temperature: Float?) {
-    text = if (temperature != null) {
-        String.format(context.getString(R.string.label_temperature, temperature))
+            ObjectAnimator.ofFloat(this, "alpha", 0f, 1f).apply {
+                duration = repeatDuration ?: 1000L
+                repeatCount = ObjectAnimator.INFINITE
+                repeatMode = ObjectAnimator.REVERSE
+            }.also {
+                tag = it
+            }.start()
+        }
     } else {
-        ""
+        (tag as? ObjectAnimator)?.end()
+            ?.also {
+                tag = null
+                Log.d(LOG_TAG, "Cancelling animation")
+            }
     }
 }
 

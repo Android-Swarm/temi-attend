@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 
 abstract class BindingFragment<T : ViewDataBinding> : Fragment() {
     protected lateinit var binding: T
@@ -40,4 +41,8 @@ abstract class BindingFragment<T : ViewDataBinding> : Fragment() {
     protected open fun onBinding() {
         // Do nothing by default
     }
+}
+
+abstract class BindingMainFragment<T : ViewDataBinding> : BindingFragment<T>() {
+    val mainViewModel by activityViewModels<MainActivityViewModel>()
 }

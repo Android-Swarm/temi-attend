@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_welcomeFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_welcomeFragment_to_thermalFragment"
+            app:destination="@id/thermalFragment" />
     </fragment>
     <fragment
         android:id="@+id/employeeLoginFragment"
@@ -94,4 +97,17 @@
             android:name="user"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/thermalFragment"
+        android:name="com.zetzaus.temiattend.ui.ThermalFragment"
+        android:label="fragment_thermal"
+        tools:layout="@layout/fragment_thermal" >
+        <action
+            android:id="@+id/action_thermalFragment_to_configureFragment"
+            app:destination="@id/configureFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/configureFragment"
+        android:name="com.zetzaus.temiattend.ui.ConfigureFragment"
+        android:label="ConfigureFragment" />
 </navigation>

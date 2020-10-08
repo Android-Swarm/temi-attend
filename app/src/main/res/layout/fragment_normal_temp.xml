@@ -27,7 +27,7 @@
         tools:context=".ui.NormalTempFragment">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/titleText"
+            android:id="@+id/titleLabel"
             style="@style/TitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

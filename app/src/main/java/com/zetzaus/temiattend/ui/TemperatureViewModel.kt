@@ -4,10 +4,10 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
-import androidx.lifecycle.asLiveData
 import com.zetzaus.temiattend.database.AttendanceRepository
 import com.zetzaus.temiattend.database.PreferenceRepository
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.take
 
 class TemperatureViewModel @ViewModelInject constructor(
     attendanceRepo: AttendanceRepository,
@@ -22,7 +22,7 @@ class TemperatureViewModel @ViewModelInject constructor(
     val attendanceToSave =
         preference.combine(temperatureLiveData.asFlow()) { preference, temperature ->
             Pair(preference.location, temperature)
-        }.asLiveData()
+        }.take(1)
 
     fun updateTemperature(temperature: Float) = _temperatureLiveData.postValue(temperature)
 

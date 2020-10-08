@@ -31,7 +31,7 @@
         tools:context=".ui.AbnormTempFragment">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/titleText"
+            android:id="@+id/titleLabel"
             style="@style/TitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
             app:layout_constraintEnd_toStartOf="@id/temperatureText"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleText"
+            app:layout_constraintTop_toBottomOf="@+id/titleLabel"
             app:lottie_autoPlay="false"
             app:lottie_progress="0.88"
             app:lottie_rawRes="@raw/thermometer" />

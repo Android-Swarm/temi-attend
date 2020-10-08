@@ -10,6 +10,7 @@ import com.ogawa.temiirsdk.IrSensorUtil
 import com.robotemi.sdk.TtsRequest
 import com.zetzaus.temiattend.BuildConfig
 import com.zetzaus.temiattend.R
+import com.zetzaus.temiattend.database.PreferenceRepository
 import com.zetzaus.temiattend.ext.LOG_TAG
 import com.zetzaus.temiattend.ext.toHexString
 import com.zetzaus.temiattend.ext.toRequestBody
@@ -33,6 +34,7 @@ import java.net.Socket
 )
 class MainActivityViewModel @ViewModelInject constructor(
     private val faceManager: AzureFaceManager,
+    repository: PreferenceRepository,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
@@ -67,6 +69,10 @@ class MainActivityViewModel @ViewModelInject constructor(
      * register a new person to the Azure cloud.
      */
     var newPersonToRegister: NewPersonPayload? = null
+
+    private val preference = repository.preference.asLiveData()
+    val cameraIp = preference.map { it.cameraIp }
+    val cameraMac = preference.map { it.cameraMac }
 
     private lateinit var tempSocket: Socket
     private lateinit var tempReader: InputStream
@@ -354,7 +360,7 @@ class MainActivityViewModel @ViewModelInject constructor(
         }
     }
 
-    private fun showSnackBar(message: String) {
+    fun showSnackBar(message: String) {
         _snackBarMessage.value = message
     }
 

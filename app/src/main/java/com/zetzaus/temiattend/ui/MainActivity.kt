@@ -52,18 +52,15 @@ class MainActivity : AppCompatActivity(), OnUserInteractionChangedListener {
 
         robot.addOnUserInteractionChangedListener(this)
 
+        // Set to night mode
+        if (!isNightMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
+
         // Setup data binding
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.viewModel = mainViewModel
         binding.lifecycleOwner = this
-
-        // Set to night mode
-        if (!isNightMode) {
-            Log.d(LOG_TAG, "Changing to night mode, recreating activity")
-
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            recreate()
-        }
 
         // Start mask detection if permitted before
         if (allAndroidPermissionsGranted(ANDROID_PERMISSIONS)) {

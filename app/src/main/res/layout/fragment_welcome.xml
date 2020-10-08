@@ -1,61 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context=".ui.WelcomeFragment">
+<layout>
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/titleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/label_welcome_title"
-        android:textAppearance="@style/TitleText"
-        app:layout_constraintBottom_toTopOf="@id/checkInAsText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <data>
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/checkInAsText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_welcome_subtitle"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <variable
+            name="viewModel"
+            type="com.zetzaus.temiattend.ui.WelcomeFragmentViewModel" />
+    </data>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonEmployee"
-        style="@style/AppButton"
-        android:layout_marginTop="32dp"
-        android:text="@string/button_employee"
-        app:layout_constraintEnd_toStartOf="@id/buttonGuest"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/checkInAsText" />
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        tools:context=".ui.WelcomeFragment">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonGuest"
-        style="@style/AppButton"
-        android:layout_marginTop="32dp"
-        android:text="@string/button_guest"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/buttonEmployee"
-        app:layout_constraintTop_toBottomOf="@id/checkInAsText" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/titleLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/label_welcome_title"
+            android:textAppearance="@style/TitleText"
+            app:layout_constraintBottom_toTopOf="@id/checkInAsText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/content_desc_setting"
-        android:src="@drawable/baseline_settings_white_48"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/checkInAsText"
+            style="@style/NormalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_welcome_subtitle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonEmployee"
+            style="@style/AppButton"
+            android:layout_marginTop="32dp"
+            android:text="@string/button_employee"
+            app:layout_constraintEnd_toStartOf="@id/buttonGuest"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/checkInAsText"
+            app:onClickNavigate="@{@id/action_welcomeFragment_to_employeeLoginFragment}" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonGuest"
+            style="@style/AppButton"
+            android:layout_marginTop="32dp"
+            android:text="@string/button_guest"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/buttonEmployee"
+            app:layout_constraintTop_toBottomOf="@id/checkInAsText" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/imageSettings"
+            style="@style/ImageButton"
+            android:contentDescription="@string/content_desc_setting"
+            app:icon="@drawable/baseline_settings_24"
+            app:iconSize="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:onClickNavigate="@{@id/action_welcomeFragment_to_settingsFragment}" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/ImageButton"
+            app:blinkEnabled="@{viewModel.trial}"
+            app:icon="@drawable/ic_temperature"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:onClickNavigate="@{@id/action_welcomeFragment_to_thermalFragment}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

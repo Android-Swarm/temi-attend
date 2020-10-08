@@ -26,6 +26,18 @@
 
     <string name="label_attendances_title">%s\'s Attendances</string>
 
+    <string name="label_camera_details">Thermal Camera Details</string>
+    <string name="label_ip">IP</string>
+    <string name="label_mac">MAC</string>
+    <string name="label_battery">Battery</string>
+    <string name="label_wifi">WIFI SSID</string>
+    <string name="label_version">Version</string>
+
+    <string name="label_configure">Configure Camera</string>
+    <string name="label_configure_instruction">
+        • Press the RESET button on the camera\'s bottom side\n• Connect Wi-Fi to OGAWA-IR
+    </string>
+
     <string name="hint_manual_employee">Schaeffler ID</string>
 
     <string name="button_employee">Employee</string>
@@ -34,6 +46,7 @@
     <string name="button_manual">Manual entry</string>
     <string name="button_confirm">Confirm</string>
     <string name="button_my_attendance">My Attendance</string>
+    <string name="button_reset">Reset</string>
 
     <string name="content_desc_mask">This icon shows because you are not wearing a mask! Please
     wear your mask properly</string>
@@ -45,6 +58,7 @@
     <string name="snack_bar_error">Encountered error: %s</string>
     <string name="snack_bar_new_face">New face detected! Your face will be saved once you confirmed your id.</string>
     <string name="snack_bar_no_face">No face detected, unable to recognize!</string>
+    <string name="snack_bar_wrong_wifi">You are not connected to the WiFi %s!</string>
 
     <!-- Camera related strings -->
     <string name="camera_overlay_text">Tap the screen when your face is visible</string>
@@ -65,4 +79,6 @@
 
     <!-- Temi TTS -->
     <string name="tts_mask_not_detected">Please wear your mask properly</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

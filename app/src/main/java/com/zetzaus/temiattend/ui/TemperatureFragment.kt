@@ -16,6 +16,8 @@ import com.zetzaus.temiattend.ext.isNormalTemperature
 import com.zetzaus.temiattend.ext.navigate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_temperature.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
@@ -29,6 +31,7 @@ class TemperatureFragment : TransitionalFragment<FragmentTemperatureBinding>() {
 
     override fun layoutId(): Int = R.layout.fragment_temperature
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
@@ -43,9 +46,12 @@ class TemperatureFragment : TransitionalFragment<FragmentTemperatureBinding>() {
                 Random.Default.nextInt(2000, 5000).toLong()
             )
 
-        viewModel.attendanceToSave.observe(viewLifecycleOwner) { (office, temperature) ->
-            // Save attendance to local database
-            viewModel.recordAttendance(args.user, temperature, office)
+        lifecycleScope.launch {
+            viewModel.attendanceToSave
+                .collect { (office, temperature) ->
+                    // Save attendance to local database
+                    viewModel.recordAttendance(args.user, temperature, office)
+                }
         }
 
         viewModel.temperatureLiveData.observe(viewLifecycleOwner) { temp ->

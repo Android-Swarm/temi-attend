@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.zetzaus.temiattend.ui.MainActivityViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        tools:context=".ui.ThermalFragment">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/titleLabel"
+            style="@style/TitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:text="@string/label_camera_details"
+            app:layout_constraintBottom_toTopOf="@id/batteryLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/batteryLabel"
+            style="@style/NormalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/label_battery"
+            app:layout_constraintBottom_toTopOf="@id/ipLabel"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="@id/titleLabel"
+            app:layout_constraintTop_toBottomOf="@id/titleLabel"
+            app:tint="@android:color/white" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/batteryText"
+            style="@style/NormalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintBottom_toBottomOf="@+id/batteryLabel"
+            app:layout_constraintEnd_toEndOf="@+id/titleLabel"
+            app:layout_constraintTop_toTopOf="@+id/batteryLabel"
+            app:noBlankDefault='@{"--"}'
+            app:noBlankText='@{""}'
+            tools:text="96%" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/ipLabel"
+            style="@style/NormalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/label_ip"
+            app:layout_constraintBottom_toTopOf="@id/macLabel"
+            app:layout_constraintStart_toStartOf="@id/titleLabel"
+            app:layout_constraintTop_toBottomOf="@id/batteryLabel" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/ipText"
+            style="@style/NormalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintBottom_toBottomOf="@+id/ipLabel"
+            app:layout_constraintEnd_toEndOf="@+id/titleLabel"
+            app:layout_constraintTop_toTopOf="@id/ipLabel"
+            app:noBlankDefault='@{"--"}'
+            app:noBlankText="@{viewModel.cameraIp}"
+            tools:text="192.168.0.100" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/macLabel"
+            style="@style/NormalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/label_mac"
+            app:layout_constraintBottom_toTopOf="@id/wifiLabel"
+            app:layout_constraintStart_toStartOf="@id/titleLabel"
+            app:layout_constraintTop_toBottomOf="@id/ipLabel" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/macText"
+            style="@style/NormalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintBottom_toBottomOf="@+id/macLabel"
+            app:layout_constraintEnd_toEndOf="@+id/titleLabel"
+            app:layout_constraintTop_toTopOf="@id/macLabel"
+            app:noBlankDefault='@{"--"}'
+            app:noBlankText="@{viewModel.cameraMac}"
+            tools:text="AA:BB:CC:DD:EE:FF" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/wifiLabel"
+            style="@style/NormalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/label_wifi"
+            app:layout_constraintBottom_toTopOf="@id/versionLabel"
+            app:layout_constraintStart_toStartOf="@id/titleLabel"
+            app:layout_constraintTop_toBottomOf="@id/macLabel" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/wifiText"
+            style="@style/NormalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintBottom_toBottomOf="@+id/wifiLabel"
+            app:layout_constraintEnd_toEndOf="@+id/titleLabel"
+            app:layout_constraintTop_toTopOf="@+id/wifiLabel"
+            app:noBlankDefault='@{"--"}'
+            app:noBlankText='@{""}'
+            tools:text="GlocalMe_67503" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/versionLabel"
+            style="@style/NormalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="@string/label_version"
+            app:layout_constraintBottom_toTopOf="@id/buttonReset"
+            app:layout_constraintStart_toStartOf="@+id/titleLabel"
+            app:layout_constraintTop_toBottomOf="@id/wifiLabel" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/NormalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintBottom_toBottomOf="@+id/versionLabel"
+            app:layout_constraintEnd_toEndOf="@+id/titleLabel"
+            app:layout_constraintTop_toTopOf="@+id/versionLabel"
+            app:noBlankDefault='@{"--"}'
+            app:noBlankText='@{""}'
+            tools:text="ESP8266_TT_V1.3" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonReset"
+            style="@style/AppButton"
+            android:layout_marginTop="32dp"
+            android:text="@string/button_reset"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/titleLabel"
+            app:layout_constraintStart_toStartOf="@+id/titleLabel"
+            app:layout_constraintTop_toBottomOf="@id/versionLabel"
+            app:onClickNavigate="@{@id/action_thermalFragment_to_configureFragment}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
