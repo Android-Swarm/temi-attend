@@ -2,6 +2,7 @@ package com.zetzaus.temiattend.database
 
 import android.content.Context
 import androidx.room.*
+import com.zetzaus.temiattend.OfficeName
 import java.util.*
 
 @Entity
@@ -9,7 +10,7 @@ data class Attendance(
     val user: String,
     val temperature: Float,
     val dateTime: Date,
-    val location: String = "18 Tai Seng",
+    val location: OfficeName,
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
 )
 
@@ -19,6 +20,12 @@ class AttendanceConverter {
 
     @TypeConverter
     fun toDate(time: Long) = Date(time)
+
+    @TypeConverter
+    fun fromOfficeName(name: OfficeName) = name.name
+
+    @TypeConverter
+    fun fromOfficeName(name: String) = OfficeName.valueOf(name)
 }
 
 @Database(version = 1, entities = [Attendance::class], exportSchema = false)

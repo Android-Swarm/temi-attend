@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_package = "com.zetzaus.temiattend";
+option java_multiple_files = true;
+
+// Application's settings
+message Preference {
+  // Thermal camera's MAC address
+  string cameraMac = 1;
+
+  // Thermal camera's IP address
+  string cameraIp = 2;
+
+  // Which office the application is used
+  OfficeName location = 3;
+}
+
+enum OfficeName {
+  UNDEFINED = 0;
+  AEROSPACE = 1;
+  SHARE_NTU = 2;
+  TAI_SENG = 3;
+}

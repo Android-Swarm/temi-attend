@@ -43,11 +43,13 @@ class TemperatureFragment : TransitionalFragment<FragmentTemperatureBinding>() {
                 Random.Default.nextInt(2000, 5000).toLong()
             )
 
+        viewModel.attendanceToSave.observe(viewLifecycleOwner) { (office, temperature) ->
+            // Save attendance to local database
+            viewModel.recordAttendance(args.user, temperature, office)
+        }
+
         viewModel.temperatureLiveData.observe(viewLifecycleOwner) { temp ->
             animatedThermometer.run {
-                // Save attendance to local database
-                viewModel.recordAttendance(args.user, temp)
-
                 val normalTemp = temp.isNormalTemperature()
                 cancelAnimation()
 
@@ -63,12 +65,12 @@ class TemperatureFragment : TransitionalFragment<FragmentTemperatureBinding>() {
                         val dir = if (normalTemp) {
                             TemperatureFragmentDirections.actionTemperatureFragmentToNormalTempFragment(
                                 args.user,
-                                viewModel.temperatureLiveData.value!!
+                                temp
                             )
                         } else {
                             TemperatureFragmentDirections.actionTemperatureFragmentToAbnormTempFragment(
                                 args.user,
-                                viewModel.temperatureLiveData.value!!
+                                temp
                             )
                         }
 

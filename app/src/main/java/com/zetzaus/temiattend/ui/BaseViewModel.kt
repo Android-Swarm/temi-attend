@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.zetzaus.temiattend.OfficeName
 import com.zetzaus.temiattend.database.Attendance
 import com.zetzaus.temiattend.database.AttendanceRepository
 import com.zetzaus.temiattend.ext.LOG_TAG
@@ -30,16 +31,6 @@ open class AppViewModel(protected val repository: AttendanceRepository) : ViewMo
     val abnormalAttendances = _user.asFlow()
         .combine(_abnormalAttendances) { user, attendances -> Pair(user, attendances) }
 
-//    protected lateinit var abnormalAttendanceList: List<Attendance>
-
-//    init {
-//        viewModelScope.launch {
-//            abnormalAttendances.collect {
-//                abnormalAttendanceList = it
-//            }
-//        }
-//    }
-
     fun submitUser(user: String) = viewModelScope.launch { _user.send(user.upperCaseAndTrim()) }
 
     /**
@@ -48,15 +39,17 @@ open class AppViewModel(protected val repository: AttendanceRepository) : ViewMo
      * @param user The attending user.
      * @param temperature The user's temperature measurement.
      */
-    fun recordAttendance(user: String, temperature: Float) = viewModelScope.launch {
-        val attendance = Attendance(
-            user = user.upperCaseAndTrim(),
-            temperature = temperature,
-            dateTime = Date()
-        )
+    fun recordAttendance(user: String, temperature: Float, location: OfficeName) =
+        viewModelScope.launch {
+            val attendance = Attendance(
+                user = user.upperCaseAndTrim(),
+                temperature = temperature,
+                location = location,
+                dateTime = Date()
+            )
 
-        repository.saveAttendance(attendance)
-    }
+            repository.saveAttendance(attendance)
+        }
 
     fun getRemainingChance(user: String, abnormalAttendances: List<Attendance>) =
         MAX_CHANCE - abnormalAttendances.size
