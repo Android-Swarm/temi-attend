@@ -35,3 +35,6 @@ fun String.isAlphabetical() = all(Char::isLetter)
  *
  */
 fun String.upperCaseAndTrim() = toUpperCase(Locale.ROOT).trim()
+
+fun String.escapeCharForCamera() = replace(",", """\,""")
+    .replace("""\""", """\\""")

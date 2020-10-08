@@ -9,8 +9,8 @@ import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
 import com.google.mlkit.vision.label.custom.CustomImageLabelerOptions
 import com.zetzaus.temiattend.R
+import com.zetzaus.temiattend.database.AppDatabase
 import com.zetzaus.temiattend.database.Attendance
-import com.zetzaus.temiattend.database.AttendanceDatabase
 import com.zetzaus.temiattend.face.AzureFaceManager
 import com.zetzaus.temiattend.face.MaskDetector
 import com.zetzaus.temiattend.ui.MainActivity
@@ -28,7 +28,10 @@ class Modules {
 
     @Provides
     fun provideAttendanceDao(@ApplicationContext context: Context) =
-        AttendanceDatabase.getInstance(context).dao
+        AppDatabase.getInstance(context).attendanceDao
+
+    @Provides
+    fun provideWifiDao(@ApplicationContext context: Context) = AppDatabase.getInstance(context).wifiDao
 
     @Provides
     fun provideAzureFaceManager(@ApplicationContext context: Context) =

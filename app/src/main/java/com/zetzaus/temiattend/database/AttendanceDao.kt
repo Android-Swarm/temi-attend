@@ -1,8 +1,18 @@
 package com.zetzaus.temiattend.database
 
 import androidx.room.*
+import com.zetzaus.temiattend.OfficeName
 import kotlinx.coroutines.flow.Flow
 import java.util.*
+
+@Entity
+data class Attendance(
+    val user: String,
+    val temperature: Float,
+    val dateTime: Date,
+    val location: OfficeName,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+)
 
 @Dao
 interface AttendanceDao {

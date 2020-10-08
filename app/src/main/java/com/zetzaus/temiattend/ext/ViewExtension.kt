@@ -6,7 +6,7 @@ import android.animation.ObjectAnimator
 import android.util.Log
 import android.view.View
 import android.view.ViewAnimationUtils
-import android.widget.TextView
+import android.widget.EditText
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
@@ -14,9 +14,13 @@ import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigator
 import com.google.android.material.textfield.TextInputLayout
-import com.zetzaus.temiattend.R
-import java.text.SimpleDateFormat
-import java.util.*
+
+
+/**
+ * The current text in the [EditText] as a [String].
+ */
+val EditText.textString
+    get() = text?.toString() ?: ""
 
 /**
  * Animates the [View] with the circular reveal animation.
@@ -127,6 +131,11 @@ fun View.blink(repeatDuration: Long?, enabled: Boolean?) {
                 Log.d(LOG_TAG, "Cancelling animation")
             }
     }
+}
+
+@BindingAdapter("isVisible")
+fun View.dynamicVisibility(isVisible: Boolean) {
+    this.isVisible = isVisible
 }
 
 @BindingAdapter("textError")

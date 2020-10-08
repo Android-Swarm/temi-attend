@@ -3,6 +3,7 @@ package com.zetzaus.temiattend.ext
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.graphics.*
+import android.net.wifi.WifiManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
@@ -11,6 +12,7 @@ import com.otaliastudios.cameraview.frame.Frame
 import com.robotemi.sdk.Robot
 import com.zetzaus.temiattend.ui.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 
 /**
@@ -82,3 +84,20 @@ fun Frame.toBitmap(quality: Int = 90): Bitmap {
 
     return BitmapFactory.decodeByteArray(bytesArray, 0, bytesArray.size)
 }
+
+infix fun BufferedReader.readStringLength(length: Int): String {
+    var result = ""
+
+    repeat(length) {
+        result += read().toChar()
+    }
+
+    return result
+}
+
+/**
+ * Returns the WiFi SSID the current device is connected to, after removing the leading and trailing
+ * apostrophes.
+ */
+val WifiManager.currentSsid
+    get() = connectionInfo.ssid.drop(1).dropLast(1)

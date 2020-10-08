@@ -109,5 +109,13 @@
     <fragment
         android:id="@+id/configureFragment"
         android:name="com.zetzaus.temiattend.ui.ConfigureFragment"
-        android:label="ConfigureFragment" />
+        android:label="ConfigureFragment" >
+        <action
+            android:id="@+id/action_configureFragment_to_wifiInputFragment"
+            app:destination="@id/wifiInputFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/wifiInputFragment"
+        android:name="com.zetzaus.temiattend.ui.WifiInputFragment"
+        android:label="WifiInputFragment" />
 </navigation>

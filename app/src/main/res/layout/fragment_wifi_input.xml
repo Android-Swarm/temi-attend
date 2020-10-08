@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="fragment"
+            type="com.zetzaus.temiattend.ui.WifiInputFragment" />
+
+        <variable
+            name="viewModel"
+            type="com.zetzaus.temiattend.ui.WifiInputViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.WifiInputFragment">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ssidLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:enabled='@{viewModel.macAddress == ""}'
+            android:hint="@string/hint_wifi_ssid"
+            app:cancelErrorOnEdit="@{true}"
+            app:errorText="@{viewModel.ssidError}"
+            app:layout_constraintBottom_toTopOf="@id/passwordLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/ssidInput"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:enabled='@{viewModel.macAddress == ""}'
+            android:hint="@string/hint_wifi_pwd"
+            app:endIconMode="password_toggle"
+            app:layout_constraintBottom_toTopOf="@id/buttonConnect"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ssidLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passwordInput"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonConnect"
+            style="@style/AppButton"
+            android:onClick="@{v -> fragment.onConnectButtonClicked()}"
+            android:text="@string/button_connect"
+            app:isVisible='@{viewModel.macAddress == "" &amp;&amp; !viewModel.isConnecting}'
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/passwordLayout" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/loadingAnimation"
+            android:layout_width="75dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:visibility="invisible"
+            app:isVisible="@{viewModel.isConnecting}"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonConnect"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toStartOf="@id/labelConnecting"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/buttonConnect"
+            app:lottie_autoPlay="true"
+            app:lottie_colorFilter="@color/colorPrimary"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/loading_circle" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/labelConnecting"
+            style="@style/UserCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_connecting_camera"
+            android:visibility="invisible"
+            app:isVisible="@{viewModel.isConnecting}"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonConnect"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/loadingAnimation"
+            app:layout_constraintTop_toTopOf="@+id/buttonConnect" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/labelPlease"
+            style="@style/NormalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_request_wifi"
+            android:textSize="18sp"
+            android:visibility="invisible"
+            app:isVisible='@{viewModel.macAddress != ""}'
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/buttonConnect" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/AppButton"
+            android:layout_marginTop="16dp"
+            android:onClick="@{v -> fragment.onConfirmButtonClicked(v)}"
+            android:text="@string/button_confirm"
+            android:visibility="invisible"
+            app:isVisible='@{viewModel.macAddress != ""}'
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/labelPlease" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

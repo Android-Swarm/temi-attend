@@ -5,14 +5,6 @@ import androidx.room.*
 import com.zetzaus.temiattend.OfficeName
 import java.util.*
 
-@Entity
-data class Attendance(
-    val user: String,
-    val temperature: Float,
-    val dateTime: Date,
-    val location: OfficeName,
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-)
 
 class AttendanceConverter {
     @TypeConverter
@@ -28,13 +20,15 @@ class AttendanceConverter {
     fun fromOfficeName(name: String) = OfficeName.valueOf(name)
 }
 
-@Database(version = 1, entities = [Attendance::class], exportSchema = false)
+@Database(version = 1, entities = [Attendance::class, WifiPoint::class], exportSchema = false)
 @TypeConverters(AttendanceConverter::class)
-abstract class AttendanceDatabase : RoomDatabase() {
-    abstract val dao: AttendanceDao
+abstract class AppDatabase : RoomDatabase() {
+    abstract val attendanceDao: AttendanceDao
+
+    abstract val wifiDao: WifiDao
 
     companion object {
-        private lateinit var INSTANCE: AttendanceDatabase
+        private lateinit var INSTANCE: AppDatabase
 
         private const val DB_NAME = "attendance"
 
@@ -42,7 +36,7 @@ abstract class AttendanceDatabase : RoomDatabase() {
             if (!::INSTANCE.isInitialized) {
                 INSTANCE = Room.databaseBuilder(
                     context.applicationContext,
-                    AttendanceDatabase::class.java,
+                    AppDatabase::class.java,
                     DB_NAME
                 ).build()
             }

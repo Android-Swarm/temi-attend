@@ -35,10 +35,15 @@
 
     <string name="label_configure">Configure Camera</string>
     <string name="label_configure_instruction">
-        • Press the RESET button on the camera\'s bottom side\n• Connect Wi-Fi to OGAWA-IR
+        • Turn the camera on\n• Press the RESET button on the camera\'s bottom side\n• Connect Wi-Fi to OGAWA-IR
     </string>
 
+    <string name="label_connecting_camera">Connecting camera to WIFI</string>
+    <string name="label_request_wifi">Please connect tēmi to the same WIFI network</string>
+
     <string name="hint_manual_employee">Schaeffler ID</string>
+    <string name="hint_wifi_ssid">WIFI SSID</string>
+    <string name="hint_wifi_pwd">Password</string>
 
     <string name="button_employee">Employee</string>
     <string name="button_guest">Guest</string>
@@ -47,6 +52,7 @@
     <string name="button_confirm">Confirm</string>
     <string name="button_my_attendance">My Attendance</string>
     <string name="button_reset">Reset</string>
+    <string name="button_connect">Connect Camera</string>
 
     <string name="content_desc_mask">This icon shows because you are not wearing a mask! Please
     wear your mask properly</string>
@@ -59,6 +65,8 @@
     <string name="snack_bar_new_face">New face detected! Your face will be saved once you confirmed your id.</string>
     <string name="snack_bar_no_face">No face detected, unable to recognize!</string>
     <string name="snack_bar_wrong_wifi">You are not connected to the WiFi %s!</string>
+    <string name="snack_bar_socket_error">Socket connection error: %s!</string>
+    <string name="unknown_error">Unknown error!</string>
 
     <!-- Camera related strings -->
     <string name="camera_overlay_text">Tap the screen when your face is visible</string>
@@ -67,6 +75,7 @@
     <!-- Schaeffler ID error -->
     <string name="error_blank">Please input your Schaeffler ID!</string>
     <string name="error_non_alphabet">Schaeffler ID cannot contain numbers or special characters!</string>
+    <string name="error_ssid_blank">Please choose an SSID!</string>
 
     <!-- Preferences -->
     <string name="settings_location">Office Location</string>
