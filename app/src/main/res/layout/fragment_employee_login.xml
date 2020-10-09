@@ -97,7 +97,7 @@
             app:lottie_autoPlay="true"
             app:lottie_colorFilter="@color/colorPrimary"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/circle_load" />
+            app:lottie_rawRes="@raw/loading_dots" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

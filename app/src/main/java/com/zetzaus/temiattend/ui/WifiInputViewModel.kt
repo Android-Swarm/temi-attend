@@ -2,13 +2,14 @@ package com.zetzaus.temiattend.ui
 
 import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
-import com.zetzaus.temiattend.database.PreferenceRepository
-import com.zetzaus.temiattend.database.WifiPoint
-import com.zetzaus.temiattend.database.WifiRepository
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.zetzaus.temiattend.ext.LOG_TAG
 import com.zetzaus.temiattend.ext.escapeCharForCamera
 import com.zetzaus.temiattend.ext.readStringLength
+import com.zetzaus.temiattend.ext.updatesTo
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
@@ -20,10 +21,7 @@ import java.io.InputStreamReader
 import java.net.Socket
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-class WifiInputViewModel @ViewModelInject constructor(
-    private val repository: PreferenceRepository,
-    private val wifiRepository: WifiRepository
-) : ViewModel() {
+class WifiInputViewModel @ViewModelInject constructor() : ViewModel() {
 
     private val ssidChannel = ConflatedBroadcastChannel<String>()
     private val passwordChannel = ConflatedBroadcastChannel<String>()
@@ -33,8 +31,6 @@ class WifiInputViewModel @ViewModelInject constructor(
 
     private val _isConnecting = MutableLiveData(false)
     val isConnecting: LiveData<Boolean> = _isConnecting
-
-    val wifiLiveData = wifiRepository.getWifiFlow().asLiveData()
 
     private val _macAddress = MutableLiveData("")
     val macAddress: LiveData<String> = _macAddress
@@ -59,10 +55,6 @@ class WifiInputViewModel @ViewModelInject constructor(
                 }
             }
         }
-    }
-
-    fun saveWifiList(wifiList: List<WifiPoint>) = viewModelScope.launch {
-        wifiRepository.saveWifiList(wifiList.filter { it.ssid != "OGAWA-IR" })
     }
 
     fun submitCredentials(ssid: String, password: String) =
@@ -97,18 +89,13 @@ class WifiInputViewModel @ViewModelInject constructor(
                 firstWriter.close()
                 firstSocket.close()
 
-                _macAddress updatesTo macResponse.drop(4).replace(":", "")
+                _macAddress updatesTo macResponse.drop(4)
             } catch (e: Exception) {
                 Log.e(LOG_TAG, "Encountered exception on first socket: ", e)
                 _socketError updatesTo e.localizedMessage
             } finally {
                 _isConnecting updatesTo false
             }
-        }
-
-    private suspend infix fun <T> MutableLiveData<T>.updatesTo(value: T) =
-        withContext(Dispatchers.Main) {
-            this@updatesTo.value = value
         }
 
     private fun createConnectCommand(ssid: String, password: String) =

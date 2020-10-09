@@ -26,6 +26,8 @@ import com.zetzaus.temiattend.ext.*
 import com.zetzaus.temiattend.face.MaskDetector
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -168,17 +170,25 @@ class MainActivity : AppCompatActivity(), OnUserInteractionChangedListener {
 
     private fun prepareTemperatureMeasurement() {
         // Temp SDK
-        IrManager.initIr(
-            application,
-            getString(R.string.temi_ir_key),
-            getString(R.string.temi_ir_app_id),
-        )
+        lifecycleScope.launch {
+            do {
+                IrManager.initIr(
+                    application,
+                    getString(R.string.temi_ir_key),
+                    getString(R.string.temi_ir_app_id),
+                )
 
-        if (IrManager.getCheckSuccess()) {
-            Log.d(LOG_TAG, "Temi-IR SDK initialization success! Starting temperature measurement")
-            mainViewModel.startTemperatureTaking()
-        } else {
-            Log.d(this@MainActivity.LOG_TAG, "Temi-IR SDK initialization failed!")
+                delay(1000)
+
+                IrManager.getCheckSuccess().also {
+                    Log.d(
+                        this@MainActivity.LOG_TAG,
+                        if (!it) "Init failed, retrying" else "Init success! Starting measurement"
+                    )
+                }
+            } while (!IrManager.getCheckSuccess())
+
+//            mainViewModel.startTemperatureTaking()
         }
     }
 

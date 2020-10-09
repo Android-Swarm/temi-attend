@@ -31,9 +31,6 @@ class Modules {
         AppDatabase.getInstance(context).attendanceDao
 
     @Provides
-    fun provideWifiDao(@ApplicationContext context: Context) = AppDatabase.getInstance(context).wifiDao
-
-    @Provides
     fun provideAzureFaceManager(@ApplicationContext context: Context) =
         AzureFaceManager(
             endpoint = context.getString(R.string.azure_endpoint),

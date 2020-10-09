@@ -2,15 +2,13 @@ package com.zetzaus.temiattend.ui
 
 import android.net.wifi.WifiManager
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
 import com.zetzaus.temiattend.R
-import com.zetzaus.temiattend.database.WifiPoint
 import com.zetzaus.temiattend.databinding.FragmentWifiInputBinding
-import com.zetzaus.temiattend.ext.LOG_TAG
 import com.zetzaus.temiattend.ext.currentSsid
+import com.zetzaus.temiattend.ext.navigate
 import com.zetzaus.temiattend.ext.textString
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_wifi_input.*
@@ -32,32 +30,19 @@ class WifiInputFragment : BindingMainFragment<FragmentWifiInputBinding>() {
         binding.viewModel = viewModel
         binding.fragment = this
     }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        wifiManager.scanResults.run {
-            viewModel.saveWifiList(map { WifiPoint(it.SSID) })
-
-            joinToString("; ") { it.SSID }.also {
-                Log.d(LOG_TAG, "WiFi latest scan result: $it")
-            }
-        }
-    }
-
+    
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.wifiLiveData.observe(viewLifecycleOwner) { list ->
+        wifiManager.scanResults.map { it.SSID }.also {
             ssidInput.setAdapter(
                 ArrayAdapter(
                     requireContext(),
                     android.R.layout.simple_list_item_1,
-                    list.map { it.ssid }
+                    it
                 )
             )
         }
-
         viewModel.socketError.observe(viewLifecycleOwner) { error ->
             mainViewModel.showSnackBar(
                 getString(R.string.snack_bar_socket_error).format(
@@ -82,6 +67,11 @@ class WifiInputFragment : BindingMainFragment<FragmentWifiInputBinding>() {
             )
         }
 
-        // TODO: navigate
+        val dir = WifiInputFragmentDirections.actionWifiInputFragmentToConnectingFragment(
+            viewModel.macAddress.value!!,
+            ssidInput.textString
+        )
+
+        v.navigate(dir)
     }
 }

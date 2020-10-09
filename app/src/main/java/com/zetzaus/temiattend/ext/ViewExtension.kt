@@ -138,6 +138,16 @@ fun View.dynamicVisibility(isVisible: Boolean) {
     this.isVisible = isVisible
 }
 
+@BindingAdapter("canVisible")
+fun View.dynamicInvisibleVisibility(isVisible: Boolean) {
+    visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+}
+
+@BindingAdapter("onClickPopUntil")
+fun View.onClickPopUntil(resId: Int) {
+    findNavController().popBackStack(resId, false)
+}
+
 @BindingAdapter("textError")
 fun TextInputLayout.textError(error: String?) {
     error?.let {

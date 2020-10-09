@@ -6,12 +6,15 @@ import android.graphics.*
 import android.net.wifi.WifiManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import com.google.mlkit.vision.face.Face
 import com.otaliastudios.cameraview.frame.Frame
 import com.robotemi.sdk.Robot
 import com.zetzaus.temiattend.ui.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 
@@ -101,3 +104,14 @@ infix fun BufferedReader.readStringLength(length: Int): String {
  */
 val WifiManager.currentSsid
     get() = connectionInfo.ssid.drop(1).dropLast(1)
+
+/**
+ * Updates the value of the [MutableLiveData]. This is guaranteed to be done in the main thread.
+ *
+ * @param T The type of the data held by the [MutableLiveData].
+ * @param value The new value.
+ */
+suspend infix fun <T> MutableLiveData<T>.updatesTo(value: T) =
+    withContext(Dispatchers.Main) {
+        this@updatesTo.value = value
+    }

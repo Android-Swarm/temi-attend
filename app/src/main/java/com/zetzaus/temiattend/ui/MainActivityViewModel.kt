@@ -34,7 +34,7 @@ import java.net.Socket
 )
 class MainActivityViewModel @ViewModelInject constructor(
     private val faceManager: AzureFaceManager,
-    repository: PreferenceRepository,
+    private val repository: PreferenceRepository,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
@@ -170,17 +170,6 @@ class MainActivityViewModel @ViewModelInject constructor(
 //
 //        }
     }
-//
-//    private fun retrySocket5001(retry: Int = 6): Socket = try {
-//        Socket("192.168.43.45", 5001)
-//    } catch (e: Exception) {
-//        if (retry > 0) {
-//            Log.d("Socket", "Socket connect failed, retries left $retry")
-//            retrySocket5001(retry - 1)
-//        } else {
-//            throw e
-//        }
-//    }
 
     fun startTemperatureTaking() = viewModelScope.launch(Dispatchers.IO) {
         tempSocket = Socket(DEVICE_IP, 5001)
@@ -261,6 +250,11 @@ class MainActivityViewModel @ViewModelInject constructor(
         )
 
         Log.d(LOG_TAG, "Measured temperature: $temperature")
+    }
+
+    fun saveCameraDetails(cameraMac: String, cameraIp: String) = viewModelScope.launch {
+        repository.saveCameraIp(cameraIp)
+        repository.saveCameraMac(cameraMac)
     }
 
     fun requestTemiSpeak(text: String, appear: Boolean = true) =

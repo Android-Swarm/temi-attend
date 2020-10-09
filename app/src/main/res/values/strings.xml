@@ -41,6 +41,10 @@
     <string name="label_connecting_camera">Connecting camera to WIFI</string>
     <string name="label_request_wifi">Please connect tēmi to the same WIFI network</string>
 
+    <string name="label_fetching_camera_distribution">Fetching camera\'s network distribution info</string>
+    <string name="label_fetching_success">Successfully retrieved camera details!</string>
+    <string name="label_fetching_failed">Failed to retrieve camera details!</string>
+
     <string name="hint_manual_employee">Schaeffler ID</string>
     <string name="hint_wifi_ssid">WIFI SSID</string>
     <string name="hint_wifi_pwd">Password</string>
@@ -52,6 +56,7 @@
     <string name="button_confirm">Confirm</string>
     <string name="button_my_attendance">My Attendance</string>
     <string name="button_reset">Reset</string>
+    <string name="button_retry">Retry</string>
     <string name="button_connect">Connect Camera</string>
 
     <string name="content_desc_mask">This icon shows because you are not wearing a mask! Please

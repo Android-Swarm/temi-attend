@@ -20,12 +20,10 @@ class AttendanceConverter {
     fun fromOfficeName(name: String) = OfficeName.valueOf(name)
 }
 
-@Database(version = 1, entities = [Attendance::class, WifiPoint::class], exportSchema = false)
+@Database(version = 1, entities = [Attendance::class], exportSchema = false)
 @TypeConverters(AttendanceConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract val attendanceDao: AttendanceDao
-
-    abstract val wifiDao: WifiDao
 
     companion object {
         private lateinit var INSTANCE: AppDatabase

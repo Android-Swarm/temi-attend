@@ -1,6 +1,7 @@
 package com.zetzaus.temiattend.ext
 
 import android.graphics.Bitmap
+import com.beust.klaxon.Klaxon
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.journeyapps.barcodescanner.BarcodeEncoder
@@ -38,3 +39,5 @@ fun String.upperCaseAndTrim() = toUpperCase(Locale.ROOT).trim()
 
 fun String.escapeCharForCamera() = replace(",", """\,""")
     .replace("""\""", """\\""")
+
+inline fun <reified T> String.parseJson(): T = Klaxon().parse<T>(this)!!
