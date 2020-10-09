@@ -30,7 +30,7 @@ class WifiInputFragment : BindingMainFragment<FragmentWifiInputBinding>() {
         binding.viewModel = viewModel
         binding.fragment = this
     }
-    
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -65,6 +65,8 @@ class WifiInputFragment : BindingMainFragment<FragmentWifiInputBinding>() {
             mainViewModel.showSnackBar(
                 getString(R.string.snack_bar_wrong_wifi).format(ssidInput.textString)
             )
+
+            return
         }
 
         val dir = WifiInputFragmentDirections.actionWifiInputFragmentToConnectingFragment(

@@ -145,7 +145,7 @@ fun View.dynamicInvisibleVisibility(isVisible: Boolean) {
 
 @BindingAdapter("onClickPopUntil")
 fun View.onClickPopUntil(resId: Int) {
-    findNavController().popBackStack(resId, false)
+    setOnClickListener { it.findNavController().popBackStack(resId, false) }
 }
 
 @BindingAdapter("textError")

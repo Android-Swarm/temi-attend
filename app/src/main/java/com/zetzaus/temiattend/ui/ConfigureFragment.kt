@@ -1,11 +1,9 @@
 package com.zetzaus.temiattend.ui
 
 import android.net.wifi.WifiManager
-import android.util.Log
 import android.view.View
 import com.zetzaus.temiattend.R
 import com.zetzaus.temiattend.databinding.FragmentConfigureBinding
-import com.zetzaus.temiattend.ext.LOG_TAG
 import com.zetzaus.temiattend.ext.currentSsid
 import com.zetzaus.temiattend.ext.navigate
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,9 +25,9 @@ class ConfigureFragment : BindingMainFragment<FragmentConfigureBinding>() {
 
     fun onConfirmButtonClicked(button: View) {
         if (wifiManager.currentSsid != OGAWA_SSID) {
-            Log.d(LOG_TAG, "User is connected to ${wifiManager.currentSsid}")
             mainViewModel.showSnackBar(getString(R.string.snack_bar_wrong_wifi).format(OGAWA_SSID))
-//            return
+
+            return
         }
 
         button.navigate(R.id.action_configureFragment_to_wifiInputFragment)
