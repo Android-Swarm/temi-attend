@@ -33,7 +33,7 @@ class ConnectingFragment : BindingMainFragment<FragmentConnectingBinding>() {
         requestCameraDetails()
 
         viewModel.cameraDetails.observe(viewLifecycleOwner) {
-            if (it.targetSsid != args.wifiSsid) {
+            if (it == null || it.targetSsid != args.wifiSsid) {
                 Log.d(LOG_TAG, "Failed! Camera details: $it")
 
                 if (viewModel.retryCount > TRY_COUNT) {

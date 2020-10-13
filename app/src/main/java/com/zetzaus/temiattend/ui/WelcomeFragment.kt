@@ -6,14 +6,14 @@ import com.zetzaus.temiattend.databinding.FragmentWelcomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class WelcomeFragment : BindingFragment<FragmentWelcomeBinding>() {
+class WelcomeFragment : BindingMainFragment<FragmentWelcomeBinding>() {
 
-    private val viewModel by viewModels<WelcomeFragmentViewModel>()
+//    private val viewModel by viewModels<WelcomeFragmentViewModel>()
 
     override fun onBinding() {
         super.onBinding()
 
-        binding.viewModel = viewModel
+        binding.viewModel = mainViewModel
     }
 
     override fun layoutId() = R.layout.fragment_welcome

@@ -3,7 +3,10 @@ package com.zetzaus.temiattend.ext
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.graphics.*
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.wifi.WifiManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
@@ -17,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
+import java.io.InputStream
 
 /**
  * Returns the simple name of the class, suitable to be used for log tags.
@@ -50,12 +54,6 @@ val Activity.isNightMode
 fun Activity.allAndroidPermissionsGranted(permissions: List<String>) = permissions.all {
     ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
 }
-
-/**
- * Converts [ByteArray] to its hexadecimal [String] representation.
- *
- */
-fun ByteArray.toHexString() = joinToString("") { "%02x".format(it) }
 
 /**
  * Returns `true` if the detected face contains all detectable landmarks.
@@ -99,11 +97,43 @@ infix fun BufferedReader.readStringLength(length: Int): String {
 }
 
 /**
+ * Reads up to [length] bytes from the [InputStream].
+ *
+ * @param length The maximum length to read.
+ * @return The data obtained from the [InputStream].
+ */
+infix fun InputStream.readBytesOfLength(length: Int): ByteArray {
+    return ByteArray(length).apply {
+        read(this, 0, length)
+    }
+}
+
+/**
  * Returns the WiFi SSID the current device is connected to, after removing the leading and trailing
  * apostrophes.
  */
 val WifiManager.currentSsid
     get() = connectionInfo.ssid.drop(1).dropLast(1)
+
+/**
+ * Checks if device is connected to a Wi-Fi network, or to a cellular network. Note that
+ * this does not check if the network can make requests.
+ */
+val ConnectivityManager.networkConnected
+    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        activeNetwork?.let { activeNet ->
+            getNetworkCapabilities(activeNet)?.let { networkCapabilities ->
+                when {
+                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                    else -> false
+                }
+            } ?: false
+        } ?: false
+    } else {
+        activeNetworkInfo?.isConnected ?: false
+    }
 
 /**
  * Updates the value of the [MutableLiveData]. This is guaranteed to be done in the main thread.

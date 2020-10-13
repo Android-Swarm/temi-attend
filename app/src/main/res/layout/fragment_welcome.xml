@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.zetzaus.temiattend.ui.WelcomeFragmentViewModel" />
+            type="com.zetzaus.temiattend.ui.MainActivityViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -68,12 +68,26 @@
             app:onClickNavigate="@{@id/action_welcomeFragment_to_settingsFragment}" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/tempButton"
             style="@style/ImageButton"
-            app:blinkEnabled="@{viewModel.trial}"
+            app:blinkEnabled='@{!viewModel.cameraWorking}'
             app:icon="@drawable/ic_temperature"
+            app:iconTint='@{!viewModel.cameraWorking? @color/error_dark_theme: @color/colorPrimary}'
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:onClickNavigate="@{@id/action_welcomeFragment_to_thermalFragment}" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@id/tempButton"
+            app:layout_constraintStart_toEndOf="@id/tempButton"
+            app:layout_constraintTop_toTopOf="@id/tempButton"
+            app:noBlankDefault='@{"--"}'
+            app:noBlankText="@{viewModel.battery}"
+            tools:text="97.1%" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,12 +1,12 @@
 package com.zetzaus.temiattend.database
 
-import com.beust.klaxon.Json
+import com.google.gson.annotations.SerializedName
 
 data class CameraApiResponse(val data: CameraDetails)
 
 data class CameraDetails(
-    @Json(name = "mac") val macAddress: String,
+    @SerializedName("mac") val macAddress: String,
     val deviceIp: String,
-    @Json(name = "targetSSID") val targetSsid: String,
+    @SerializedName("targetSSID") val targetSsid: String,
     val version: String
 )

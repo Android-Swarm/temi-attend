@@ -19,6 +19,17 @@
         app:layoutDescription="@xml/fragment_temperature_xml_constraintlayout_scene"
         tools:context=".ui.TemperatureFragment">
 
+        <ImageView
+            android:id="@+id/thermalCameraImage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toTopOf="@id/include"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/animatedThermometer" />
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/titleLabel"
             style="@style/TitleText"

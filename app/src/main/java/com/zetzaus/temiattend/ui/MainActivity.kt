@@ -188,7 +188,7 @@ class MainActivity : AppCompatActivity(), OnUserInteractionChangedListener {
                 }
             } while (!IrManager.getCheckSuccess())
 
-//            mainViewModel.startTemperatureTaking()
+            mainViewModel.sdkReady()
         }
     }
 

@@ -10,6 +10,11 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
 
+    dexOptions {
+        incremental true
+        javaMaxHeapSize "4g"
+    }
+
     defaultConfig {
         applicationId "com.zetzaus.temiattend"
         minSdkVersion 22
@@ -147,7 +152,7 @@ dependencies {
     implementation "com.google.protobuf:protobuf-javalite:3.10.0"
 
     // JSON Parse
-    implementation 'com.beust:klaxon:5.4'
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     // Testing
     testImplementation "org.robolectric:robolectric:4.4"

@@ -71,6 +71,7 @@
     <string name="snack_bar_no_face">No face detected, unable to recognize!</string>
     <string name="snack_bar_wrong_wifi">You are not connected to the WiFi %s!</string>
     <string name="snack_bar_socket_error">Socket connection error: %s!</string>
+    <string name="snack_bar_camera_not_ready">Sorry! Thermal camera is not working right now</string>
     <string name="unknown_error">Unknown error!</string>
 
     <!-- Camera related strings -->
@@ -93,6 +94,9 @@
 
     <!-- Temi TTS -->
     <string name="tts_mask_not_detected">Please wear your mask properly</string>
+    <string name="tts_user_too_close">Please move back a little bit</string>
+    <string name="tts_user_too_far">Please come closer</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

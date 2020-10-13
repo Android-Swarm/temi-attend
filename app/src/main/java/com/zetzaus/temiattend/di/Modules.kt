@@ -1,6 +1,7 @@
 package com.zetzaus.temiattend.di
 
 import android.content.Context
+import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
@@ -78,7 +79,11 @@ class MainActivityModules {
     }
 
     @Provides
-    fun provideWifiManager(@ApplicationContext context: Context): WifiManager =
+    fun provideWifiManager(@ApplicationContext context: Context) =
         ContextCompat.getSystemService(context, WifiManager::class.java)!!
+
+    @Provides
+    fun provideConnectivityManager(@ApplicationContext context: Context) =
+        ContextCompat.getSystemService(context, ConnectivityManager::class.java)!!
 
 }

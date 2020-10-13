@@ -54,7 +54,7 @@
             app:layout_constraintEnd_toEndOf="@+id/titleLabel"
             app:layout_constraintTop_toTopOf="@+id/batteryLabel"
             app:noBlankDefault='@{"--"}'
-            app:noBlankText='@{""}'
+            app:noBlankText='@{viewModel.battery}'
             tools:text="96%" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -104,7 +104,7 @@
             app:layout_constraintEnd_toEndOf="@+id/titleLabel"
             app:layout_constraintTop_toTopOf="@id/macLabel"
             app:noBlankDefault='@{"--"}'
-            app:noBlankText="@{viewModel.cameraMac}"
+            app:noBlankMac="@{viewModel.cameraMac}"
             tools:text="AA:BB:CC:DD:EE:FF" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -129,7 +129,7 @@
             app:layout_constraintEnd_toEndOf="@+id/titleLabel"
             app:layout_constraintTop_toTopOf="@+id/wifiLabel"
             app:noBlankDefault='@{"--"}'
-            app:noBlankText='@{""}'
+            app:noBlankText='@{viewModel.cameraDetails.targetSsid}'
             tools:text="GlocalMe_67503" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -152,7 +152,7 @@
             app:layout_constraintEnd_toEndOf="@+id/titleLabel"
             app:layout_constraintTop_toTopOf="@+id/versionLabel"
             app:noBlankDefault='@{"--"}'
-            app:noBlankText='@{""}'
+            app:noBlankText='@{viewModel.cameraDetails.version}'
             tools:text="ESP8266_TT_V1.3" />
 
         <com.google.android.material.button.MaterialButton

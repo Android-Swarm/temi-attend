@@ -73,7 +73,7 @@
             android:id="@+id/buttonRetry"
             style="@style/AppButton"
             android:text="@string/button_retry"
-            app:isVisible="@{viewModel.success == false}"
+            app:isVisible="@{viewModel.success != null &amp;&amp; viewModel.success == false}"
             app:layout_constraintBottom_toBottomOf="@id/buttonConfirm"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
