@@ -72,7 +72,7 @@
             style="@style/ImageButton"
             app:blinkEnabled='@{!viewModel.cameraWorking}'
             app:icon="@drawable/ic_temperature"
-            app:iconTint='@{!viewModel.cameraWorking? @color/error_dark_theme: @color/colorPrimary}'
+            app:iconTint='@{!viewModel.cameraWorking ? @color/error_dark_theme : @color/colorPrimary}'
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:onClickNavigate="@{@id/action_welcomeFragment_to_thermalFragment}" />

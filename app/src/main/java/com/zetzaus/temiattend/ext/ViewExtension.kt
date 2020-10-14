@@ -78,6 +78,11 @@ fun View?.navigate(dir: NavDirections) = this?.findNavController()?.navigate(dir
 fun View?.navigateWithExtras(dir: NavDirections, extra: FragmentNavigator.Extras) =
     this?.findNavController()?.navigate(dir, extra)
 
+/**
+ * When the [View] is clicked, the application will navigate based on the given action id.
+ *
+ * @param resId The action id.
+ */
 @BindingAdapter("onClickNavigate")
 fun View?.navigateOnClick(resId: Int) =
     this?.setOnClickListener { findNavController().navigate(resId) }
@@ -110,6 +115,13 @@ fun MotionLayout.addTransitionCompleteListener(listener: (MotionLayout?, Int) ->
         ) = Unit
     })
 
+/**
+ * If [enabled] is `true`, the [View] will play blinking animation. By default, it will blink with
+ * the frequency of 2 seconds.
+ *
+ * @param repeatDuration The half duration of the animation (from invisible to visible or vice versa).
+ * @param enabled `true` to play the animation or `false` to stop the animation.
+ */
 @BindingAdapter(value = ["blinkDuration", "blinkEnabled"], requireAll = false)
 fun View.blink(repeatDuration: Long?, enabled: Boolean?) {
     if (enabled != false) {
@@ -133,21 +145,42 @@ fun View.blink(repeatDuration: Long?, enabled: Boolean?) {
     }
 }
 
+/**
+ * Sets the [isVisible] property of the [View].
+ *
+ * @param isVisible The new value for the [isVisible] property.
+ */
 @BindingAdapter("isVisible")
 fun View.dynamicVisibility(isVisible: Boolean) {
     this.isVisible = isVisible
 }
 
+/**
+ * Sets the visibility of the [View]. Using this adapter, the [View] will go to [View.INVISIBLE]
+ * instead of [View.GONE].
+ *
+ * @param isVisible The new visibility.
+ */
 @BindingAdapter("canVisible")
 fun View.dynamicInvisibleVisibility(isVisible: Boolean) {
     visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
 }
 
+/**
+ * When the [View] is clicked, pop the back stack until the given destination id.
+ *
+ * @param resId The destination id.
+ */
 @BindingAdapter("onClickPopUntil")
 fun View.onClickPopUntil(resId: Int) {
     setOnClickListener { it.findNavController().popBackStack(resId, false) }
 }
 
+/**
+ * Sets the error text to the [TextInputLayout].
+ *
+ * @param error The error message to tell the user. If null, the error will be removed.
+ */
 @BindingAdapter("textError")
 fun TextInputLayout.textError(error: String?) {
     error?.let {

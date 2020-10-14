@@ -42,7 +42,7 @@
             android:value="@string/app_name" />
 
         <meta-data
-            android:name="@string/metadata_open_without_internet"
+            android:name="com.robotemi.sdk.metadata.KIOSK"
             android:value="TRUE" />
 
     </application>

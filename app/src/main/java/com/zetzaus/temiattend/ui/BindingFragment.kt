@@ -44,5 +44,5 @@ abstract class BindingFragment<T : ViewDataBinding> : Fragment() {
 }
 
 abstract class BindingMainFragment<T : ViewDataBinding> : BindingFragment<T>() {
-    val mainViewModel by activityViewModels<MainActivityViewModel>()
+    protected val mainViewModel by activityViewModels<MainActivityViewModel>()
 }

@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.FaceDetector
@@ -27,6 +28,7 @@ import com.zetzaus.temiattend.face.MaskDetector
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
@@ -88,6 +90,14 @@ class MainActivity : AppCompatActivity(), OnUserInteractionChangedListener {
         }
 
         mainViewModel.temiTts.observe(this) { request -> robot.speak(request) }
+
+        lifecycleScope.launchWhenCreated {
+            mainViewModel.isUserInteracting.collect { interacting ->
+                if (!interacting && currentDestinationId != R.id.welcomeFragment) {
+                    navHostFragment.findNavController().popBackStack(R.id.welcomeFragment, false)
+                }
+            }
+        }
 
         prepareTemperatureMeasurement()
     }
@@ -201,9 +211,10 @@ class MainActivity : AppCompatActivity(), OnUserInteractionChangedListener {
         }
     }
 
-
     override fun onUserInteraction(interacting: Boolean) {
         Log.d(LOG_TAG, "Change of user interaction! User is interacting: $interacting")
+
+        mainViewModel.updateUserInteraction(interacting)
 
         if (interacting && currentDestinationId == R.id.welcomeFragment) {
             mainViewModel.requestTemiSpeak(getString(R.string.label_welcome_title), false)

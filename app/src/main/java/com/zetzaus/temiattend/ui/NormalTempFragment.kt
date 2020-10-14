@@ -37,8 +37,6 @@ class NormalTempFragment : BindingFragment<FragmentNormalTempBinding>() {
         }
 
         barcodeTreeObserver.addOnGlobalLayoutListener(layoutListener)
-
-
     }
 
     fun onConfirmButtonPressed() = requireActivity().onBackPressed()

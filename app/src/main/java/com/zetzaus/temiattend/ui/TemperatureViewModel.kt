@@ -1,15 +1,16 @@
 package com.zetzaus.temiattend.ui
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.asFlow
+import androidx.lifecycle.*
 import com.zetzaus.temiattend.database.AttendanceRepository
 import com.zetzaus.temiattend.database.PreferenceRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class TemperatureViewModel @ViewModelInject constructor(
@@ -21,6 +22,9 @@ class TemperatureViewModel @ViewModelInject constructor(
 
     private val _temperatureLiveData = MutableLiveData<Float>()
     val temperatureLiveData: LiveData<Float> = _temperatureLiveData
+
+    private val _detecting = ConflatedBroadcastChannel(false)
+    val detecting = _detecting.asFlow().asLiveData()
 
     private val preference = preferenceRepo.preference
 
@@ -38,5 +42,9 @@ class TemperatureViewModel @ViewModelInject constructor(
         )
     )
 
-
+    fun sendDetection(detecting: Boolean) {
+        if (_detecting.value != detecting) {
+            viewModelScope.launch { _detecting.send(detecting) }
+        }
+    }
 }

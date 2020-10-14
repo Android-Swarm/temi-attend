@@ -96,6 +96,8 @@
     <string name="tts_mask_not_detected">Please wear your mask properly</string>
     <string name="tts_user_too_close">Please move back a little bit</string>
     <string name="tts_user_too_far">Please come closer</string>
+    <string name="tts_normal_temp">%.2f degree celcius normal temperature</string>
+    <string name="tts_abnormal_temp">%.2f degree celcius abnormal temperature</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

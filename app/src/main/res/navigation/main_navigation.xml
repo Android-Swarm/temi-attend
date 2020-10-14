@@ -92,7 +92,7 @@
     <fragment
         android:id="@+id/attendancesFragment"
         android:name="com.zetzaus.temiattend.ui.AttendancesFragment"
-        android:label="AttendancesFragment" >
+        android:label="AttendancesFragment">
         <argument
             android:name="user"
             app:argType="string" />
@@ -101,7 +101,7 @@
         android:id="@+id/thermalFragment"
         android:name="com.zetzaus.temiattend.ui.ThermalFragment"
         android:label="fragment_thermal"
-        tools:layout="@layout/fragment_thermal" >
+        tools:layout="@layout/fragment_thermal">
         <action
             android:id="@+id/action_thermalFragment_to_configureFragment"
             app:destination="@id/configureFragment" />
@@ -109,15 +109,16 @@
     <fragment
         android:id="@+id/configureFragment"
         android:name="com.zetzaus.temiattend.ui.ConfigureFragment"
-        android:label="ConfigureFragment" >
+        android:label="ConfigureFragment">
         <action
             android:id="@+id/action_configureFragment_to_wifiInputFragment"
-            app:destination="@id/wifiInputFragment" />
+            app:destination="@id/wifiInputFragment"
+            app:popUpTo="@id/thermalFragment" />
     </fragment>
     <fragment
         android:id="@+id/wifiInputFragment"
         android:name="com.zetzaus.temiattend.ui.WifiInputFragment"
-        android:label="WifiInputFragment" >
+        android:label="WifiInputFragment">
         <action
             android:id="@+id/action_wifiInputFragment_to_connectingFragment"
             app:destination="@id/connectingFragment"
@@ -127,7 +128,7 @@
         android:id="@+id/connectingFragment"
         android:name="com.zetzaus.temiattend.ui.ConnectingFragment"
         android:label="fragment_connecting"
-        tools:layout="@layout/fragment_connecting" >
+        tools:layout="@layout/fragment_connecting">
         <argument
             android:name="cameraMac"
             app:argType="string" />

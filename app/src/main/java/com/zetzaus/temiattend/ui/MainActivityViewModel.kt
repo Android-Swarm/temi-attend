@@ -152,8 +152,16 @@ class MainActivityViewModel @ViewModelInject constructor(
     // Don't collect the flow if not needed, collect the flow together with frmFlow
     private val initialTempFlow = cameraMac.asFlow()
         .combine(cameraIp.asFlow()) { mac, ip -> Pair(mac, ip) }
+        .filter { (mac, ip) -> mac.isNotBlank() && ip.isNotBlank() }
         .debounce(1000) // Delay for preference update
         .combine(_sdkReady.asFlow()) { (mac, ip), sdkReady -> Triple(mac, ip, sdkReady) }
+
+    private val _isUserInteracting = ConflatedBroadcastChannel(false)
+    val isUserInteracting = _isUserInteracting.asFlow()
+
+    fun updateUserInteraction(interacting: Boolean) {
+        viewModelScope.launch { _isUserInteracting.send(interacting) }
+    }
 
     init {
         // Start polling for battery
