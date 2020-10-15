@@ -8,7 +8,6 @@ import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.ogawa.temiirsdk.IrDataUtil
-import com.ogawa.temiirsdk.IrSensorUtil
 import com.robotemi.sdk.TtsRequest
 import com.zetzaus.temiattend.BuildConfig
 import com.zetzaus.temiattend.R
@@ -18,6 +17,7 @@ import com.zetzaus.temiattend.ext.*
 import com.zetzaus.temiattend.face.AzureFaceManager
 import com.zetzaus.temiattend.face.NewPersonPayload
 import com.zetzaus.temiattend.temperature.CameraDetailsFetcher
+import com.zetzaus.temiattend.temperature.TmIrResponse
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
 import java.io.IOException
 import java.io.InputStream
+import java.io.OutputStream
 import java.io.PrintWriter
 import java.net.Socket
 
@@ -90,10 +91,6 @@ class MainActivityViewModel @ViewModelInject constructor(
     private val _cameraDetails = MutableLiveData<CameraDetails>()
     val cameraDetails: LiveData<CameraDetails> = _cameraDetails
 
-    private lateinit var tempSocket: Socket
-    private lateinit var tempReader: InputStream
-    private lateinit var tempWriter: PrintWriter
-
     private val _battery = MutableLiveData("--")
     val battery: LiveData<String> = _battery
 
@@ -149,15 +146,19 @@ class MainActivityViewModel @ViewModelInject constructor(
         }.filter { (temp, _) -> temp in 30.0..42.0 }
         .asLiveData()
 
-    // Don't collect the flow if not needed, collect the flow together with frmFlow
-    private val initialTempFlow = cameraMac.asFlow()
+    /** A flow of saved camera mac and IP. Will only emit if both are not blank. */
+    private val macAndIpFlow = cameraMac.asFlow()
         .combine(cameraIp.asFlow()) { mac, ip -> Pair(mac, ip) }
         .filter { (mac, ip) -> mac.isNotBlank() && ip.isNotBlank() }
+
+    // Don't collect the flow if not needed, collect the flow together with frmFlow
+    private val initialTempFlow = macAndIpFlow
         .debounce(1000) // Delay for preference update
         .combine(_sdkReady.asFlow()) { (mac, ip), sdkReady -> Triple(mac, ip, sdkReady) }
 
     private val _isUserInteracting = ConflatedBroadcastChannel(false)
     val isUserInteracting = _isUserInteracting.asFlow()
+        .debounce(5000) // If in 10 seconds no user interaction, go to welcome page
 
     fun updateUserInteraction(interacting: Boolean) {
         viewModelScope.launch { _isUserInteracting.send(interacting) }
@@ -165,19 +166,7 @@ class MainActivityViewModel @ViewModelInject constructor(
 
     init {
         // Start polling for battery
-        viewModelScope.launch {
-            initialTempFlow.collect { (mac, ip, _) ->
-                if (ip.isBlank() || mac.isBlank()) return@collect
-
-                while (true) {
-                    currentCoroutineContext().ensureActive()
-
-                    pollBattery(mac, ip)
-
-                    delay(10000)
-                }
-            }
-        }
+        viewModelScope.launch { initialTempFlow.collect { (mac, ip, _) -> pollBattery(mac, ip) } }
 
         // Get camera details
         viewModelScope.launch {
@@ -198,7 +187,7 @@ class MainActivityViewModel @ViewModelInject constructor(
     }
 
     /**
-     * Requests the thermal camera for its battery level once.
+     * Requests the thermal camera for its battery level once every 10 seconds.
      *
      * @param mac The MAC address of the camera.
      * @param ip The IP address where the data is distributed at.
@@ -208,22 +197,31 @@ class MainActivityViewModel @ViewModelInject constructor(
             try {
                 withSocketOperation(ip, BATTERY_PORT) { _, writer, reader ->
                     Log.d(this@MainActivityViewModel.LOG_TAG, "Connected to battery socket")
-                    Log.d(this@MainActivityViewModel.LOG_TAG, "Updating battery")
 
-                    // Send battery command
-                    writer.println(BATTERY_COMMAND)
 
-                    // Read battery response
-                    val response =
-                        (reader readBytesOfLength BATTERY_RESPONSE_LENGTH).decodeToString().also {
-                            Log.d(this@MainActivityViewModel.LOG_TAG, "Response: $it")
-                        }
+                    while (true) {
+                        // Check if coroutine scope is cancelled
+                        currentCoroutineContext().ensureActive()
 
-                    // Update live data
-                    val number = response.filter { it.isDigit() }.toFloat()
-                    val battery = ((number - 800f) / 200f).setRange(0f, 1f)
+                        // Send battery command
+                        writer.println(BATTERY_COMMAND)
+                        Log.d(this@MainActivityViewModel.LOG_TAG, "Sent battery request command")
 
-                    _battery updatesTo String.format("%.1f", battery * 100) + "%"
+                        // Read battery response
+                        val response =
+                            (reader readBytesOfLength BATTERY_RESPONSE_LENGTH).decodeToString()
+                                .also {
+                                    Log.d(this@MainActivityViewModel.LOG_TAG, "Response: $it")
+                                }
+
+                        // Update live data
+                        val number = response.filter { it.isDigit() }.toFloat()
+                        val battery = ((number - 800f) / 200f).setRange(0f, 1f)
+
+                        _battery updatesTo String.format("%.1f", battery * 100) + "%"
+
+                        delay(10000)
+                    }
                 }
             } catch (e: IOException) {
                 _battery updatesTo "--"
@@ -242,6 +240,14 @@ class MainActivityViewModel @ViewModelInject constructor(
                 socket.getInputStream().use { out ->
                     block(socket, writer, out)
                 }
+            }
+        }
+    }
+
+    inline fun <T> Socket.exposeReaderWriter(block: (OutputStream, InputStream) -> T): T {
+        getOutputStream().use { writer ->
+            getInputStream().use { reader ->
+                return block(writer, reader)
             }
         }
     }
@@ -268,11 +274,9 @@ class MainActivityViewModel @ViewModelInject constructor(
      * proto data store's camera ip and camera mac.
      *
      * @param ip The failing IP address.
-     * @param mac The camera's MAC address.
+     * @param mac The camera's MAC address. This should not be blank
      */
     private suspend fun fetchCameraDetails(ip: String, mac: String) = viewModelScope.launch {
-        if (mac.isBlank()) return@launch
-
         Log.d(
             this@MainActivityViewModel.LOG_TAG,
             "Failed to connect to socket at $ip, re-fetching camera details"
@@ -295,96 +299,91 @@ class MainActivityViewModel @ViewModelInject constructor(
     private fun startTemperatureTaking(scope: CoroutineScope, ip: String, mac: String) =
         scope.launch(Dispatchers.IO) {
             try {
-                tempSocket = Socket(ip, TEMP_PORT)
+                withSocketOperation(ip, TEMP_PORT) { s, tempWriter, tempReader ->
+                    Log.d(this@MainActivityViewModel.LOG_TAG, "Connected to socket at $ip")
+
+                    do {
+                        val eem = readThermalData<TmIrResponse.EEM>(tempReader, tempWriter) {
+                            it.println(TEMP_COMMAND) // Need to issue the command to get EEM
+                            Log.d(
+                                this@MainActivityViewModel.LOG_TAG,
+                                "Sent first temperature read command"
+                            )
+                        }
+
+                        val correction = eem.correction
+                        if (correction != 0) {
+                            Log.d(
+                                this@MainActivityViewModel.LOG_TAG,
+                                "Failed to correct temperature measurement! Correction: $correction, " +
+                                        "eem data length: ${eem.data.size}"
+                            )
+                        } else {
+                            Log.d(
+                                this@MainActivityViewModel.LOG_TAG,
+                                "Successfully corrected temperature measurement!"
+                            )
+                        }
+                    } while (correction != 0)
+
+                    // Fetch FRM pairs
+                    while (true) {
+                        currentCoroutineContext().ensureActive()
+
+                        val frmArray = mutableMapOf<Int, TmIrResponse.FRM>()
+
+                        // FRM 1
+                        var frmOne: TmIrResponse.FRM
+
+                        do {
+                            frmOne = readThermalData(tempReader, tempWriter)
+                        } while (
+                            frmOne.data.isEmpty() ||
+                            frmOne.frameNo !in listOf(0, 1) ||
+                            frmOne.distance == 0
+                        )
+
+                        frmArray[frmOne.frameNo] = frmOne
+
+                        Log.d(
+                            this@MainActivityViewModel.LOG_TAG,
+                            "Success for FRM 1: frame ${frmOne.frameNo} with distance ${frmOne.distance}"
+                        )
+
+                        // FRM 2
+                        var frmTwo: TmIrResponse.FRM
+
+                        do {
+                            frmTwo = readThermalData(tempReader, tempWriter)
+                        } while (
+                            frmTwo.data.isEmpty() ||
+                            frmTwo.frameNo !in listOf(0, 1) ||
+                            frmTwo.distance == 0 ||
+                            frmTwo.frameNo == frmOne.frameNo
+                        )
+
+                        frmArray[frmTwo.frameNo] = frmTwo
+
+                        Log.d(
+                            this@MainActivityViewModel.LOG_TAG,
+                            "Success for FRM 2: frame ${frmTwo.frameNo} with distance ${frmTwo.distance}"
+                        )
+
+                        viewModelScope.launch {
+                            rawFrmZero.send(frmArray.getValue(0))
+                            rawFrmOne.send(frmArray.getValue(1))
+                        }
+                    }
+                }
             } catch (e: IOException) {
                 fetchCameraDetails(ip, mac)
                 // This should re-trigger the `temperature` flow
 
                 return@launch
-            }
-
-            Log.d(this@MainActivityViewModel.LOG_TAG, "Connected to socket at $ip")
-            tempWriter = PrintWriter(tempSocket.getOutputStream(), true)
-            tempReader = tempSocket.getInputStream()
-
-            // Analyse and correct temperature calculation parameters
-            try {
-                do {
-                    val eem = readThermalData<TmIrResponse.EEM>(tempReader) {
-                        it.println(TEMP_COMMAND) // Need to issue the command to get EEM
-                        Log.d(
-                            this@MainActivityViewModel.LOG_TAG,
-                            "Sent first temperature read command"
-                        )
-                    }
-
-                    val correction = eem.correction
-                    if (correction != 0) {
-                        Log.d(
-                            this@MainActivityViewModel.LOG_TAG,
-                            "Failed to correct temperature measurement! Correction: $correction, " +
-                                    "eem data length: ${eem.data.size}"
-                        )
-                    } else {
-                        Log.d(
-                            this@MainActivityViewModel.LOG_TAG,
-                            "Successfully corrected temperature measurement!"
-                        )
-                    }
-                } while (correction != 0)
-
-                // Fetch FRM pairs
-                while (true) {
-                    currentCoroutineContext().ensureActive()
-
-                    val frmArray = mutableMapOf<Int, TmIrResponse.FRM>()
-
-                    // FRM 1
-                    var frmOne: TmIrResponse.FRM
-
-                    do {
-                        frmOne = readThermalData(tempReader)
-                    } while (
-                        frmOne.data.isEmpty() ||
-                        frmOne.frameNo !in listOf(0, 1) ||
-                        frmOne.distance == 0
-                    )
-
-                    frmArray[frmOne.frameNo] = frmOne
-
-                    Log.d(
-                        this@MainActivityViewModel.LOG_TAG,
-                        "Success for FRM 1: frame ${frmOne.frameNo} with distance ${frmOne.distance}"
-                    )
-
-                    // FRM 2
-                    var frmTwo: TmIrResponse.FRM
-
-                    do {
-                        frmTwo = readThermalData(tempReader)
-                    } while (
-                        frmTwo.data.isEmpty() ||
-                        frmTwo.frameNo !in listOf(0, 1) ||
-                        frmTwo.distance == 0 ||
-                        frmTwo.frameNo == frmOne.frameNo
-                    )
-
-                    frmArray[frmTwo.frameNo] = frmTwo
-
-                    Log.d(
-                        this@MainActivityViewModel.LOG_TAG,
-                        "Success for FRM 2: frame ${frmTwo.frameNo} with distance ${frmTwo.distance}"
-                    )
-
-                    viewModelScope.launch {
-                        rawFrmZero.send(frmArray.getValue(0))
-                        rawFrmOne.send(frmArray.getValue(1))
-                    }
-                }
             } catch (e: CancellationException) {
                 Log.d(this@MainActivityViewModel.LOG_TAG, "Stopping due to coroutine cancellation")
-                closeCameraSocket()
             } catch (e: IllegalStateException) {
+                Log.e(this@MainActivityViewModel.LOG_TAG, "Wrong starting point!")
                 restartTempSocket()
             } catch (e: Exception) {
                 Log.e(
@@ -398,17 +397,9 @@ class MainActivityViewModel @ViewModelInject constructor(
         }
 
     private fun restartTempSocket() {
-        Log.e(this@MainActivityViewModel.LOG_TAG, "Wrong starting point! Restarting")
-
-        closeCameraSocket()
+        Log.d(LOG_TAG, "Restarting temperature socket")
 
         sdkReady()
-    }
-
-    private fun closeCameraSocket() {
-        tempReader.close()
-        tempWriter.close()
-        tempSocket.close()
     }
 
     fun saveCameraDetails(cameraMac: String, cameraIp: String) = viewModelScope.launch {
@@ -536,15 +527,16 @@ class MainActivityViewModel @ViewModelInject constructor(
      */
     private inline fun <reified T : TmIrResponse> readThermalData(
         reader: InputStream,
+        writer: PrintWriter,
         request: (PrintWriter) -> Unit = {}
     ): T {
         var result: TmIrResponse?
 
         do {
-            request(tempWriter)
+            request(writer)
 
             result = readSocketForTemp(reader)
-                .also { response ->
+                ?.also { response ->
                     Log.d(
                         LOG_TAG,
                         "${response::class.simpleName} received with length ${response.body.length}"
@@ -566,7 +558,7 @@ class MainActivityViewModel @ViewModelInject constructor(
      * @throws IllegalStateException If the starting header is not EEM's or FRM's. **Do note that
      * this happens pretty often.**
      */
-    private fun readSocketForTemp(reader: InputStream): TmIrResponse {
+    private fun readSocketForTemp(reader: InputStream): TmIrResponse? {
         // Read header
         val header = reader readBytesOfLength 7
 
@@ -588,41 +580,18 @@ class MainActivityViewModel @ViewModelInject constructor(
             }
 
             else -> {
-                Log.e(
+                Log.d(
                     LOG_TAG,
-                    "Reading from the wrong starting point! result=${header.toHexString()}"
+                    "Reading from the wrong starting point! Header=${header.toHexString()}"
                 )
 
-                throw IllegalStateException("Wrong starting point!")
+                reader readBytesOfLength 1741
+                null
+//                throw IllegalStateException("Wrong starting point!")
             }
         }
     }
 
-    /**
-     * Wrapper class for EEM or FRM data.
-     *
-     * @property body The body of the response. In other words, the raw data with the header dropped.
-     */
-    sealed class TmIrResponse(val body: String) {
-
-        abstract val data: IntArray
-
-        /** Wrapper class for FRM. */
-        class FRM(body: String) : TmIrResponse(body) {
-            override val data = IrDataUtil.getFRMData(body) ?: intArrayOf()
-
-            val distance = IrDataUtil.getDistanceData(body) ?: 0
-
-            val frameNo = IrDataUtil.getFrmNo(data) ?: -1
-        }
-
-        /** Wrapper class for EEM. */
-        class EEM(body: String) : TmIrResponse(body) {
-            override val data = IrDataUtil.getEEMData(body) ?: intArrayOf()
-
-            val correction = IrSensorUtil.mlx90640ExtractParameters(data) ?: -1
-        }
-    }
 
     companion object {
         const val PRIVATE_BROADCAST_PERMISSION = "com.zetzaus.temiattend.PRIVATE_BROADCAST"

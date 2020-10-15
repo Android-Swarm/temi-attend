@@ -91,9 +91,14 @@ class MainActivity : AppCompatActivity(), OnUserInteractionChangedListener {
 
         mainViewModel.temiTts.observe(this) { request -> robot.speak(request) }
 
-        lifecycleScope.launchWhenCreated {
+        lifecycleScope.launchWhenResumed {
             mainViewModel.isUserInteracting.collect { interacting ->
                 if (!interacting && currentDestinationId != R.id.welcomeFragment) {
+                    Log.d(
+                        this@MainActivity.LOG_TAG,
+                        "User stops interacting, returning to welcome page."
+                    )
+
                     navHostFragment.findNavController().popBackStack(R.id.welcomeFragment, false)
                 }
             }
@@ -147,10 +152,10 @@ class MainActivity : AppCompatActivity(), OnUserInteractionChangedListener {
                             val boundingBox = face.boundingBox
                             val faceImage = Bitmap.createBitmap(
                                 originalImage,
-                                boundingBox.centerX() - abs(boundingBox.width() / 1.25).toInt(),
-                                boundingBox.centerY() - abs(boundingBox.height() / 1.25).toInt(),
-                                (boundingBox.width() * 1.5).toInt(),
-                                (boundingBox.height() * 1.5).toInt()
+                                boundingBox.centerX() - abs(boundingBox.width() / 1.75).toInt(),
+                                boundingBox.centerY() - abs(boundingBox.height() / 1.75).toInt(),
+                                (boundingBox.width() * 1.25).toInt(),
+                                (boundingBox.height() * 1.25).toInt()
                             )
 
                             // Detect mask

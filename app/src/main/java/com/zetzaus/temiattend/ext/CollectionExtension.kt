@@ -12,7 +12,9 @@ fun ByteArray.toRequestBody(type: String): RequestBody =
  *
  * @param uppercase `true` if the result should be in uppercase.
  */
-fun ByteArray.toHexString(uppercase: Boolean = true) = joinToString("") { "%02x".format(it) }.run {
-    if (uppercase) toUpperCase(Locale.ROOT)
-    else this
-}
+fun ByteArray.toHexString(uppercase: Boolean = true) =
+    joinToString("") { "%02x".format(it) }
+        .run {
+            if (uppercase) toUpperCase(Locale.ROOT)
+            else this
+        }

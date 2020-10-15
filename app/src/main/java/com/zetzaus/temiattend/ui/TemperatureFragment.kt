@@ -41,11 +41,14 @@ class TemperatureFragment : TransitionalFragment<FragmentTemperatureBinding>() {
 
         viewModel.submitUser(args.user)
 
-//        Handler(Looper.getMainLooper())
-//            .postDelayed(
-//                { viewModel.updateTemperature(35 + Random.Default.nextFloat() * 5) },
-//                Random.Default.nextInt(2000, 5000).toLong()
-//            )
+//        if (BuildConfig.DEBUG) {
+//            Log.d(LOG_TAG, "Is in debug mode, sending fake temperature")
+//            Handler(Looper.getMainLooper())
+//                .postDelayed(
+//                    { viewModel.finalizeTemperature(35 + Random.Default.nextFloat() * 5) },
+//                    Random.Default.nextInt(2000, 5000).toLong()
+//                )
+//        }
 
         lifecycleScope.launchWhenCreated {
             // This needs to trigger collection of temperature
@@ -55,8 +58,10 @@ class TemperatureFragment : TransitionalFragment<FragmentTemperatureBinding>() {
         // Handles the case when the thermal camera suddenly is not working
         mainViewModel.cameraWorking.observe(viewLifecycleOwner) { isWorking ->
             if (!isWorking) {
+//                if (!BuildConfig.DEBUG) {
                 requireActivity().onBackPressed()
                 mainViewModel.showSnackBar(getString(R.string.snack_bar_camera_not_ready))
+//                }
             }
         }
 
@@ -66,7 +71,7 @@ class TemperatureFragment : TransitionalFragment<FragmentTemperatureBinding>() {
 
             when (distance) {
                 in Int.MIN_VALUE until 500 -> {
-                    Log.d(LOG_TAG, "Sent valid temperature candidate")
+                    Log.d(LOG_TAG, "Sent valid temperature candidate: $temp")
                     viewModel.sendTemperature(temp)
                     viewModel.sendDetection(true)
                 }
@@ -82,7 +87,7 @@ class TemperatureFragment : TransitionalFragment<FragmentTemperatureBinding>() {
         }
 
         viewModel.averageTemperature.observe(viewLifecycleOwner) { (count, acc) ->
-            if (count == 5) {
+            if (count == TEMP_COUNT) {
                 val avg = acc / count
 
                 Log.d(LOG_TAG, "Collected $count temperature!")
@@ -145,5 +150,9 @@ class TemperatureFragment : TransitionalFragment<FragmentTemperatureBinding>() {
                 motionLayout.transitionToEnd()
             }
         }
+    }
+
+    companion object {
+        const val TEMP_COUNT = 3
     }
 }
