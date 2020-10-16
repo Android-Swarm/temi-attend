@@ -45,9 +45,17 @@
     <string name="label_fetching_success">Successfully retrieved camera details!</string>
     <string name="label_fetching_failed">Failed to retrieve camera details!</string>
 
+    <string name="label_password_mixed_case">Password must consist of both uppercase and lowercase</string>
+    <string name="label_password_length">Password must be at least %d characters long</string>
+
     <string name="hint_manual_employee">Schaeffler ID</string>
     <string name="hint_wifi_ssid">WIFI SSID</string>
     <string name="hint_wifi_pwd">Password</string>
+
+    <string name="hint_old_password">Old Password</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_confirm_password">Repeat Password</string>
+    <string name="hint_new_password">New Password</string>
 
     <string name="button_employee">Employee</string>
     <string name="button_guest">Guest</string>
@@ -58,6 +66,7 @@
     <string name="button_reset">Reset</string>
     <string name="button_retry">Retry</string>
     <string name="button_connect">Connect Camera</string>
+    <string name="button_change_password">Change Password</string>
 
     <string name="content_desc_mask">This icon shows because you are not wearing a mask! Please
     wear your mask properly</string>
@@ -82,6 +91,10 @@
     <string name="error_blank">Please input your Schaeffler ID!</string>
     <string name="error_non_alphabet">Schaeffler ID cannot contain numbers or special characters!</string>
     <string name="error_ssid_blank">Please choose an SSID!</string>
+
+    <string name="error_repeat_password_different">Confirmation password must be the same as the password.</string>
+    <string name="error_weak_password">Password must meet the given criteria.</string>
+    <string name="error_wrong_password">Wrong password.</string>
 
     <!-- Preferences -->
     <string name="settings_location">Office Location</string>

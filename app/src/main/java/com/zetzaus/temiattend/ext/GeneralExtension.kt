@@ -3,10 +3,7 @@ package com.zetzaus.temiattend.ext
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.graphics.*
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.net.wifi.WifiManager
-import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
@@ -18,9 +15,9 @@ import com.zetzaus.temiattend.ui.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
+import java.io.OutputStream
 
 /**
  * Returns the simple name of the class, suitable to be used for log tags.
@@ -86,27 +83,29 @@ fun Frame.toBitmap(quality: Int = 90): Bitmap {
     return BitmapFactory.decodeByteArray(bytesArray, 0, bytesArray.size)
 }
 
-infix fun BufferedReader.readStringLength(length: Int): String {
-    var result = ""
-
-    repeat(length) {
-        result += read().toChar()
-    }
-
-    return result
-}
-
 /**
  * Reads up to [length] bytes from the [InputStream].
  *
  * @param length The maximum length to read.
  * @return The data obtained from the [InputStream].
  */
-infix fun InputStream.readBytesOfLength(length: Int): ByteArray {
+infix fun InputStream.readBytesLength(length: Int): ByteArray {
     return ByteArray(length).apply {
         read(this, 0, length)
     }
 }
+
+/**
+ * Reads up to [length] bytes from the [InputStream], and decode it to a [String].
+ *
+ * @param length The maximum length to read.
+ * @return The data obtained from the [InputStream].
+ */
+infix fun InputStream.readStringLength(length: Int): String {
+    return readBytesLength(length).decodeToString()
+}
+
+fun OutputStream.writeString(message: String) = write(message.toByteArray())
 
 /**
  * Returns the WiFi SSID the current device is connected to, after removing the leading and trailing
@@ -114,26 +113,6 @@ infix fun InputStream.readBytesOfLength(length: Int): ByteArray {
  */
 val WifiManager.currentSsid
     get() = connectionInfo.ssid.drop(1).dropLast(1)
-
-/**
- * Checks if device is connected to a Wi-Fi network, or to a cellular network. Note that
- * this does not check if the network can make requests.
- */
-val ConnectivityManager.networkConnected
-    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        activeNetwork?.let { activeNet ->
-            getNetworkCapabilities(activeNet)?.let { networkCapabilities ->
-                when {
-                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
-                            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-                    else -> false
-                }
-            } ?: false
-        } ?: false
-    } else {
-        activeNetworkInfo?.isConnected ?: false
-    }
 
 /**
  * Updates the value of the [MutableLiveData]. This is guaranteed to be done in the main thread.

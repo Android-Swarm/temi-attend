@@ -19,6 +19,13 @@
         <action
             android:id="@+id/action_welcomeFragment_to_thermalFragment"
             app:destination="@id/thermalFragment" />
+        <action
+            android:id="@+id/action_welcomeFragment_to_passwordFragment"
+            app:destination="@id/passwordFragment" >
+            <argument
+                android:name="changePassword"
+                android:defaultValue="false" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/employeeLoginFragment"
@@ -133,5 +140,30 @@
             android:name="cameraMac"
             app:argType="string" />
         <argument android:name="wifiSsid" />
+    </fragment>
+    <fragment
+        android:id="@+id/passwordFragment"
+        android:name="com.zetzaus.temiattend.ui.PasswordFragment"
+        android:label="PasswordFragment" >
+        <argument
+            android:name="changePassword"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_passwordFragment_to_adminFragment"
+            app:destination="@id/adminFragment"
+            app:popUpTo="@id/welcomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminFragment"
+        android:name="com.zetzaus.temiattend.ui.AdminFragment"
+        android:label="fragment_admin"
+        tools:layout="@layout/fragment_admin" >
+        <action
+            android:id="@+id/action_adminFragment_to_passwordFragment"
+            app:destination="@id/passwordFragment" >
+            <argument
+                android:name="changePassword"
+                android:defaultValue="true" />
+        </action>
     </fragment>
 </navigation>

@@ -32,6 +32,11 @@ class PreferenceRepository @Inject constructor(@ApplicationContext context: Cont
 
     suspend fun saveLocation(location: OfficeName) = savePreference { setLocation(location) }
 
+    suspend fun savePassword(encrypted: String, iv: String) = savePreference {
+        password = encrypted
+        setIv(iv)
+    }
+
     private suspend fun savePreference(block: Preference.Builder.() -> Preference.Builder) {
         dataStore.updateData {
             it.toBuilder().apply { block(this) }.build()

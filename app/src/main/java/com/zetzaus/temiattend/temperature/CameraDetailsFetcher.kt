@@ -16,7 +16,9 @@ class CameraDetailsFetcher(private val mac: String) {
         coroutineScope.async(Dispatchers.IO) {
             try {
                 val response = URL(createEndpoint(mac))
-                    .readText()
+                    .readText().also {
+                        Log.d(this@CameraDetailsFetcher.LOG_TAG, "Response: $it")
+                    }
                     .parseJson<CameraApiResponse>()
 
                 response.data

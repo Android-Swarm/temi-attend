@@ -97,8 +97,10 @@ class TemperatureFragment : TransitionalFragment<FragmentTemperatureBinding>() {
             }
         }
 
-        mainViewModel.thermalImage.observe(viewLifecycleOwner) {
-            thermalCameraImage.setImageBitmap(it)
+        lifecycleScope.launchWhenCreated {
+            mainViewModel.thermalImage.collect {
+                thermalCameraImage.setImageBitmap(it)
+            }
         }
 
         lifecycleScope.launch {
@@ -153,6 +155,6 @@ class TemperatureFragment : TransitionalFragment<FragmentTemperatureBinding>() {
     }
 
     companion object {
-        const val TEMP_COUNT = 3
+        const val TEMP_COUNT = 5
     }
 }

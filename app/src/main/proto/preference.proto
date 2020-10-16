@@ -13,6 +13,12 @@ message Preference {
 
   // Which office the application is used
   OfficeName location = 3;
+
+  // Admin panel password
+  string password = 4;
+
+  // Initialization vector
+  string iv = 5;
 }
 
 enum OfficeName {

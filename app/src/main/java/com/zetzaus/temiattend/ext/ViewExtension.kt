@@ -128,7 +128,7 @@ fun View.blink(repeatDuration: Long?, enabled: Boolean?) {
         tag ?: let {
             Log.d(LOG_TAG, "Enabled blink animation")
 
-            ObjectAnimator.ofFloat(this, "alpha", 0f, 1f).apply {
+            ObjectAnimator.ofFloat(this, "alpha", 1f, 0f).apply {
                 duration = repeatDuration ?: 1000L
                 repeatCount = ObjectAnimator.INFINITE
                 repeatMode = ObjectAnimator.REVERSE
@@ -137,11 +137,12 @@ fun View.blink(repeatDuration: Long?, enabled: Boolean?) {
             }.start()
         }
     } else {
-        (tag as? ObjectAnimator)?.end()
-            ?.also {
-                tag = null
-                Log.d(LOG_TAG, "Cancelling animation")
-            }
+        (tag as? ObjectAnimator)?.let {
+            it.end()
+            alpha = 1.0f
+            tag = null
+            Log.d(LOG_TAG, "Cancelling animation")
+        }
     }
 }
 

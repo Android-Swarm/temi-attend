@@ -6,19 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zetzaus.temiattend.ext.LOG_TAG
-import com.zetzaus.temiattend.ext.escapeCharForCamera
-import com.zetzaus.temiattend.ext.readStringLength
-import com.zetzaus.temiattend.ext.updatesTo
+import com.zetzaus.temiattend.ext.*
+import com.zetzaus.temiattend.temperature.withSocketOperation
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.zip
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.Socket
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class WifiInputViewModel @ViewModelInject constructor() : ViewModel() {
@@ -70,26 +65,20 @@ class WifiInputViewModel @ViewModelInject constructor() : ViewModel() {
             _isConnecting updatesTo true
 
             try {
-                val firstSocket = Socket(FIRST_SOCKET_IP, FIRST_SOCKET_PORT)
-                val firstWriter = firstSocket.getOutputStream()
-                val firstReader = BufferedReader(InputStreamReader(firstSocket.getInputStream()))
+                withSocketOperation(FIRST_SOCKET_IP, FIRST_SOCKET_PORT) { _, writer, reader ->
+                    writer.writeString(createConnectCommand(ssid, password))
+                    Log.d(this@WifiInputViewModel.LOG_TAG, "Sent SETWLAN command")
 
-                firstWriter.write(createConnectCommand(ssid, password).toByteArray())
-                Log.d(this@WifiInputViewModel.LOG_TAG, "Sent SETWLAN command")
+                    val macResponse = reader readStringLength "+OK=AA:BB:CC:DD:EE:FF".length
+                    Log.d(this@WifiInputViewModel.LOG_TAG, "Response: $macResponse")
 
-                val macResponse = firstReader readStringLength "+OK=AA:BB:CC:DD:EE:FF".length
-                Log.d(this@WifiInputViewModel.LOG_TAG, "Response: $macResponse")
+                    writer.writeString(RESET_WLAN_COMMAND)
+                    Log.d(this@WifiInputViewModel.LOG_TAG, "Sent RSTWLAN command")
 
-                firstWriter.write(RESET_WLAN_COMMAND.toByteArray())
-                Log.d(this@WifiInputViewModel.LOG_TAG, "Sent RSTWLAN command")
+                    delay(2000)
 
-                delay(2000)
-
-                firstReader.close()
-                firstWriter.close()
-                firstSocket.close()
-
-                _macAddress updatesTo macResponse.drop(4)
+                    _macAddress updatesTo macResponse.drop(4)
+                }
             } catch (e: Exception) {
                 Log.e(LOG_TAG, "Encountered exception on first socket: ", e)
                 _socketError updatesTo e.localizedMessage

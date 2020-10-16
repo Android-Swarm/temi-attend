@@ -65,7 +65,7 @@
             app:iconSize="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:onClickNavigate="@{@id/action_welcomeFragment_to_settingsFragment}" />
+            app:onClickNavigate="@{@id/action_welcomeFragment_to_passwordFragment}" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/tempButton"
