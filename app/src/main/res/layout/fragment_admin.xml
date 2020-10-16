@@ -3,18 +3,81 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.zetzaus.temiattend.ui.AdminFragmentViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="32dp"
         tools:context=".ui.AdminFragment">
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/labelOffice"
+            style="@style/NormalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_office_location"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/labelOfficeDesc"
+            style="@style/TextAppearance.MaterialComponents.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/label_office_location_desc"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/labelOffice" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/label_office_location"
+            app:layout_constraintBottom_toBottomOf="@id/labelOfficeDesc"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/labelOffice">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/officeInput"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="none"
+                android:text="@{viewModel.chosenOfficeName}"
+                app:simpleContent="@{viewModel.officeNames.values()}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonViewVisitors"
+            style="@style/AppButton"
+            android:text="@string/button_view_visitors"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/buttonChangePassword"
+            app:layout_constraintStart_toEndOf="@id/buttonViewAttendances" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonViewAttendances"
+            style="@style/AppButton"
+            android:text="@string/button_view_attendances"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/buttonViewVisitors"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonChangePassword"
             style="@style/OutlinedAppButton"
             android:text="@string/button_change_password"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/buttonViewVisitors"
             app:onClickNavigate="@{@id/action_adminFragment_to_passwordFragment}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

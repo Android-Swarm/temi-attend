@@ -153,7 +153,7 @@ class MainActivityViewModel @ViewModelInject constructor(
     private val initialTempFlow = macAndIpFlow
         .combine(_sdkReady.asFlow()) { (mac, ip), sdkReady -> Triple(mac, ip, sdkReady) }
 
-    private val _isUserInteracting = ConflatedBroadcastChannel(false)
+    private val _isUserInteracting = ConflatedBroadcastChannel<Boolean>()
     val isUserInteracting = _isUserInteracting.asFlow()
         .debounce(5000) // If in 10 seconds no user interaction, go to welcome page
 

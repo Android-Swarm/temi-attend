@@ -79,4 +79,8 @@ open class PreferenceViewModel(
         val (cipher, iv) = CryptoManager.encrypt(password)
         viewModelScope.launch { preferenceRepo.savePassword(cipher, iv) }
     }
+
+    fun saveOfficeLocation(office: OfficeName) {
+        viewModelScope.launch { preferenceRepo.saveLocation(office) }
+    }
 }

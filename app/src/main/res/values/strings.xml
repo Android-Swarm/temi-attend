@@ -48,6 +48,9 @@
     <string name="label_password_mixed_case">Password must consist of both uppercase and lowercase</string>
     <string name="label_password_length">Password must be at least %d characters long</string>
 
+    <string name="label_office_location">Office Location</string>
+    <string name="label_office_location_desc">Which office the attendances should be registered</string>
+
     <string name="hint_manual_employee">Schaeffler ID</string>
     <string name="hint_wifi_ssid">WIFI SSID</string>
     <string name="hint_wifi_pwd">Password</string>
@@ -67,6 +70,8 @@
     <string name="button_retry">Retry</string>
     <string name="button_connect">Connect Camera</string>
     <string name="button_change_password">Change Password</string>
+    <string name="button_view_visitors">Visitors</string>
+    <string name="button_view_attendances">All Attendances</string>
 
     <string name="content_desc_mask">This icon shows because you are not wearing a mask! Please
     wear your mask properly</string>

@@ -2,8 +2,11 @@ package com.zetzaus.temiattend.ext
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import androidx.databinding.BindingAdapter
+import androidx.databinding.BindingConversion
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 
 /**
@@ -24,6 +27,14 @@ fun TextInputLayout.cancelErrorOnEdit(cancel: Boolean) {
         }
     }
 }
+
+@BindingAdapter("simpleContent")
+fun MaterialAutoCompleteTextView.simpleAdapter(content: List<String>) {
+    setAdapter(ArrayAdapter(context, android.R.layout.simple_list_item_1, content))
+}
+
+@BindingConversion
+fun <T> collectionToList(collection: Collection<T>) = collection.toList()
 
 fun EditText.addOnTextChangedListener(listener: (String, Int, Int, Int) -> Unit) =
     addTextChangedListener(object : TextWatcher {
