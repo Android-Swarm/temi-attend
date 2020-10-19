@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="fragment"
+            type="com.zetzaus.temiattend.ui.AdminFragment" />
+
+        <variable
             name="viewModel"
             type="com.zetzaus.temiattend.ui.AdminFragmentViewModel" />
     </data>
@@ -65,6 +69,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonViewAttendances"
             style="@style/AppButton"
+            android:onClick="@{v -> fragment.onShowAllAttendancesClicked(v)}"
             android:text="@string/button_view_attendances"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/buttonViewVisitors"

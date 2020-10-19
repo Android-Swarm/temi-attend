@@ -20,6 +20,9 @@ interface AttendanceDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveAttendance(attendance: Attendance)
 
+    @Query("SELECT * FROM Attendance ORDER BY dateTime DESC")
+    fun getAllAttendance(): Flow<List<Attendance>>
+
     @Query("SELECT * FROM Attendance WHERE user = :user ORDER BY dateTime DESC")
     fun getByUser(user: String): Flow<List<Attendance>>
 

@@ -147,7 +147,7 @@ class MainActivityViewModel @ViewModelInject constructor(
     private val macAndIpFlow = cameraMac.asFlow()
         .combine(cameraIp.asFlow()) { mac, ip -> Pair(mac, ip) }
         .filter { (mac, ip) -> mac.isNotBlank() && ip.isNotBlank() }
-        .debounce(1000) // Delay for multiple preference update
+        .debounce(2000) // Delay for multiple preference update
 
     // Don't collect the flow if not needed, collect the flow together with frmFlow
     private val initialTempFlow = macAndIpFlow
@@ -163,11 +163,7 @@ class MainActivityViewModel @ViewModelInject constructor(
 
     init {
         // Start polling for battery
-        viewModelScope.launch {
-            initialTempFlow.collectLatest { (mac, ip, _) ->
-                pollBattery(mac, ip)
-            }
-        }
+        viewModelScope.launch { initialTempFlow.collectLatest { (_, ip, _) -> pollBattery(ip) } }
 
         // Get camera details
         viewModelScope.launch {
@@ -190,12 +186,12 @@ class MainActivityViewModel @ViewModelInject constructor(
     /**
      * Requests the thermal camera for its battery level once every 10 seconds.
      *
-     * @param mac The MAC address of the camera.
      * @param ip The IP address where the data is distributed at.
      */
-    private fun pollBattery(mac: String, ip: String) =
+    private fun pollBattery(ip: String) =
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                Log.d(this@MainActivityViewModel.LOG_TAG, "Start polling battery")
                 withSocketOperation(ip, BATTERY_PORT) { _, writer, reader ->
                     Log.d(this@MainActivityViewModel.LOG_TAG, "Connected to battery socket")
 
@@ -230,7 +226,7 @@ class MainActivityViewModel @ViewModelInject constructor(
 
                 _battery updatesTo "--"
 
-                fetchCameraDetails(ip, mac)
+                fetchCameraDetails(ip)
             }
         }
 
@@ -258,7 +254,7 @@ class MainActivityViewModel @ViewModelInject constructor(
      * @param ip The failing IP address.
      * @param mac The camera's MAC address. This should not be blank
      */
-    private suspend fun fetchCameraDetails(ip: String, mac: String) = viewModelScope.launch {
+    private suspend fun fetchCameraDetails(mac: String) = viewModelScope.launch {
         Log.d(this@MainActivityViewModel.LOG_TAG, "Re-fetching camera details in 5 seconds")
         delay(5000)
 
@@ -270,10 +266,10 @@ class MainActivityViewModel @ViewModelInject constructor(
             Log.d(this@MainActivityViewModel.LOG_TAG, "Saved new camera details")
         } catch (e: Exception) {
             Log.e(this@MainActivityViewModel.LOG_TAG, "Unable to refetch camera details: ", e)
-
-            // Retry to connect
-            viewModelScope.launch { _sdkReady.send(_sdkReady.value) }
         }
+
+        // Retry to connect
+        viewModelScope.launch { _sdkReady.sendLastEmitted() }
     }
 
     private fun startTemperatureTaking(scope: CoroutineScope, ip: String, mac: String) =
@@ -356,7 +352,7 @@ class MainActivityViewModel @ViewModelInject constructor(
                     }
                 }
             } catch (e: IOException) {
-                fetchCameraDetails(ip, mac)
+                fetchCameraDetails(ip)
                 // This should re-trigger the `temperature` flow
 
                 return@launch

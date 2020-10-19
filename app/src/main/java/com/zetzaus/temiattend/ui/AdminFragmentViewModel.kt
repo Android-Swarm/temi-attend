@@ -10,9 +10,15 @@ import kotlinx.coroutines.flow.map
 class AdminFragmentViewModel @ViewModelInject constructor(
     repository: PreferenceRepository
 ) : PreferenceViewModel(repository) {
+    private val invalidLocations = listOf(OfficeName.UNRECOGNIZED, OfficeName.UNDEFINED)
+
     /** All office locations in its [String] representation. */
-    val offices = OfficeName.values().map { it.toStringRepresentation() }
+    val offices = OfficeName.values()
+        .filter { it !in invalidLocations }
+        .map { it.toStringRepresentation() }
 
     /** The chosen location. */
-    val chosenOfficeName = officeLocation.map { it.toStringRepresentation() }.asLiveData()
+    val chosenOfficeName = officeLocation
+        .map { if (it in invalidLocations) "" else it.toStringRepresentation() }
+        .asLiveData()
 }

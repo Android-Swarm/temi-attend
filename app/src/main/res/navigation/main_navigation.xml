@@ -21,7 +21,7 @@
             app:destination="@id/thermalFragment" />
         <action
             android:id="@+id/action_welcomeFragment_to_passwordFragment"
-            app:destination="@id/passwordFragment" >
+            app:destination="@id/passwordFragment">
             <argument
                 android:name="changePassword"
                 android:defaultValue="false" />
@@ -102,7 +102,8 @@
         android:label="AttendancesFragment">
         <argument
             android:name="user"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/thermalFragment"
@@ -144,7 +145,7 @@
     <fragment
         android:id="@+id/passwordFragment"
         android:name="com.zetzaus.temiattend.ui.PasswordFragment"
-        android:label="PasswordFragment" >
+        android:label="PasswordFragment">
         <argument
             android:name="changePassword"
             app:argType="boolean" />
@@ -157,13 +158,20 @@
         android:id="@+id/adminFragment"
         android:name="com.zetzaus.temiattend.ui.AdminFragment"
         android:label="fragment_admin"
-        tools:layout="@layout/fragment_admin" >
+        tools:layout="@layout/fragment_admin">
         <action
             android:id="@+id/action_adminFragment_to_passwordFragment"
-            app:destination="@id/passwordFragment" >
+            app:destination="@id/passwordFragment">
             <argument
                 android:name="changePassword"
                 android:defaultValue="true" />
+        </action>
+        <action
+            android:id="@+id/action_adminFragment_to_attendancesFragment"
+            app:destination="@id/attendancesFragment">
+            <argument
+                android:name="user"
+                android:defaultValue="@null" />
         </action>
     </fragment>
 </navigation>

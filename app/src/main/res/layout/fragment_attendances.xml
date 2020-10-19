@@ -8,6 +8,19 @@
         <variable
             name="user"
             type="String" />
+
+        <variable
+            name="itemDecoration"
+            type="androidx.recyclerview.widget.DividerItemDecoration" />
+
+        <variable
+            name="adapter"
+            type="androidx.recyclerview.widget.ListAdapter" />
+
+        <variable
+            name="viewModel"
+            type="com.zetzaus.temiattend.ui.AttendancesFragmentViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,23 +34,25 @@
             style="@style/TitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{String.format(@string/label_attendances_title, user)}"
+            android:text="@string/label_attendances_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="LIANDSBA's Attendances" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:scrollbars="vertical"
+            app:adapter="@{adapter}"
+            app:itemDecoration="@{itemDecoration}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleLabel" />
+            app:layout_constraintTop_toBottomOf="@id/searchLayout" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/confirmButton"
@@ -45,7 +60,41 @@
             android:text="@string/button_confirm"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/recyclerView"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/searchLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/hint_search"
+            app:isVisible='@{user == ""}'
+            app:layout_constraintEnd_toStartOf="@id/requirementSwitch"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleLabel">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputSearch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/requirementSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.abnormalOnly ? @string/switch_attendance_on : @string/switch_attendance_off}"
+            app:isVisible='@{user == ""}'
+            app:layout_constraintBottom_toBottomOf="@id/searchLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/searchLayout"
+            app:layout_constraintTop_toTopOf="@id/searchLayout"
+            app:onCheckedChangeListener="@{(v, c) -> viewModel.showAbnormalOnly(c)}"
+            tools:text="@string/switch_attendance_on" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -5,10 +5,10 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.zetzaus.temiattend.R
 import com.zetzaus.temiattend.adapter.AttendanceAdapter
 import com.zetzaus.temiattend.databinding.FragmentAttendancesBinding
+import com.zetzaus.temiattend.ext.addOnTextChangedListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_attendances.*
 import javax.inject.Inject
@@ -16,7 +16,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class AttendancesFragment : BindingFragment<FragmentAttendancesBinding>() {
 
-    private val viewModel by viewModels<AttendancesViewModel>()
+    private val viewModel by viewModels<AttendancesFragmentViewModel>()
 
     private val args by navArgs<AttendancesFragmentArgs>()
 
@@ -29,8 +29,15 @@ class AttendancesFragment : BindingFragment<FragmentAttendancesBinding>() {
         super.onBinding()
 
         args.user.run {
-            binding.user = this
-            viewModel.setUser(this)
+            binding.user = this ?: ""
+            viewModel.setUser(this ?: "")
+
+            binding.viewModel = viewModel
+            binding.adapter = attendanceAdapter
+            binding.itemDecoration = DividerItemDecoration(
+                requireContext(),
+                DividerItemDecoration.VERTICAL
+            )
         }
     }
 
@@ -43,52 +50,12 @@ class AttendancesFragment : BindingFragment<FragmentAttendancesBinding>() {
             requireActivity().onBackPressed()
         }
 
+        inputSearch.addOnTextChangedListener { query, _, _, _ ->
+            viewModel.submitQuery(query)
+        }
+
         viewModel.attendances.observe(viewLifecycleOwner) {
             attendanceAdapter.submitList(it)
         }
-
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = attendanceAdapter
-
-            // Horizontal lines between items
-            addItemDecoration(
-                DividerItemDecoration(
-                    requireContext(),
-                    DividerItemDecoration.VERTICAL
-                )
-            )
-        }
     }
-
-//    class AttendanceAdapter @Inject constructor(
-//        differCallback: DiffUtil.ItemCallback<Attendance>
-//    ) : ListAdapter<Attendance, AttendanceAdapter.AttendanceViewHolder>(differCallback) {
-//
-//        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AttendanceViewHolder {
-//            val inflater = LayoutInflater.from(parent.context)
-//            val binding = DataBindingUtil.inflate<ItemAttendanceBinding>(
-//                inflater,
-//                R.layout.item_attendance,
-//                parent,
-//                false
-//            )
-//
-//            return AttendanceViewHolder(binding)
-//        }
-//
-//        override fun onBindViewHolder(holder: AttendanceViewHolder, position: Int) {
-//            holder.bind(getItem(position))
-//        }
-//
-//        inner class AttendanceViewHolder(private val binding: ItemAttendanceBinding) :
-//            RecyclerView.ViewHolder(binding.root) {
-//
-//            fun bind(attendance: Attendance) {
-//                binding.attendance = attendance
-//                binding.executePendingBindings()
-//            }
-//        }
-//    }
-
 }

@@ -1,8 +1,10 @@
 package com.zetzaus.temiattend.ui
 
+import android.view.View
 import androidx.fragment.app.viewModels
 import com.zetzaus.temiattend.R
 import com.zetzaus.temiattend.databinding.FragmentAdminBinding
+import com.zetzaus.temiattend.ext.navigate
 import com.zetzaus.temiattend.ext.textString
 import com.zetzaus.temiattend.ext.toOfficeName
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,6 +20,7 @@ class AdminFragment : BindingFragment<FragmentAdminBinding>() {
     override fun onBinding() {
         super.onBinding()
 
+        binding.fragment = this
         binding.viewModel = viewModel
     }
 
@@ -27,5 +30,9 @@ class AdminFragment : BindingFragment<FragmentAdminBinding>() {
         // Save chosen location
         val chosenLocation = officeInput.textString.toOfficeName()
         viewModel.saveOfficeLocation(chosenLocation)
+    }
+
+    fun onShowAllAttendancesClicked(v: View) {
+        v.navigate(AdminFragmentDirections.actionAdminFragmentToAttendancesFragment())
     }
 }

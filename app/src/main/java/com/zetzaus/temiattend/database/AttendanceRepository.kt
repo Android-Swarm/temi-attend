@@ -16,6 +16,8 @@ class AttendanceRepository @Inject constructor(private val dao: AttendanceDao) {
 
     suspend fun saveAttendance(attendance: Attendance) = dao.saveAttendance(attendance)
 
+    fun getAllAttendance() = dao.getAllAttendance()
+
     fun getUserAttendances(user: String) = dao.getByUser(user)
 
     fun getAbnormalAttendancesToday(user: String) = getUserAttendancesToday(user)

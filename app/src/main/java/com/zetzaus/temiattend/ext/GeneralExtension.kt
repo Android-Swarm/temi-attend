@@ -14,6 +14,8 @@ import com.robotemi.sdk.Robot
 import com.zetzaus.temiattend.ui.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
@@ -124,3 +126,6 @@ suspend infix fun <T> MutableLiveData<T>.updatesTo(value: T) =
     withContext(Dispatchers.Main) {
         this@updatesTo.value = value
     }
+
+@OptIn(ExperimentalCoroutinesApi::class)
+suspend fun <E> ConflatedBroadcastChannel<E>.sendLastEmitted() = send(value)

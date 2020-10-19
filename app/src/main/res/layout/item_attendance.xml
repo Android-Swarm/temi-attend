@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -8,13 +10,33 @@
             type="com.zetzaus.temiattend.database.Attendance" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/iconPerson"
+            android:layout_width="30dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/content_desc_ic_person"
+            android:src="@drawable/ic_person"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{attendance.user}"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/iconPerson"
+            app:layout_constraintStart_toEndOf="@id/iconPerson"
+            app:layout_constraintTop_toTopOf="@id/iconPerson"
+            tools:text="SCHAEFFLERID" />
 
         <ImageView
             android:id="@+id/iconCalendar"
@@ -24,7 +46,7 @@
             android:scaleType="centerCrop"
             android:src="@drawable/ic_calendar"
             app:layout_constraintDimensionRatio="1"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@android:color/white" />
 
@@ -36,7 +58,7 @@
             android:textSize="16sp"
             app:dateText="@{attendance.dateTime}"
             app:layout_constraintBottom_toBottomOf="@id/iconCalendar"
-            app:layout_constraintStart_toEndOf="@+id/iconCalendar"
+            app:layout_constraintEnd_toStartOf="@+id/iconCalendar"
             app:layout_constraintTop_toTopOf="@id/iconCalendar"
             tools:text="Mar 26, 2020 10:30:20" />
 
@@ -48,17 +70,17 @@
             android:contentDescription="@string/content_desc_ic_location"
             android:src="@drawable/ic_location"
             app:layout_constraintDimensionRatio="1"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iconCalendar" />
 
         <com.google.android.material.textview.MaterialTextView
             style="@style/TextAppearance.AppCompat.Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@id/iconLocation"
-            app:layout_constraintStart_toEndOf="@id/iconLocation"
+            app:layout_constraintEnd_toStartOf="@id/iconLocation"
             app:layout_constraintTop_toTopOf="@id/iconLocation"
             app:officeText="@{attendance.location}"
             tools:text="18 Tai Seng" />
@@ -67,11 +89,12 @@
             style="@style/TextAppearance.AppCompat.Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
+            android:layout_marginStart="8dp"
+            android:textColor="@{attendance.temperature &lt;= 37.3 ? @android:color/white  : @color/error_dark_theme}"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/iconThermometer"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/iconThermometer"
+            app:layout_constraintStart_toEndOf="@+id/iconThermometer"
+            app:layout_constraintTop_toTopOf="@id/iconThermometer"
             app:temperatureText="@{attendance.temperature}"
             tools:text="36.5℃" />
 
@@ -79,13 +102,14 @@
             android:id="@+id/iconThermometer"
             android:layout_width="30dp"
             android:layout_height="0dp"
+            android:layout_marginTop="8dp"
             android:contentDescription="@string/content_desc_ic_thermometer"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_thermometer"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iconPerson"
             app:tint="@android:color/white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

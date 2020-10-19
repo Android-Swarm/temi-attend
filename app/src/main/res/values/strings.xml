@@ -24,7 +24,7 @@
         For safety purpose, kindly leave the office now.
     </string>
 
-    <string name="label_attendances_title">%s\'s Attendances</string>
+    <string name="label_attendances_title">Attendances</string>
 
     <string name="label_camera_details">Thermal Camera Details</string>
     <string name="label_ip">IP</string>
@@ -60,6 +60,8 @@
     <string name="hint_confirm_password">Repeat Password</string>
     <string name="hint_new_password">New Password</string>
 
+    <string name="hint_search">Search Name</string>
+
     <string name="button_employee">Employee</string>
     <string name="button_guest">Guest</string>
     <string name="button_face_recognize">Recognize me</string>
@@ -73,6 +75,9 @@
     <string name="button_view_visitors">Visitors</string>
     <string name="button_view_attendances">All Attendances</string>
 
+    <string name="switch_attendance_on">Abnormal only</string>
+    <string name="switch_attendance_off">All attendances</string>
+
     <string name="content_desc_mask">This icon shows because you are not wearing a mask! Please
     wear your mask properly</string>
     <string name="content_desc_setting">Settings icon. Click to access settings.</string>
@@ -81,6 +86,7 @@
     <string name="content_desc_ic_thermometer">Thermometer icon.</string>
     <string name="content_desc_ic_location">Location icon.</string>
     <string name="content_desc_thermal_image">Thermal image from the thermal camera.</string>
+    <string name="content_desc_ic_person">Person icon.</string>
 
     <string name="snack_bar_error">Encountered error: %s</string>
     <string name="snack_bar_new_face">New face detected! Your face will be saved once you confirmed your id.</string>
