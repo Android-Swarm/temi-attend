@@ -1,20 +1,14 @@
 package com.zetzaus.temiattend.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.zetzaus.temiattend.R
-import com.zetzaus.temiattend.database.Attendance
+import com.zetzaus.temiattend.adapter.AttendanceAdapter
 import com.zetzaus.temiattend.databinding.FragmentAttendancesBinding
-import com.zetzaus.temiattend.databinding.ItemAttendanceBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_attendances.*
 import javax.inject.Inject
@@ -56,37 +50,45 @@ class AttendancesFragment : BindingFragment<FragmentAttendancesBinding>() {
         recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = attendanceAdapter
-        }
-    }
 
-    class AttendanceAdapter @Inject constructor(
-        differCallback: DiffUtil.ItemCallback<Attendance>
-    ) : ListAdapter<Attendance, AttendanceAdapter.AttendanceViewHolder>(differCallback) {
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AttendanceViewHolder {
-            val inflater = LayoutInflater.from(parent.context)
-            val binding = DataBindingUtil.inflate<ItemAttendanceBinding>(
-                inflater,
-                R.layout.item_attendance,
-                parent,
-                false
+            // Horizontal lines between items
+            addItemDecoration(
+                DividerItemDecoration(
+                    requireContext(),
+                    DividerItemDecoration.VERTICAL
+                )
             )
-
-            return AttendanceViewHolder(binding)
-        }
-
-        override fun onBindViewHolder(holder: AttendanceViewHolder, position: Int) {
-            holder.bind(getItem(position))
-        }
-
-        inner class AttendanceViewHolder(private val binding: ItemAttendanceBinding) :
-            RecyclerView.ViewHolder(binding.root) {
-
-            fun bind(attendance: Attendance) {
-                binding.attendance = attendance
-                binding.executePendingBindings()
-            }
         }
     }
+
+//    class AttendanceAdapter @Inject constructor(
+//        differCallback: DiffUtil.ItemCallback<Attendance>
+//    ) : ListAdapter<Attendance, AttendanceAdapter.AttendanceViewHolder>(differCallback) {
+//
+//        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AttendanceViewHolder {
+//            val inflater = LayoutInflater.from(parent.context)
+//            val binding = DataBindingUtil.inflate<ItemAttendanceBinding>(
+//                inflater,
+//                R.layout.item_attendance,
+//                parent,
+//                false
+//            )
+//
+//            return AttendanceViewHolder(binding)
+//        }
+//
+//        override fun onBindViewHolder(holder: AttendanceViewHolder, position: Int) {
+//            holder.bind(getItem(position))
+//        }
+//
+//        inner class AttendanceViewHolder(private val binding: ItemAttendanceBinding) :
+//            RecyclerView.ViewHolder(binding.root) {
+//
+//            fun bind(attendance: Attendance) {
+//                binding.attendance = attendance
+//                binding.executePendingBindings()
+//            }
+//        }
+//    }
 
 }

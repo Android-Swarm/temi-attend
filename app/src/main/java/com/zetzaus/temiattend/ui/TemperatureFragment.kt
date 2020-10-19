@@ -7,7 +7,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
-import com.zetzaus.temiattend.OfficeName
 import com.zetzaus.temiattend.R
 import com.zetzaus.temiattend.databinding.FragmentTemperatureBinding
 import com.zetzaus.temiattend.ext.LOG_TAG
@@ -23,7 +22,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class TemperatureFragment : TransitionalFragment<FragmentTemperatureBinding>() {
 
-    private val viewModel by viewModels<TemperatureViewModel>()
+    private val viewModel by viewModels<TemperatureFragmentViewModel>()
 
     private val mainViewModel by activityViewModels<MainActivityViewModel>()
 
@@ -108,7 +107,7 @@ class TemperatureFragment : TransitionalFragment<FragmentTemperatureBinding>() {
                 .collect { (office, temperature) ->
                     // Save attendance to local database
                     // TODO: Change from hardcoding location
-                    viewModel.recordAttendance(args.user, temperature, OfficeName.TAI_SENG)
+                    viewModel.recordAttendance(args.user, temperature, office)
                 }
         }
 

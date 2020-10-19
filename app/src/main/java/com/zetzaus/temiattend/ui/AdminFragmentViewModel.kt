@@ -4,16 +4,15 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.asLiveData
 import com.zetzaus.temiattend.OfficeName
 import com.zetzaus.temiattend.database.PreferenceRepository
+import com.zetzaus.temiattend.ext.toStringRepresentation
 import kotlinx.coroutines.flow.map
 
 class AdminFragmentViewModel @ViewModelInject constructor(
     repository: PreferenceRepository
 ) : PreferenceViewModel(repository) {
-    val officeNames = mapOf(
-        OfficeName.TAI_SENG to "18 Tai Seng",
-        OfficeName.SHARE_NTU to "SHARELAB@NTU",
-        OfficeName.AEROSPACE to "Aerospace",
-    )
+    /** All office locations in its [String] representation. */
+    val offices = OfficeName.values().map { it.toStringRepresentation() }
 
-    val chosenOfficeName = officeLocation.map { officeNames[it] ?: "" }.asLiveData()
+    /** The chosen location. */
+    val chosenOfficeName = officeLocation.map { it.toStringRepresentation() }.asLiveData()
 }

@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.zetzaus.temiattend.ui.TemperatureViewModel" />
+            type="com.zetzaus.temiattend.ui.TemperatureFragmentViewModel" />
 
     </data>
 
@@ -23,6 +23,7 @@
             android:id="@+id/thermalCameraImage"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:contentDescription="@string/content_desc_thermal_image"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toTopOf="@id/include"
             app:layout_constraintDimensionRatio="1"

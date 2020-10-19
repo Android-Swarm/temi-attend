@@ -1,10 +1,10 @@
 package com.zetzaus.temiattend.ui
 
 import androidx.fragment.app.viewModels
-import com.zetzaus.temiattend.OfficeName
 import com.zetzaus.temiattend.R
 import com.zetzaus.temiattend.databinding.FragmentAdminBinding
 import com.zetzaus.temiattend.ext.textString
+import com.zetzaus.temiattend.ext.toOfficeName
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_admin.*
 
@@ -24,10 +24,8 @@ class AdminFragment : BindingFragment<FragmentAdminBinding>() {
     override fun onPause() {
         super.onPause()
 
-        val chosenLocation = viewModel.officeNames.entries.find { (_, officeLabel) ->
-            officeLabel == officeInput.textString
-        }?.key ?: OfficeName.UNDEFINED
-
+        // Save chosen location
+        val chosenLocation = officeInput.textString.toOfficeName()
         viewModel.saveOfficeLocation(chosenLocation)
     }
 }

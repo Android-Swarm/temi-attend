@@ -155,7 +155,7 @@ class MainActivityViewModel @ViewModelInject constructor(
 
     private val _isUserInteracting = ConflatedBroadcastChannel<Boolean>()
     val isUserInteracting = _isUserInteracting.asFlow()
-        .debounce(5000) // If in 10 seconds no user interaction, go to welcome page
+        .debounce(10_000) // If in 10 seconds no user interaction, go to welcome page
 
     fun updateUserInteraction(interacting: Boolean) {
         viewModelScope.launch { _isUserInteracting.send(interacting) }
@@ -259,19 +259,17 @@ class MainActivityViewModel @ViewModelInject constructor(
      * @param mac The camera's MAC address. This should not be blank
      */
     private suspend fun fetchCameraDetails(ip: String, mac: String) = viewModelScope.launch {
-        Log.d(
-            this@MainActivityViewModel.LOG_TAG,
-            "Failed to connect to socket at $ip, re-fetching camera details"
-        )
+        Log.d(this@MainActivityViewModel.LOG_TAG, "Re-fetching camera details in 5 seconds")
+        delay(5000)
 
         try {
             val newDetails = CameraDetailsFetcher(mac).cameraDetailsAsync(this).await()!!
             repository.saveCameraIp(newDetails.deviceIp)
             repository.saveCameraMac(newDetails.macAddress)
+
+            Log.d(this@MainActivityViewModel.LOG_TAG, "Saved new camera details")
         } catch (e: Exception) {
             Log.e(this@MainActivityViewModel.LOG_TAG, "Unable to refetch camera details: ", e)
-
-            delay(10000)
 
             // Retry to connect
             viewModelScope.launch { _sdkReady.send(_sdkReady.value) }
@@ -380,7 +378,6 @@ class MainActivityViewModel @ViewModelInject constructor(
 
     private fun restartTempSocket() {
         Log.d(LOG_TAG, "Restarting temperature socket")
-
         sdkReady()
     }
 

@@ -152,10 +152,10 @@ class MainActivity : AppCompatActivity(), OnUserInteractionChangedListener {
                             val boundingBox = face.boundingBox
                             val faceImage = Bitmap.createBitmap(
                                 originalImage,
-                                boundingBox.centerX() - abs(boundingBox.width() / 1.75).toInt(),
-                                boundingBox.centerY() - abs(boundingBox.height() / 1.75).toInt(),
-                                (boundingBox.width() * 1.25).toInt(),
-                                (boundingBox.height() * 1.25).toInt()
+                                boundingBox.centerX() - abs(boundingBox.width() / 1.85).toInt(),
+                                boundingBox.centerY() - abs(boundingBox.height() / 1.85).toInt(),
+                                (boundingBox.width() * 1.15).toInt(),
+                                (boundingBox.height() * 1.15).toInt()
                             )
 
                             // Detect mask

@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-class TemperatureViewModel @ViewModelInject constructor(
+class TemperatureFragmentViewModel @ViewModelInject constructor(
     attendanceRepo: AttendanceRepository,
     preferenceRepo: PreferenceRepository
 ) : AppViewModel(attendanceRepo) {

@@ -2,6 +2,7 @@ package com.zetzaus.temiattend.ext
 
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.zetzaus.temiattend.OfficeName
 import com.zetzaus.temiattend.R
 import java.text.SimpleDateFormat
 import java.util.*
@@ -18,6 +19,11 @@ fun TextView.temperatureText(temperature: Float?) {
     } else {
         ""
     }
+}
+
+@BindingAdapter("officeText")
+fun TextView.officeLocationText(location: OfficeName) {
+    text = location.toStringRepresentation()
 }
 
 /**

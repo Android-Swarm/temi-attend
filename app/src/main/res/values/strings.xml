@@ -79,6 +79,8 @@
     <string name="content_desc_qr_code">SafeEntry QR code. Please scan this with your phone before entering office.</string>
     <string name="content_desc_ic_calendar">Calendar icon.</string>
     <string name="content_desc_ic_thermometer">Thermometer icon.</string>
+    <string name="content_desc_ic_location">Location icon.</string>
+    <string name="content_desc_thermal_image">Thermal image from the thermal camera.</string>
 
     <string name="snack_bar_error">Encountered error: %s</string>
     <string name="snack_bar_new_face">New face detected! Your face will be saved once you confirmed your id.</string>
