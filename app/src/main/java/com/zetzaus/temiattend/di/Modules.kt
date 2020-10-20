@@ -32,6 +32,10 @@ class Modules {
         AppDatabase.getInstance(context).attendanceDao
 
     @Provides
+    fun provideVisitorDao(@ApplicationContext context: Context) =
+        AppDatabase.getInstance(context).visitorDao
+
+    @Provides
     fun provideAzureFaceManager(@ApplicationContext context: Context) =
         AzureFaceManager(
             endpoint = context.getString(R.string.azure_endpoint),

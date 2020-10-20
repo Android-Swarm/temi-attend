@@ -51,6 +51,40 @@
     <string name="label_office_location">Office Location</string>
     <string name="label_office_location_desc">Which office the attendances should be registered</string>
 
+    <string name="label_visitor_registration_title">External Visitor Travel Declaration Form</string>
+    <string name="label_details">Details</string>
+    <string name="label_declaration">Declaration</string>
+    <string name="label_date_visit">Date of Visit (Arrival at Schaeffler Site)</string>
+    <string name="label_declaration_travel">
+        I have NOT recently travelled from abroad in the last 15 days (before date of your visit to Schaeffler).
+    </string>
+    <string name="label_travel_start">Start of travel</string>
+    <string name="label_travel_end">End of travel</string>
+    <string name="label_declaration_fever_symptom">
+        I do NOT have fever or other symptoms (e.g. dry cough, body aches, headache, sore throat, runny nose,
+        tiredness, shortness of breath.
+    </string>
+    <string name="label_declaration_contact_traveller">
+        I have NOT been in contact with someone (examples: family member, member of the same household,
+        close friend, etc.) who has travelled abroad in the last 15 days (before the date of your visit to 
+        Schaeffler).
+    </string>
+    <string name="label_declaration_contact_confirmed">
+        I have NOT been in contact with a person with a confirmed COVID-19 infection.
+    </string>
+    <string name="label_declaration_contact_suspected">
+        I have NOT been in contact with a person with a suspected COVID-19 infection.
+    </string>
+    <string name="label_declaration_contact_quarantine">
+        I have NOT been in contact with a person placed under quarantine/stay-home notice (SHN) or who has been
+        recently released from quarantine/SHN.
+    </string>
+
+    <string name="hint_visitor_name">Name of Visitor</string>
+    <string name="hint_company">Company</string>
+    <string name="hint_contact">Contact Number (Business/Mobile Phone)</string>
+    <string name="hint_host">Person Visiting at Schaeffler (Host)</string>
+
     <string name="hint_manual_employee">Schaeffler ID</string>
     <string name="hint_wifi_ssid">WIFI SSID</string>
     <string name="hint_wifi_pwd">Password</string>
@@ -74,6 +108,8 @@
     <string name="button_change_password">Change Password</string>
     <string name="button_view_visitors">Visitors</string>
     <string name="button_view_attendances">All Attendances</string>
+    <string name="button_choose">Choose</string>
+    <string name="button_submit">Submit</string>
 
     <string name="switch_attendance_on">Abnormal only</string>
     <string name="switch_attendance_off">All attendances</string>
@@ -96,6 +132,8 @@
     <string name="snack_bar_camera_not_ready">Sorry! Thermal camera is not working right now</string>
     <string name="unknown_error">Unknown error!</string>
 
+    <string name="snack_bar_travel_date_required">Please fill both start and end of your travel date.</string>
+
     <!-- Camera related strings -->
     <string name="camera_overlay_text">Tap the screen when your face is visible</string>
     <string name="camera_overlay_button">Close Camera</string>
@@ -108,6 +146,8 @@
     <string name="error_repeat_password_different">Confirmation password must be the same as the password.</string>
     <string name="error_weak_password">Password must meet the given criteria.</string>
     <string name="error_wrong_password">Wrong password.</string>
+
+    <string name="error_required">*Required</string>
 
     <!-- Preferences -->
     <string name="settings_location">Office Location</string>

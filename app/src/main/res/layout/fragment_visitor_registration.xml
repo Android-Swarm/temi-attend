@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <import type="com.zetzaus.temiattend.ui.DateRequest" />
+
+        <variable
+            name="fragment"
+            type="com.zetzaus.temiattend.ui.VisitorRegistrationFragment" />
+
+        <variable
+            name="viewModel"
+            type="com.zetzaus.temiattend.ui.VisitorRegistrationFragmentViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="24dp"
+        tools:context=".ui.VisitorRegistrationFragment">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/labelTitle"
+            style="@style/TitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_visitor_registration_title"
+            android:textSize="36sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/labelDetails"
+            style="?android:listSeparatorTextViewStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:text="@string/label_details"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@id/labelDeclaration"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/labelTitle" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutVisitorName"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_visitor_name"
+            app:cancelErrorOnEdit="@{true}"
+            app:errorEnabled="true"
+            app:layout_constraintBottom_toTopOf="@id/layoutCompany"
+            app:layout_constraintEnd_toEndOf="@id/labelDetails"
+            app:layout_constraintStart_toStartOf="@id/labelDetails"
+            app:layout_constraintTop_toBottomOf="@id/labelDetails"
+            app:startIconDrawable="@drawable/ic_person">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputVisitorName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutCompany"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_company"
+            app:cancelErrorOnEdit="@{true}"
+            app:errorEnabled="true"
+            app:layout_constraintBottom_toTopOf="@id/layoutContact"
+            app:layout_constraintEnd_toEndOf="@id/labelDetails"
+            app:layout_constraintStart_toStartOf="@id/labelDetails"
+            app:layout_constraintTop_toBottomOf="@id/layoutVisitorName"
+            app:startIconDrawable="@drawable/ic_enterprise">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputCompany"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textCapWords" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutContact"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_contact"
+            app:cancelErrorOnEdit="@{true}"
+            app:errorEnabled="true"
+            app:layout_constraintBottom_toTopOf="@id/layoutHost"
+            app:layout_constraintEnd_toEndOf="@id/labelDetails"
+            app:layout_constraintStart_toStartOf="@id/labelDetails"
+            app:layout_constraintTop_toBottomOf="@id/layoutCompany"
+            app:startIconDrawable="@drawable/ic_phone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputContact"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="phone" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutHost"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_host"
+            app:cancelErrorOnEdit="@{true}"
+            app:errorEnabled="true"
+            app:layout_constraintBottom_toTopOf="@id/buttonSubmit"
+            app:layout_constraintEnd_toEndOf="@id/labelDetails"
+            app:layout_constraintStart_toStartOf="@id/labelDetails"
+            app:layout_constraintTop_toBottomOf="@id/layoutContact"
+            app:startIconDrawable="@drawable/ic_person">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputHost"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--        <com.google.android.material.textview.MaterialTextView-->
+        <!--            android:id="@+id/labelDateOfVisit"-->
+        <!--            style="@style/TextAppearance.AppCompat.Body1"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="@string/label_date_visit"-->
+        <!--            app:layout_constraintBottom_toTopOf="@id/buttonChooseDate"-->
+        <!--            app:layout_constraintStart_toStartOf="@id/labelDetails"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/layoutHost" />-->
+
+        <!--        <com.google.android.material.button.MaterialButton-->
+        <!--            android:id="@+id/buttonChooseDate"-->
+        <!--            style="@style/Widget.MaterialComponents.Button.OutlinedButton"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:padding="16dp"-->
+        <!--            android:text="@string/button_choose"-->
+        <!--            app:layout_constraintBottom_toTopOf="@id/buttonSubmit"-->
+        <!--            app:layout_constraintStart_toStartOf="@id/labelDetails"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/labelDateOfVisit" />-->
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/labelDeclaration"
+            style="?android:listSeparatorTextViewStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/label_declaration"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/labelDetails"
+            app:layout_constraintTop_toBottomOf="@id/labelTitle" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchTravel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/label_declaration_travel"
+            app:dependentViewId="@{@id/travelDetails}"
+            app:layout_constraintEnd_toEndOf="@id/labelDeclaration"
+            app:layout_constraintStart_toStartOf="@id/labelDeclaration"
+            app:layout_constraintTop_toBottomOf="@id/labelDeclaration" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/travelDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="buttonEndTravel,buttonStartTravel,labelStartTravel,labelEndTravel" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/labelStartTravel"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_travel_start"
+            app:layout_constraintBottom_toBottomOf="@id/buttonStartTravel"
+            app:layout_constraintStart_toStartOf="@id/labelDeclaration"
+            app:layout_constraintTop_toTopOf="@id/buttonStartTravel" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonStartTravel"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:onClick="@{v -> fragment.onChooseDate(v, DateRequest.DATE_START_TRAVEL)}"
+            android:padding="16dp"
+            android:text="@string/button_choose"
+            app:dateOnly="@{true}"
+            app:dateText="@{viewModel.travelStartDate}"
+            app:layout_constraintBottom_toTopOf="@id/buttonEndTravel"
+            app:layout_constraintStart_toEndOf="@id/labelStartTravel"
+            app:layout_constraintTop_toBottomOf="@id/switchTravel" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/labelEndTravel"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_travel_end"
+            app:layout_constraintBottom_toBottomOf="@id/buttonEndTravel"
+            app:layout_constraintStart_toStartOf="@id/labelDeclaration"
+            app:layout_constraintTop_toTopOf="@id/buttonEndTravel" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonEndTravel"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:onClick="@{v -> fragment.onChooseDate(v, DateRequest.DATE_END_TRAVEL)}"
+            android:padding="16dp"
+            android:text="@string/button_choose"
+            app:dateOnly="@{true}"
+            app:dateText="@{viewModel.travelEndDate}"
+            app:layout_constraintBottom_toTopOf="@id/switchFever"
+            app:layout_constraintStart_toEndOf="@id/labelStartTravel"
+            app:layout_constraintTop_toBottomOf="@id/buttonStartTravel" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchFever"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/label_declaration_fever_symptom"
+            app:layout_constraintBottom_toTopOf="@id/switchContactTravel"
+            app:layout_constraintEnd_toEndOf="@id/labelDeclaration"
+            app:layout_constraintStart_toStartOf="@id/labelDeclaration"
+            app:layout_constraintTop_toBottomOf="@id/buttonEndTravel" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchContactTravel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/label_declaration_contact_traveller"
+            app:layout_constraintBottom_toTopOf="@id/switchContactConfirmed"
+            app:layout_constraintEnd_toEndOf="@id/labelDeclaration"
+            app:layout_constraintStart_toStartOf="@id/labelDeclaration"
+            app:layout_constraintTop_toBottomOf="@id/switchFever" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchContactConfirmed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/label_declaration_contact_confirmed"
+            app:layout_constraintBottom_toTopOf="@id/switchContactSuspected"
+            app:layout_constraintEnd_toEndOf="@id/labelDeclaration"
+            app:layout_constraintStart_toStartOf="@id/labelDeclaration"
+            app:layout_constraintTop_toBottomOf="@id/switchContactTravel" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchContactSuspected"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/label_declaration_contact_suspected"
+            app:layout_constraintBottom_toTopOf="@id/switchContactQuarantined"
+            app:layout_constraintEnd_toEndOf="@id/labelDeclaration"
+            app:layout_constraintStart_toStartOf="@id/labelDeclaration"
+            app:layout_constraintTop_toBottomOf="@id/switchContactConfirmed" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchContactQuarantined"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/label_declaration_contact_quarantine"
+            app:layout_constraintBottom_toTopOf="@id/buttonSubmit"
+            app:layout_constraintEnd_toEndOf="@id/labelDeclaration"
+            app:layout_constraintStart_toStartOf="@id/labelDeclaration"
+            app:layout_constraintTop_toBottomOf="@id/switchContactSuspected" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{v -> fragment.onSubmit(v)}"
+            android:padding="16dp"
+            android:text="@string/button_submit"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

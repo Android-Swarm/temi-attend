@@ -55,7 +55,8 @@
             android:text="@string/button_guest"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/buttonEmployee"
-            app:layout_constraintTop_toBottomOf="@id/checkInAsText" />
+            app:layout_constraintTop_toBottomOf="@id/checkInAsText"
+            app:onClickNavigate="@{@id/action_welcomeFragment_to_visitorRegistrationFragment}" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/imageSettings"

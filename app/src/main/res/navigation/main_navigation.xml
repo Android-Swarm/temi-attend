@@ -14,9 +14,6 @@
             android:id="@+id/action_welcomeFragment_to_employeeLoginFragment"
             app:destination="@id/employeeLoginFragment" />
         <action
-            android:id="@+id/action_welcomeFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
-        <action
             android:id="@+id/action_welcomeFragment_to_thermalFragment"
             app:destination="@id/thermalFragment" />
         <action
@@ -26,6 +23,9 @@
                 android:name="changePassword"
                 android:defaultValue="false" />
         </action>
+        <action
+            android:id="@+id/action_welcomeFragment_to_visitorRegistrationFragment"
+            app:destination="@id/visitorRegistrationFragment" />
     </fragment>
     <fragment
         android:id="@+id/employeeLoginFragment"
@@ -42,10 +42,6 @@
             app:destination="@id/abnormTempFragment"
             app:popUpTo="@id/welcomeFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.zetzaus.temiattend.ui.SettingsFragment"
-        android:label="SettingsFragment" />
     <fragment
         android:id="@+id/temperatureFragment"
         android:name="com.zetzaus.temiattend.ui.TemperatureFragment"
@@ -174,4 +170,21 @@
                 android:defaultValue="@null" />
         </action>
     </fragment>
+    <fragment
+        android:id="@+id/visitorRegistrationFragment"
+        android:name="com.zetzaus.temiattend.ui.VisitorRegistrationFragment"
+        android:label="fragment_visitor_registration"
+        tools:layout="@layout/fragment_visitor_registration" >
+        <action
+            android:id="@+id/action_visitorRegistrationFragment_to_dateDialog"
+            app:destination="@id/dateDialog" />
+        <action
+            android:id="@+id/action_visitorRegistrationFragment_to_temperatureFragment"
+            app:destination="@id/temperatureFragment"
+            app:popUpTo="@id/welcomeFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/dateDialog"
+        android:name="com.zetzaus.temiattend.ui.DateDialog"
+        android:label="DateDialog" />
 </navigation>

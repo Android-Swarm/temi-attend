@@ -10,10 +10,10 @@ import java.util.*
 
 class AttendanceConverter {
     @TypeConverter
-    fun fromDate(date: Date) = date.time
+    fun fromDate(date: Date?) = date?.time
 
     @TypeConverter
-    fun toDate(time: Long) = Date(time)
+    fun toDate(time: Long?) = time?.let { Date(it) }
 
     @TypeConverter
     fun fromOfficeName(name: OfficeName) = name.name
@@ -28,10 +28,12 @@ class AttendanceConverter {
     }
 }
 
-@Database(version = 1, entities = [Attendance::class], exportSchema = false)
+@Database(version = 1, entities = [Attendance::class, Visitor::class], exportSchema = false)
 @TypeConverters(AttendanceConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract val attendanceDao: AttendanceDao
+
+    abstract val visitorDao: VisitorDao
 
     companion object {
         private lateinit var INSTANCE: AppDatabase

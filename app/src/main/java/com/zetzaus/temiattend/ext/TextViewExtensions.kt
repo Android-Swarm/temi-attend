@@ -7,9 +7,16 @@ import com.zetzaus.temiattend.R
 import java.text.SimpleDateFormat
 import java.util.*
 
-@BindingAdapter("dateText")
-fun TextView.dateText(date: Date) {
-    text = SimpleDateFormat.getDateTimeInstance().format(date)
+@BindingAdapter("dateText", "dateOnly", requireAll = false)
+fun TextView.dateText(date: Date?, dateOnly: Boolean?) {
+    if (date == null) return
+
+    val formatter = when (dateOnly) {
+        null, false -> SimpleDateFormat.getDateTimeInstance()
+        true -> SimpleDateFormat.getDateInstance()
+    }
+
+    text = formatter.format(date)
 }
 
 @BindingAdapter("temperatureText")

@@ -28,6 +28,22 @@ fun TextInputLayout.cancelErrorOnEdit(cancel: Boolean) {
     }
 }
 
+/**
+ * Checks if the [EditText] is not empty.
+ *
+ * @param message The error message to be displayed if [EditText] is empty.
+ */
+fun TextInputLayout.requireNonEmptyText(message: String) =
+    editText?.let {
+        if (it.text.isBlank()) {
+            error = message
+            return@let false
+        }
+
+        true
+    } ?: true
+
+
 @BindingAdapter("simpleContent")
 fun MaterialAutoCompleteTextView.simpleAdapter(content: List<String>) {
     setAdapter(ArrayAdapter(context, android.R.layout.simple_list_item_1, content))

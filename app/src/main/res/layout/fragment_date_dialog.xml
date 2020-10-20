@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="dialogFragment"
+            type="com.zetzaus.temiattend.ui.DateDialog" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="64dp"
+        tools:context=".ui.DateDialog">
+
+        <DatePicker
+            android:id="@+id/datePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/AppButton"
+            android:layout_marginTop="16dp"
+            android:onClick="@{() -> dialogFragment.onConfirmButtonClicked()}"
+            android:text="@string/button_confirm" />
+
+    </LinearLayout>
+</layout>
