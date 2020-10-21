@@ -80,6 +80,15 @@
         recently released from quarantine/SHN.
     </string>
 
+    <string name="label_item_travel">Travelled abroad in the last 15 days</string>
+    <string name="label_item_travel_start">From: </string>
+    <string name="label_item_travel_end">To: </string>
+    <string name="label_item_fever">Have fever or related symptoms</string>
+    <string name="label_item_contact_traveller">In contact with someone who travelled abroad in the last 15 days</string>
+    <string name="label_item_contact_confirmed">In contact with confirmed COVID-19 case</string>
+    <string name="label_item_contact_suspected">In contact with suspected COVID-19 case</string>
+    <string name="label_item_contact_quarantine">In contact with someone in quarantine or SHN</string>
+
     <string name="hint_visitor_name">Name of Visitor</string>
     <string name="hint_company">Company</string>
     <string name="hint_contact">Contact Number (Business/Mobile Phone)</string>
@@ -123,6 +132,8 @@
     <string name="content_desc_ic_location">Location icon.</string>
     <string name="content_desc_thermal_image">Thermal image from the thermal camera.</string>
     <string name="content_desc_ic_person">Person icon.</string>
+    <string name="content_desc_ic_enterprise">Company icon.</string>
+    <string name="content_desc_ic_phone">Contact number icon.</string>
 
     <string name="snack_bar_error">Encountered error: %s</string>
     <string name="snack_bar_new_face">New face detected! Your face will be saved once you confirmed your id.</string>

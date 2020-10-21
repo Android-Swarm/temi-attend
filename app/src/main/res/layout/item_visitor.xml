@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="visitor"
+            type="com.zetzaus.temiattend.database.Visitor" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/imagePerson"
+            style="@style/SmallIcon"
+            android:contentDescription="@string/content_desc_ic_person"
+            android:src="@drawable/ic_person"
+            app:layout_constraintBottom_toTopOf="@id/imageCompany"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageCompany"
+            style="@style/SmallIcon"
+            android:contentDescription="@string/content_desc_ic_enterprise"
+            android:src="@drawable/ic_enterprise"
+            app:layout_constraintBottom_toTopOf="@id/imageContact"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imagePerson"
+            app:tint="@android:color/background_light" />
+
+        <ImageView
+            android:id="@+id/imageContact"
+            style="@style/SmallIcon"
+            android:contentDescription="@string/content_desc_ic_phone"
+            android:src="@drawable/ic_phone"
+            app:layout_constraintBottom_toTopOf="@id/imageHost"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageCompany" />
+
+        <ImageView
+            android:id="@+id/imageHost"
+            style="@style/SmallIcon"
+            android:contentDescription="@string/content_desc_ic_person"
+            android:src="@drawable/ic_person"
+            app:layout_constraintBottom_toTopOf="@id/imageDateOfVisit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageContact" />
+
+        <ImageView
+            android:id="@+id/imageDateOfVisit"
+            style="@style/SmallIcon"
+            android:contentDescription="@string/content_desc_ic_calendar"
+            android:src="@drawable/ic_calendar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageHost"
+            app:tint="@android:color/background_light" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/SmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{visitor.name}"
+            app:layout_constraintBottom_toBottomOf="@id/imagePerson"
+            app:layout_constraintStart_toEndOf="@id/imagePerson"
+            app:layout_constraintTop_toTopOf="@id/imagePerson"
+            tools:text="Hello Visitor" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/SmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{visitor.company}"
+            app:layout_constraintBottom_toBottomOf="@id/imageCompany"
+            app:layout_constraintStart_toEndOf="@id/imageCompany"
+            app:layout_constraintTop_toTopOf="@id/imageCompany"
+            tools:text="Company Pte. Ltd." />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/SmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{visitor.contactNo}"
+            app:layout_constraintBottom_toBottomOf="@id/imageContact"
+            app:layout_constraintStart_toEndOf="@id/imageContact"
+            app:layout_constraintTop_toTopOf="@id/imageContact"
+            tools:text="+6591739203" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/SmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{visitor.host}"
+            app:layout_constraintBottom_toBottomOf="@id/imageHost"
+            app:layout_constraintStart_toEndOf="@id/imageHost"
+            app:layout_constraintTop_toTopOf="@id/imageHost"
+            tools:text="Host of the Year" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/SmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:dateOnly="@{true}"
+            app:dateText="@{visitor.dateOfVisit}"
+            app:layout_constraintBottom_toBottomOf="@id/imageDateOfVisit"
+            app:layout_constraintStart_toEndOf="@id/imageDateOfVisit"
+            app:layout_constraintTop_toTopOf="@id/imageDateOfVisit"
+            tools:text="Oct 21, 2005" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/checkBoxTravel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="@{visitor.traveledLastTwoWeeks}"
+            android:clickable="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/checkBoxFeverSymptoms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="@{visitor.haveFeverOrSymptoms}"
+            android:clickable="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/labelTo" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/checkBoxContactTravel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="@{visitor.contactWithTraveler}"
+            android:clickable="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/checkBoxFeverSymptoms" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/checkBoxContactConfirmed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="@{visitor.contactWithConfirmed}"
+            android:clickable="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/checkBoxContactTravel" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/checkBoxContactSuspected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="@{visitor.contactWithSuspected}"
+            android:clickable="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/checkBoxContactConfirmed" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/checkBoxContactQuarantined"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="@{visitor.contactWithQuarantine}"
+            android:clickable="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/checkBoxContactSuspected" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/labelTravel"
+            style="@style/SmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_item_travel"
+            app:layout_constraintBottom_toBottomOf="@id/checkBoxTravel"
+            app:layout_constraintEnd_toStartOf="@id/checkBoxTravel"
+            app:layout_constraintTop_toTopOf="@id/checkBoxTravel" />
+
+        <androidx.constraintlayout.widget.Group
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="labelFrom,labelTo,textFrom,textTo"
+            app:isVisible="@{visitor.traveledLastTwoWeeks}" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/labelFrom"
+            style="@style/SmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/label_item_travel_start"
+            app:layout_constraintEnd_toStartOf="@id/textFrom"
+            app:layout_constraintTop_toBottomOf="@id/checkBoxTravel" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textFrom"
+            style="@style/SmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:dateOnly="@{true}"
+            app:dateText="@{visitor.travelStartDate}"
+            app:layout_constraintBottom_toBottomOf="@id/labelFrom"
+            app:layout_constraintEnd_toStartOf="@id/checkBoxTravel"
+            app:layout_constraintTop_toTopOf="@id/labelFrom"
+            tools:text="Oct 21, 2020" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/labelTo"
+            style="@style/SmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/label_item_travel_end"
+            app:layout_constraintStart_toStartOf="@id/labelFrom"
+            app:layout_constraintTop_toBottomOf="@id/labelFrom" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textTo"
+            style="@style/SmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:dateOnly="@{true}"
+            app:dateText="@{visitor.travelEndDate}"
+            app:layout_constraintBottom_toBottomOf="@id/labelTo"
+            app:layout_constraintStart_toStartOf="@id/textFrom"
+            app:layout_constraintTop_toTopOf="@id/labelTo"
+            tools:text="Oct 25, 2020" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/SmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_item_fever"
+            app:layout_constraintBottom_toBottomOf="@id/checkBoxFeverSymptoms"
+            app:layout_constraintEnd_toStartOf="@id/checkBoxFeverSymptoms"
+            app:layout_constraintTop_toTopOf="@id/checkBoxFeverSymptoms" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/SmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_item_contact_traveller"
+            app:layout_constraintBottom_toBottomOf="@id/checkBoxContactTravel"
+            app:layout_constraintEnd_toStartOf="@id/checkBoxContactTravel"
+            app:layout_constraintTop_toTopOf="@id/checkBoxContactTravel" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/SmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_item_contact_confirmed"
+            app:layout_constraintBottom_toBottomOf="@id/checkBoxContactConfirmed"
+            app:layout_constraintEnd_toStartOf="@id/checkBoxContactConfirmed"
+            app:layout_constraintTop_toTopOf="@id/checkBoxContactConfirmed" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/SmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_item_contact_suspected"
+            app:layout_constraintBottom_toBottomOf="@id/checkBoxContactSuspected"
+            app:layout_constraintEnd_toStartOf="@id/checkBoxContactSuspected"
+            app:layout_constraintTop_toTopOf="@id/checkBoxContactSuspected" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/SmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_item_contact_quarantine"
+            app:layout_constraintBottom_toBottomOf="@id/checkBoxContactQuarantined"
+            app:layout_constraintEnd_toStartOf="@id/checkBoxContactQuarantined"
+            app:layout_constraintTop_toTopOf="@id/checkBoxContactQuarantined" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

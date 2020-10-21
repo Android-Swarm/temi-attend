@@ -169,6 +169,9 @@
                 android:name="user"
                 android:defaultValue="@null" />
         </action>
+        <action
+            android:id="@+id/action_adminFragment_to_visitorsFragment"
+            app:destination="@id/visitorsFragment" />
     </fragment>
     <fragment
         android:id="@+id/visitorRegistrationFragment"
@@ -187,4 +190,8 @@
         android:id="@+id/dateDialog"
         android:name="com.zetzaus.temiattend.ui.DateDialog"
         android:label="DateDialog" />
+    <fragment
+        android:id="@+id/visitorsFragment"
+        android:name="com.zetzaus.temiattend.ui.VisitorsFragment"
+        android:label="VisitorsFragment" />
 </navigation>

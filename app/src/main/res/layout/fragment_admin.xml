@@ -64,7 +64,8 @@
             android:text="@string/button_view_visitors"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/buttonChangePassword"
-            app:layout_constraintStart_toEndOf="@id/buttonViewAttendances" />
+            app:layout_constraintStart_toEndOf="@id/buttonViewAttendances"
+            app:onClickNavigate="@{@id/action_adminFragment_to_visitorsFragment}" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonViewAttendances"

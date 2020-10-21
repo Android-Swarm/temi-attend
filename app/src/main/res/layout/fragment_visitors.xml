@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="itemDecoration"
+            type="androidx.recyclerview.widget.DividerItemDecoration" />
+
+        <variable
+            name="adapter"
+            type="androidx.recyclerview.widget.ListAdapter" />
+
+        <variable
+            name="viewModel"
+            type="com.zetzaus.temiattend.ui.VisitorsFragmentViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="32dp"
+        tools:context=".ui.VisitorsFragment">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/searchLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_search"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="2"
+            app:layout_constraintStart_toEndOf="@id/switchTravel"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputSearch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:adapter="@{adapter}"
+            app:itemDecoration="@{itemDecoration}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/searchLayout"
+            app:layout_constraintStart_toStartOf="@id/searchLayout"
+            app:layout_constraintTop_toBottomOf="@id/searchLayout" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchTravel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/label_item_travel"
+            app:layout_constraintBottom_toTopOf="@id/switchFever"
+            app:layout_constraintEnd_toStartOf="@id/searchLayout"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:onCheckedChangeListener="@{(v, c) -> viewModel.showTravelledOnly(c) }" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchFever"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/label_item_fever"
+            app:layout_constraintBottom_toTopOf="@id/switchContactTravel"
+            app:layout_constraintEnd_toEndOf="@id/switchTravel"
+            app:layout_constraintStart_toStartOf="@id/switchTravel"
+            app:layout_constraintTop_toBottomOf="@id/switchTravel"
+            app:onCheckedChangeListener="@{(v, c) -> viewModel.showFeverOnly(c) }" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchContactTravel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/label_item_contact_traveller"
+            app:layout_constraintBottom_toTopOf="@id/switchContactConfirmed"
+            app:layout_constraintEnd_toEndOf="@id/switchTravel"
+            app:layout_constraintStart_toStartOf="@id/switchTravel"
+            app:layout_constraintTop_toBottomOf="@id/switchFever"
+            app:onCheckedChangeListener="@{(v, c) -> viewModel.showContactWithTravellerOnly(c) }" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchContactConfirmed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/label_item_contact_confirmed"
+            app:layout_constraintBottom_toTopOf="@id/switchContactSuspected"
+            app:layout_constraintEnd_toEndOf="@id/switchTravel"
+            app:layout_constraintStart_toStartOf="@id/switchTravel"
+            app:layout_constraintTop_toBottomOf="@id/switchContactTravel"
+            app:onCheckedChangeListener="@{(v, c) -> viewModel.showContactWithConfirmedOnly(c) }" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchContactSuspected"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/label_item_contact_suspected"
+            app:layout_constraintBottom_toTopOf="@id/switchContactQuarantined"
+            app:layout_constraintEnd_toEndOf="@id/switchTravel"
+            app:layout_constraintStart_toStartOf="@id/switchTravel"
+            app:layout_constraintTop_toBottomOf="@id/switchContactConfirmed"
+            app:onCheckedChangeListener="@{(v, c) -> viewModel.showContactWithSuspectedOnly(c) }" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchContactQuarantined"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/label_item_contact_quarantine"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/switchTravel"
+            app:layout_constraintStart_toStartOf="@id/switchTravel"
+            app:layout_constraintTop_toBottomOf="@id/switchContactSuspected"
+            app:onCheckedChangeListener="@{(v, c) -> viewModel.showContactWithQuarantinedOnly(c) }" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/confirmButton"
+            style="@style/AppButton"
+            android:text="@string/button_confirm"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/switchContactTravel"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
