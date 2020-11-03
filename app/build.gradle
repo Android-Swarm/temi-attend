@@ -102,7 +102,7 @@ dependencies {
 
     // Face detection and mask recognition
     implementation 'com.google.mlkit:face-detection:16.0.2'
-    implementation 'com.google.mlkit:image-labeling-custom:16.2.1'
+    implementation 'com.google.mlkit:object-detection-custom:16.2.1'
 
     // Task to coroutine API
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
@@ -146,7 +146,7 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.4.2'
 
     // Proto DataStore
-    implementation "androidx.datastore:datastore-core:1.0.0-alpha01"
+    implementation "androidx.datastore:datastore-core:1.0.0-alpha02"
     implementation "com.google.protobuf:protobuf-javalite:3.10.0"
 
     // Testing

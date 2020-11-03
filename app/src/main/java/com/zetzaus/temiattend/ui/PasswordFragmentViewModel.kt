@@ -60,7 +60,6 @@ class PasswordFragmentViewModel @ViewModelInject constructor(
             if (!it) _passwordError.value = context.getString(R.string.error_weak_password)
         }
 
-
     fun isValidConfirmPassword(password: String, confirmPassword: String) =
         (password == confirmPassword).also {
             if (!it) _repeatPasswordError.value =

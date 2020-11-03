@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.google.mlkit.common.model.LocalModel
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
-import com.google.mlkit.vision.label.custom.CustomImageLabelerOptions
+import com.google.mlkit.vision.objects.custom.CustomObjectDetectorOptions
 import com.zetzaus.temiattend.R
 import com.zetzaus.temiattend.database.AppDatabase
 import com.zetzaus.temiattend.database.Attendance
@@ -74,12 +74,12 @@ class MainActivityModules {
             .setAssetFilePath(MainActivity.MODEL_FILENAME)
             .build()
 
-        // Image classification configurations
-        val customLabelerOptions = CustomImageLabelerOptions.Builder(localModel)
-            .setConfidenceThreshold(0.8f)
+        val customOptions = CustomObjectDetectorOptions.Builder(localModel)
+            .setDetectorMode(CustomObjectDetectorOptions.SINGLE_IMAGE_MODE)
+            .enableClassification()
             .build()
 
-        return MaskDetector(customLabelerOptions)
+        return MaskDetector(customOptions)
     }
 
     @Provides

@@ -1,7 +1,6 @@
 package com.zetzaus.temiattend.ui
 
 import android.Manifest
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
@@ -33,7 +32,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
-import kotlin.math.abs
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), OnUserInteractionChangedListener {
@@ -132,40 +130,24 @@ class MainActivity : AppCompatActivity(), OnUserInteractionChangedListener {
         maskCameraView.addFrameProcessor { frame ->
             runBlocking {
                 if (frame.dataClass == ByteArray::class.java) {
+                    val rotation = frame.rotationToUser
+
                     val inputImage = InputImage.fromByteArray(
                         frame.getData(),
                         frame.size.width,
                         frame.size.height,
-                        frame.rotationToView,
+                        rotation,
                         InputImage.IMAGE_FORMAT_NV21
                     )
 
                     val faces = faceDetector.process(inputImage).await()
 
-                    faces.filter { it.hasAllLandmarks() }
-                        .firstOrNull { it.headEulerAngleX in -30.0f..30f && it.headEulerAngleY in -30.0f..30f }
-                        ?.let { face ->
-                            // Convert frame to bitmap
-                            val originalImage = frame.toBitmap()
-
-                            // Crop image only the face part
-                            val boundingBox = face.boundingBox
-                            val faceImage = Bitmap.createBitmap(
-                                originalImage,
-                                boundingBox.centerX() - abs(boundingBox.width() / 1.85).toInt(),
-                                boundingBox.centerY() - abs(boundingBox.height() / 1.85).toInt(),
-                                (boundingBox.width() * 1.15).toInt(),
-                                (boundingBox.height() * 1.15).toInt()
-                            )
-
-                            // Detect mask
-                            val faceInputImage =
-                                InputImage.fromBitmap(faceImage, frame.rotationToView)
-
-                            maskDetector.detectMask(faceInputImage).run {
+                    // Check for mask only if there is a face detected
+                    faces.firstOrNull { it.hasAllLandmarks() }
+                        ?.let { _ ->
+                            maskDetector.detectMask(inputImage).run {
                                 mainViewModel.updateMaskDetection(isWearingMask)
                             }
-
                         } ?: mainViewModel.updateMaskDetection(true)
                 }
             }
@@ -183,6 +165,10 @@ class MainActivity : AppCompatActivity(), OnUserInteractionChangedListener {
         })
     }
 
+    /**
+     * Initializes the Temi-IR SDK.
+     *
+     */
     private fun prepareTemperatureMeasurement() {
         // Temp SDK
         lifecycleScope.launch {
@@ -230,9 +216,9 @@ class MainActivity : AppCompatActivity(), OnUserInteractionChangedListener {
         const val PERMISSION_CODE = 1111
         const val MODEL_FILENAME = "model.tflite"
         val ANDROID_PERMISSIONS = listOf(
-            Manifest.permission.CAMERA,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
+            Manifest.permission.CAMERA, // For mask detection and face recognition
+            Manifest.permission.ACCESS_FINE_LOCATION, // For fetching WiFi scan results
+            Manifest.permission.ACCESS_COARSE_LOCATION // For fetching WiFi scan results
         )
     }
 }

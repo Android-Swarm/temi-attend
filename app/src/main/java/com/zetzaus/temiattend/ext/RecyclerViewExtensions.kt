@@ -1,4 +1,4 @@
-package com.zetzaus.temiattend.database
+package com.zetzaus.temiattend.ext
 
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView

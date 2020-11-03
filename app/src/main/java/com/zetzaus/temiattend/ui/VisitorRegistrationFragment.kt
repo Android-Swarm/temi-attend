@@ -1,5 +1,6 @@
 package com.zetzaus.temiattend.ui
 
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.setFragmentResultListener
@@ -92,12 +93,24 @@ class VisitorRegistrationFragment : BindingMainFragment<FragmentVisitorRegistrat
      *
      * @param v The button that is clicked.
      */
-    private suspend fun selectDateFromDialog(v: View) = suspendCoroutine<Date?> {
-        setFragmentResultListener(DateDialog.REQUEST_DATE) { _, bundle ->
-            it.resume(bundle.getDate())
+    private suspend fun selectDateFromDialog(v: View) =
+        v.getByFragmentResult(
+            DateDialog.REQUEST_DATE,
+            R.id.action_visitorRegistrationFragment_to_dateDialog
+        ) {
+            it.getDate()
         }
 
-        v.navigate(R.id.action_visitorRegistrationFragment_to_dateDialog)
+    private suspend fun <T> View.getByFragmentResult(
+        requestKey: String,
+        destinationId: Int,
+        extractBlock: (Bundle) -> T
+    ) = suspendCoroutine<T> {
+        setFragmentResultListener(requestKey) { _, bundle ->
+            it.resume(extractBlock(bundle))
+        }
+
+        navigate(destinationId)
     }
 }
 

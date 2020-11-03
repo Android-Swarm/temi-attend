@@ -21,7 +21,6 @@ import com.zetzaus.temiattend.temperature.TmIrResponse
 import com.zetzaus.temiattend.temperature.withSocketOperation
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
@@ -37,12 +36,13 @@ class MainActivityViewModel @ViewModelInject constructor(
 ) : ViewModel() {
 
     /** Channel to update when mask become (not) detected. */
-    private val maskDetectionChannel = BroadcastChannel<Boolean>(60)
+    private val maskDetectionChannel = ConflatedBroadcastChannel(true)
 
     /** Observed to update the mask icon's visibility.*/
     val maskDetected = maskDetectionChannel.asFlow()
         .distinctUntilChanged() // From rapid frames, emit only if the incoming value is different than the last emitted value
         .debounce(2000) // Emit if the value doesn't change for 2s
+        .distinctUntilChanged()
         .asLiveData()
 
     /** Used to update if face recognition should be started. */
@@ -231,7 +231,7 @@ class MainActivityViewModel @ViewModelInject constructor(
         }
 
     suspend fun startTemperatureCollection(scope: CoroutineScope) {
-        initialTempFlow.collectLatest { (mac, ip, sdkReady) ->
+        initialTempFlow.collectLatest { (_, ip, sdkReady) ->
             Log.d(this@MainActivityViewModel.LOG_TAG, "Collected from temperature flow")
 
             if (!sdkReady) {
@@ -242,7 +242,7 @@ class MainActivityViewModel @ViewModelInject constructor(
                     "Temi-IR SDK is ready, and IP is found, trying to connect to socket"
                 )
 
-                startTemperatureTaking(scope, ip, mac)
+                startTemperatureTaking(scope, ip)
             }
         }
     }
@@ -251,7 +251,6 @@ class MainActivityViewModel @ViewModelInject constructor(
      * Calls the thermal camera's backend API to get the camera details. Also updates the
      * proto data store's camera ip and camera mac.
      *
-     * @param ip The failing IP address.
      * @param mac The camera's MAC address. This should not be blank
      */
     private suspend fun fetchCameraDetails(mac: String) = viewModelScope.launch {
@@ -272,7 +271,7 @@ class MainActivityViewModel @ViewModelInject constructor(
         viewModelScope.launch { _sdkReady.sendLastEmitted() }
     }
 
-    private fun startTemperatureTaking(scope: CoroutineScope, ip: String, mac: String) =
+    private fun startTemperatureTaking(scope: CoroutineScope, ip: String) =
         scope.launch(Dispatchers.IO) {
             try {
                 withSocketOperation(ip, TEMP_PORT) { _, tempWriter, tempReader ->
